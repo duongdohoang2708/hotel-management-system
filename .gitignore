@@ -1,1 +1,28 @@
 .vs/
+# Bỏ các thư mục build
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.db
+*.log
+
+# VS/VSCode
+.vscode/
+*.user
+*.suo
+
+# Dotnet specific
+project.lock.json
+project.fragment.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Optional: bỏ luôn các file tạo khi chạy ứng dụng
+*.deps.json
+*.runtimeconfig.json
+*.Assets.json
+*.g.cs
+*.g.i.cs
