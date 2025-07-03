@@ -138,3 +138,4 @@ D:\Documents\Coding\Source\New folder\HotelManagementSystem\HotelManagementSyste
 D:\Documents\Coding\Source\New folder\HotelManagementSystem\HotelManagementSystem\obj\Debug\net8.0-windows\HotelManagementSystem.pdb
 D:\Documents\Coding\Source\New folder\HotelManagementSystem\HotelManagementSystem\obj\Debug\net8.0-windows\HotelManagementSystem.genruntimeconfig.cache
 D:\Documents\Coding\Source\New folder\HotelManagementSystem\HotelManagementSystem\obj\Debug\net8.0-windows\ref\HotelManagementSystem.dll
+D:\Documents\Coding\Source\New folder\HotelManagementSystem\HotelManagementSystem\obj\Debug\net8.0-windows\HotelManagementSystem.sourcelink.json
