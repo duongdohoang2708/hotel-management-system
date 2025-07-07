@@ -19,6 +19,14 @@ namespace HotelManagementSystem
         public MainWindow()
         {
             InitializeComponent();
+            var role = AppSession.CurrentAccount?.Role;
+            // Ví dụ: nếu không phải Admin thì ẩn menu quản trị
+            if (role != "Admin")
+            {
+                // Giả sử bạn có Menu tên AdminMenu
+                // AdminMenu.Visibility = Visibility.Collapsed;
+            }
+            // Tương tự cho các quyền khác
         }
     }
 }
