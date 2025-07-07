@@ -7,6 +7,8 @@ public partial class Room
 {
     public int RoomId { get; set; }
 
+    public string RoomNumber { get; set; } = null!;
+
     public int RoomTypeId { get; set; }
 
     public int? Floor { get; set; }
@@ -17,7 +19,7 @@ public partial class Room
 
     public virtual ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>();
 
-    public virtual RoomType RoomType { get; set; } = null!;
+    public virtual ICollection<RoomAmenity> RoomAmenities { get; set; } = new List<RoomAmenity>();
 
-    public virtual ICollection<Amenity> Amenities { get; set; } = new List<Amenity>();
+    public virtual RoomType RoomType { get; set; } = null!;
 }

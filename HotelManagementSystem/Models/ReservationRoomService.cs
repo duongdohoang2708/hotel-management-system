@@ -13,7 +13,7 @@ public partial class ReservationRoomService
 
     public int ServiceId { get; set; }
 
-    public int? Qty { get; set; }
+    public int Qty { get; set; }
 
     public decimal UnitPrice { get; set; }
 

@@ -15,5 +15,15 @@ public partial class Employee
 
     public string? Email { get; set; }
 
+    public DateOnly? DateOfBirth { get; set; }
+
+    public string? Gender { get; set; }
+
+    public string? Address { get; set; }
+
+    public string? CitizenId { get; set; }
+
+    public decimal? Salary { get; set; }
+
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 }

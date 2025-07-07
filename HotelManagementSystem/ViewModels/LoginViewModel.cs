@@ -39,7 +39,7 @@ namespace HotelManagementSystem.ViewModels
         {
             _accountService = accountService;
             LoginCommand = new RelayCommand(_ => Login());
-            OpenForgotPasswordCommand = new RelayCommand(_ => OnOpenForgotPassword());
+            OpenForgotPasswordCommand = new RelayCommand(_ => OpenForgotPassword());
         }
 
         private void Login()
@@ -64,7 +64,7 @@ namespace HotelManagementSystem.ViewModels
             LoginSuccess?.Invoke(account);
         }
 
-        private void OnOpenForgotPassword()
+        private void OpenForgotPassword()
         {
             ForgotPasswordRequested?.Invoke();
         }

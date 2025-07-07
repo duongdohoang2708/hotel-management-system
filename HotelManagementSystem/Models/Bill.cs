@@ -15,8 +15,6 @@ public partial class Bill
 
     public decimal ServiceCharge { get; set; }
 
-    public decimal? DiscountPct { get; set; }
-
     public decimal? Vatpct { get; set; }
 
     public decimal FinalAmount { get; set; }

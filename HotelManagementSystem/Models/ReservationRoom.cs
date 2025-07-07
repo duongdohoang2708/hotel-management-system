@@ -11,7 +11,7 @@ public partial class ReservationRoom
 
     public decimal RoomPrice { get; set; }
 
-    public int? GuestCount { get; set; }
+    public int GuestCount { get; set; }
 
     public virtual Reservation Reservation { get; set; } = null!;
 

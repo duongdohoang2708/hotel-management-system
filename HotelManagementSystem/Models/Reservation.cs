@@ -13,10 +13,6 @@ public partial class Reservation
 
     public DateTime CheckOutPlan { get; set; }
 
-    public decimal? Deposit { get; set; }
-
-    public string Status { get; set; } = null!;
-
     public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
     public virtual Customer Customer { get; set; } = null!;
