@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using HotelManagementSystem.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,17 +17,34 @@ namespace HotelManagementSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool isSidebarOpen = true;
+
         public MainWindow()
         {
             InitializeComponent();
-            var role = AppSession.CurrentAccount?.Role;
-            // Ví dụ: nếu không phải Admin thì ẩn menu quản trị
-            if (role != "Admin")
+            SidebarColumn.Width = new GridLength(0);
+            Sidebar.Visibility = Visibility.Collapsed;
+            isSidebarOpen = false;
+
+            // Lấy role và userName từ tài khoản đăng nhập
+            string role = AppSession.CurrentAccount?.Role ?? "Guest";
+            string userName = AppSession.CurrentAccount?.Username ?? "";
+            Sidebar.DataContext = new SideBarUserControlViewModel(role, userName);
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isSidebarOpen)
             {
-                // Giả sử bạn có Menu tên AdminMenu
-                // AdminMenu.Visibility = Visibility.Collapsed;
+                SidebarColumn.Width = new GridLength(0);
+                Sidebar.Visibility = Visibility.Collapsed;
             }
-            // Tương tự cho các quyền khác
+            else
+            {
+                SidebarColumn.Width = new GridLength(220);
+                Sidebar.Visibility = Visibility.Visible;
+            }
+            isSidebarOpen = !isSidebarOpen;
         }
     }
 }

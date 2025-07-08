@@ -4,9 +4,57 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelManagementSystem"
+        xmlns:converters="clr-namespace:HotelManagementSystem.Converters"
+        xmlns:views="clr-namespace:HotelManagementSystem.Views.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1200">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
-        
+        <!-- Background Image -->
+        <Image Source="Assets/background.jpg"
+               Stretch="UniformToFill"
+               Panel.ZIndex="0"
+               Opacity="0.9"/>
+
+        <!-- Layout chính -->
+        <Grid Panel.ZIndex="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="SidebarColumn" Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <views:SideBarUserControl x:Name="Sidebar"
+                                      Visibility="{Binding IsSidebarOpen, Converter={StaticResource BoolToVisibilityConverter}}"
+                                      HorizontalAlignment="Left"
+                                      Grid.Column="0"
+                                      Effect="{x:Null}"/>
+
+            <!-- Main Content -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Topbar -->
+                <DockPanel Grid.Row="0" Background="#F5F5F5" Opacity="0.95" LastChildFill="True" Height="60">
+                    <Button Content="☰" Width="50" Height="50" Margin="5,5,0,5" Click="HamburgerButton_Click" DockPanel.Dock="Left"
+                            Style="{x:Null}" FontSize="22" Background="White" BorderThickness="0"/>
+                    <TextBlock Text="DD Luxury Hotel" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="16,0,0,0" Foreground="#2D2D2D"/>
+                </DockPanel>
+                <!-- Nội dung chính -->
+                <Border Grid.Row="1" Margin="40" Background="#B2FFFFFF" CornerRadius="18" Padding="36" Opacity="0.97" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="Chào mừng đến với DD Luxury Hotel"
+                                   FontSize="32" FontWeight="Bold" Foreground="#222" TextAlignment="Center"/>
+                        <TextBlock Text="Khách sạn sang trọng, dịch vụ đẳng cấp, trải nghiệm tuyệt vời."
+                                   FontSize="18" Foreground="#444" Margin="0,16,0,0" TextAlignment="Center"/>
+                        <!-- Thêm các nút hoặc thông tin nổi bật ở đây nếu muốn -->
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
