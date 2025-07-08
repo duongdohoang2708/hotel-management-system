@@ -44,6 +44,8 @@ namespace HotelManagementSystem.ViewModels
         public ICommand EmployeeCommand { get; }
         public ICommand StatisticCommand { get; }
         public ICommand LogoutCommand { get; }
+        
+        public event Action? LogoutRequested;
 
         public SideBarUserControlViewModel(string role, string userName = "")
         {
@@ -80,7 +82,12 @@ namespace HotelManagementSystem.ViewModels
             AccountCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL tài khoản */ });
             EmployeeCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL nhân viên */ });
             StatisticCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Thống kê */ });
-            LogoutCommand = new RelayCommand(_ => { /* Xử lý đăng xuất */ });
+            LogoutCommand = new RelayCommand(_ => LogOut());
+        }
+
+        private void LogOut()
+        {
+            LogoutRequested?.Invoke();
         }
     }
 }

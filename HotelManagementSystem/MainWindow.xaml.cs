@@ -17,19 +17,25 @@ namespace HotelManagementSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool isSidebarOpen = true;
+        private bool isSidebarOpen = false;
 
         public MainWindow()
         {
             InitializeComponent();
             SidebarColumn.Width = new GridLength(0);
             Sidebar.Visibility = Visibility.Collapsed;
-            isSidebarOpen = false;
 
             // Lấy role và userName từ tài khoản đăng nhập
             string role = AppSession.CurrentAccount?.Role ?? "Guest";
             string userName = AppSession.CurrentAccount?.Username ?? "";
-            Sidebar.DataContext = new SideBarUserControlViewModel(role, userName);
+            var viewModel = new SideBarUserControlViewModel(role, userName);
+            Sidebar.DataContext = viewModel;
+            // Đăng ký event logout
+            viewModel.LogoutRequested += () =>
+            {
+                AppSession.CurrentAccount = null;
+                this.Close();
+            };
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
