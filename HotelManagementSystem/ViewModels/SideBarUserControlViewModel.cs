@@ -44,7 +44,9 @@ namespace HotelManagementSystem.ViewModels
         public ICommand EmployeeCommand { get; }
         public ICommand StatisticCommand { get; }
         public ICommand LogoutCommand { get; }
-        
+
+        public event Action? HomeRequested;
+        public event Action? RoomRequested;
         public event Action? LogoutRequested;
 
         public SideBarUserControlViewModel(string role, string userName = "")
@@ -68,8 +70,8 @@ namespace HotelManagementSystem.ViewModels
             ShowEmployee = role == "Admin" || role == "Manager";
             ShowStatistic = role == "Admin" || role == "Manager";
 
-            HomeCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Trang chủ */ });
-            RoomCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Phòng */ });
+            HomeCommand = new RelayCommand(_ => Home());
+            RoomCommand = new RelayCommand(_ => Room());
             BookingCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Đặt Phòng */ });
             BillCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Hóa đơn */ });
             CustomerCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL khách hàng */ });
@@ -83,6 +85,16 @@ namespace HotelManagementSystem.ViewModels
             EmployeeCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL nhân viên */ });
             StatisticCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Thống kê */ });
             LogoutCommand = new RelayCommand(_ => LogOut());
+        }
+
+        private void Home()
+        {
+            HomeRequested?.Invoke();
+        }
+
+        private void Room()
+        {
+            RoomRequested.Invoke();
         }
 
         private void LogOut()

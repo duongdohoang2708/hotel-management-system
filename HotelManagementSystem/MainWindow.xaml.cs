@@ -1,4 +1,5 @@
 ﻿using HotelManagementSystem.ViewModels;
+using HotelManagementSystem.Views.UserControls;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,13 +26,37 @@ namespace HotelManagementSystem
             SidebarColumn.Width = new GridLength(0);
             Sidebar.Visibility = Visibility.Collapsed;
 
+            // Gán DataContext cho MainWindow để binding hoạt động
+            this.DataContext = new MainWindowViewModel();
+
             // Lấy role và userName từ tài khoản đăng nhập
             string role = AppSession.CurrentAccount?.Role ?? "Guest";
             string userName = AppSession.CurrentAccount?.Username ?? "";
-            var viewModel = new SideBarUserControlViewModel(role, userName);
-            Sidebar.DataContext = viewModel;
+            var sideBarviewModel = new SideBarUserControlViewModel(role, userName);
+            Sidebar.DataContext = sideBarviewModel;
+
+            // Đăng ký event chuyển MH trang chủ
+            sideBarviewModel.HomeRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm) 
+                {
+                    mainVm.CurrentView = new WelcomeUserControl();
+                }
+                    
+            };
+
+            // Đăng ký event chuyển MH trạng thái phòng
+            sideBarviewModel.RoomRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    mainVm.CurrentView = new RoomStatusUserControl();
+                }
+
+            };
+
             // Đăng ký event logout
-            viewModel.LogoutRequested += () =>
+            sideBarviewModel.LogoutRequested += () =>
             {
                 AppSession.CurrentAccount = null;
                 this.Close();
