@@ -86,6 +86,8 @@ namespace HotelManagementSystem.ViewModels
                     stayDuration = days > 0 ? $"{days} ngày" : "1 ngày";
                 }
 
+                int? guestCount = latestReservationRoom != null ? latestReservationRoom.GuestCount : (int?)null;
+
                 // Màu nền và màu chữ card theo trạng thái phòng (màu nhạt)
                 (string cardBg, string cardFg) = room.Status switch
                 {
@@ -115,6 +117,7 @@ namespace HotelManagementSystem.ViewModels
                     CheckInPlan = checkIn,
                     CheckOutPlan = checkOut,
                     StayDuration = stayDuration,
+                    GuestCount = guestCount,
                     CardBackground = cardBg,
                     CardForeground = cardFg,
                     CleanStatusIcon = icon,

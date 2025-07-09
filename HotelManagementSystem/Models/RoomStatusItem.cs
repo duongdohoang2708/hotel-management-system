@@ -13,6 +13,7 @@ namespace HotelManagementSystem.Models
         public DateTime? CheckInPlan { get; set; }
         public DateTime? CheckOutPlan { get; set; }
         public string? StayDuration { get; set; } // Ví dụ: "2 ngày", "3 giờ"
+        public int? GuestCount { get; set; }
         public string CardBackground { get; set; } = "#FFF";
         public string CleanStatusIcon { get; set; } = "Check";
         public string CleanStatusIconColor { get; set; } = "#388E3C";

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Thêm dịch vụ" Height="515" Width="920" WindowStartupLocation="CenterOwner">
+        Title="Thêm dịch vụ" Height="540" Width="1000" WindowStartupLocation="CenterOwner">
     <Border Background="#fff" CornerRadius="14" Padding="18" Margin="8">
         <StackPanel>
             <TextBlock Text="Thêm dịch vụ" FontSize="28" FontWeight="Bold" Foreground="#039BE5" Margin="0,-8,0,17" HorizontalAlignment="Center"/>
@@ -27,10 +27,20 @@
                             <DataGridTextColumn Header="Loại DV" Binding="{Binding Category.CategoryName}" Width="120" MinWidth="80"/>
                             <DataGridTextColumn Header="Dịch vụ" Binding="{Binding ServiceName}" Width="*" MinWidth="120"/>
                             <DataGridTextColumn Header="Giá" Binding="{Binding UnitPrice, StringFormat=N0}" Width="90" MinWidth="70"/>
-                            <DataGridTemplateColumn Width="60" MinWidth="50">
+                            <DataGridTemplateColumn Width="70" MinWidth="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="+" Command="{Binding DataContext.AddToSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Width="32" Height="32" Background="#43A047" Foreground="White" FontWeight="Bold"/>
+                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Button Command="{Binding DataContext.AddToSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    Width="32" Height="32"
+                                                    Background="#43A047" Foreground="White"
+                                                    BorderThickness="0"
+                                                    Padding="0"
+                                                    ToolTip="Thêm">
+                                                <TextBlock Text="+" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Button>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -48,7 +58,17 @@
                             <DataGridTemplateColumn Width="60" MinWidth="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="✖" Command="{Binding DataContext.RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Width="28" Height="28" Background="#E53935" Foreground="White"/>
+                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Button Command="{Binding DataContext.RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    Width="28" Height="28"
+                                                    Background="#E53935" Foreground="White"
+                                                    BorderThickness="0"
+                                                    Padding="0"
+                                                    ToolTip="Xóa">
+                                                <TextBlock Text="✖" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Button>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

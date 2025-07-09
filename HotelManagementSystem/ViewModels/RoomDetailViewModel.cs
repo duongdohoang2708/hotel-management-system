@@ -13,7 +13,7 @@ namespace HotelManagementSystem.ViewModels
         public string? GuestName { get; }
         public DateTime? CheckInPlan { get; }
         public string? StayDuration { get; }
-        public int GuestCount { get; } = 1;
+        public int? GuestCount { get; }
         public string Status { get; }
         public string CleanStatus { get; set; }
         public ObservableCollection<string> CleanStatusOptions { get; } = new ObservableCollection<string> { "Đã dọn dẹp", "Chưa dọn dẹp", "Sửa chữa" };
@@ -42,6 +42,7 @@ namespace HotelManagementSystem.ViewModels
             StayDuration = room.StayDuration;
             Status = room.Status;
             CleanStatus = room.CleanStatus;
+            GuestCount = room.GuestCount;
 
             // Lấy danh sách dịch vụ thực tế từ DB
             using (var db = new HotelManagementDbContext())
