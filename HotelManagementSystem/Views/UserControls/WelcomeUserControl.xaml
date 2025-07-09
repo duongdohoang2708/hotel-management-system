@@ -1,0 +1,27 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.WelcomeUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="700">
+
+        <Grid>
+            <!-- Background Image phủ toàn bộ -->
+            <Image Source="/HotelManagementSystem;component/Assets/background.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.9"/>
+            <!-- Nội dung căn giữa -->
+        <Border Background="#B2FFFFFF" CornerRadius="16" Padding="14" Opacity="0.97" 
+                HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,28,0,0">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Chào mừng đến với DD Luxury Hotel"
+                           FontSize="28" FontWeight="Bold" Foreground="#222" TextAlignment="Center"/>
+                <TextBlock Text="Khách sạn sang trọng, dịch vụ đẳng cấp, trải nghiệm tuyệt vời."
+                           FontSize="14" Foreground="#444" Margin="0,8,0,0" TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</UserControl>
