@@ -2,9 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:HotelManagementSystem.Views.UserControls"
+             xmlns:local="clr-namespace:HotelManagementSystem.Converters"
              xmlns:vm="clr-namespace:HotelManagementSystem.ViewModels"
              Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <local:RadioButtonCheckedToStringConverter x:Key="RadioButtonCheckedToStringConverter"/>
+    </UserControl.Resources>
     <Grid Background="#F8F9FA">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
@@ -16,34 +19,31 @@
                 <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.12"/>
             </Border.Effect>
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <!-- Ngày giờ và tìm kiếm -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20" HorizontalAlignment="Center">
-                    <DatePicker Width="180"/>
-                </StackPanel>
-                <TextBox Width="200" Height="32" Margin="0,0,0,24" materialDesign:HintAssist.Hint="Tìm phòng"/>
+                <!-- Tìm kiếm -->
+                <TextBlock Text="Tìm kiếm" FontWeight="Bold" Foreground="#1976D2" FontSize="16" Margin="0,0,0,8"/>
+                <TextBox Width="220" Height="32" Margin="0,0,0,24" materialDesign:HintAssist.Hint="Tìm phòng"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
                 <!-- Trạng thái -->
                 <TextBlock Text="Trạng thái" FontWeight="Bold" Foreground="#1976D2" FontSize="16" Margin="0,0,0,8"/>
                 <StackPanel Margin="0,0,0,20">
-                    <RadioButton Content="Phòng trống" GroupName="Status" Margin="0,2"/>
-                    <RadioButton Content="Phòng đã đặt" GroupName="Status" Margin="0,2"/>
-                    <RadioButton Content="Phòng đang thuê" GroupName="Status" Margin="0,2"/>
-                    <RadioButton Content="Tất cả phòng" GroupName="Status" Margin="0,2" IsChecked="True"/>
-                </StackPanel>
-                <!-- Loại phòng -->
-                <TextBlock Text="Loại phòng" FontWeight="Bold" Foreground="#1976D2" FontSize="16" Margin="0,0,0,8"/>
-                <StackPanel Margin="0,0,0,20">
-                    <RadioButton Content="Phòng đơn" GroupName="Type" Margin="0,2"/>
-                    <RadioButton Content="Phòng đôi" GroupName="Type" Margin="0,2"/>
-                    <RadioButton Content="Phòng gia đình" GroupName="Type" Margin="0,2"/>
-                    <RadioButton Content="Tất cả loại phòng" GroupName="Type" Margin="0,2" IsChecked="True"/>
+                    <RadioButton Content="Phòng trống" GroupName="Status" Margin="0,2"
+                                 IsChecked="{Binding SelectedStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Phòng trống, Mode=TwoWay}"/>
+                    <RadioButton Content="Phòng đã đặt" GroupName="Status" Margin="0,2"
+                                 IsChecked="{Binding SelectedStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Phòng đã đặt, Mode=TwoWay}"/>
+                    <RadioButton Content="Phòng đang thuê" GroupName="Status" Margin="0,2"
+                                 IsChecked="{Binding SelectedStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Phòng đang thuê, Mode=TwoWay}"/>
+                    <RadioButton Content="Tất cả phòng" GroupName="Status" Margin="0,2" IsChecked="{Binding SelectedStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Tất cả, Mode=TwoWay}"/>
                 </StackPanel>
                 <!-- Dọn dẹp -->
                 <TextBlock Text="Dọn dẹp" FontWeight="Bold" Foreground="#1976D2" FontSize="16" Margin="0,0,0,8"/>
                 <StackPanel>
-                    <RadioButton Content="Đã dọn dẹp" GroupName="Clean" Margin="0,2"/>
-                    <RadioButton Content="Chưa dọn dẹp" GroupName="Clean" Margin="0,2"/>
-                    <RadioButton Content="Sửa chữa" GroupName="Clean" Margin="0,2"/>
-                    <RadioButton Content="Tất cả" GroupName="Clean" Margin="0,2" IsChecked="True"/>
+                    <RadioButton Content="Đã dọn dẹp" GroupName="Clean" Margin="0,2"
+                                 IsChecked="{Binding SelectedCleanStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Đã dọn dẹp, Mode=TwoWay}"/>
+                    <RadioButton Content="Chưa dọn dẹp" GroupName="Clean" Margin="0,2"
+                                 IsChecked="{Binding SelectedCleanStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Chưa dọn dẹp, Mode=TwoWay}"/>
+                    <RadioButton Content="Sửa chữa" GroupName="Clean" Margin="0,2"
+                                 IsChecked="{Binding SelectedCleanStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Sửa chữa, Mode=TwoWay}"/>
+                    <RadioButton Content="Tất cả" GroupName="Clean" Margin="0,2" IsChecked="{Binding SelectedCleanStatus, Converter={StaticResource RadioButtonCheckedToStringConverter}, ConverterParameter=Tất cả, Mode=TwoWay}"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -73,20 +73,20 @@
                                         <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
                                             <materialDesign:PackIcon Kind="Account" Width="28" Height="28" Margin="0,0,8,0" Foreground="#757575"/>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding RoomName}" FontWeight="Bold" FontSize="16"/>
-                                                <TextBlock Text="{Binding CustomerName}" FontSize="14" FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="#388E3C"/>
+                                                <TextBlock Text="{Binding RoomNumber}" FontWeight="Bold" FontSize="16" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding GuestName}" FontSize="14" FontWeight="SemiBold" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                         <!-- Thông tin phụ -->
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,12,8" VerticalAlignment="Bottom">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
                                                 <materialDesign:PackIcon Kind="Calendar" Width="18" Height="18" Foreground="#757575" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding StayDuration}" FontSize="13"/>
+                                                <TextBlock Text="{Binding StayDuration}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <materialDesign:PackIcon Kind="Check" Width="18" Height="18" Foreground="#388E3C" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13"/>
+                                                <materialDesign:PackIcon Kind="{Binding CleanStatusIcon}" Width="18" Height="18" Margin="0,0,4,0" Foreground="{Binding CleanStatusIconColor}"/>
+                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Grid>
@@ -116,20 +116,20 @@
                                         <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
                                             <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" Margin="0,0,8,0" Foreground="#757575"/>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding RoomName}" FontWeight="Bold" FontSize="16"/>
-                                                <TextBlock Text="{Binding CustomerName}" FontSize="14" FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="#388E3C"/>
+                                                <TextBlock Text="{Binding RoomNumber}" FontWeight="Bold" FontSize="16" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding GuestName}" FontSize="14" FontWeight="SemiBold" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                         <!-- Thông tin phụ -->
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,12,8" VerticalAlignment="Bottom">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
                                                 <materialDesign:PackIcon Kind="Calendar" Width="18" Height="18" Foreground="#757575" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding StayDuration}" FontSize="13"/>
+                                                <TextBlock Text="{Binding StayDuration}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <materialDesign:PackIcon Kind="Check" Width="18" Height="18" Foreground="#388E3C" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13"/>
+                                                <materialDesign:PackIcon Kind="{Binding CleanStatusIcon}" Width="18" Height="18" Margin="0,0,4,0" Foreground="{Binding CleanStatusIconColor}"/>
+                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Grid>
@@ -159,20 +159,20 @@
                                         <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
                                             <materialDesign:PackIcon Kind="HomeGroup" Width="28" Height="28" Margin="0,0,8,0" Foreground="#757575"/>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding RoomName}" FontWeight="Bold" FontSize="16"/>
-                                                <TextBlock Text="{Binding CustomerName}" FontSize="14" FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="#388E3C"/>
+                                                <TextBlock Text="{Binding RoomNumber}" FontWeight="Bold" FontSize="16" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding GuestName}" FontSize="14" FontWeight="SemiBold" Foreground="{Binding CardForeground}"/>
+                                                <TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                         <!-- Thông tin phụ -->
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,12,8" VerticalAlignment="Bottom">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
                                                 <materialDesign:PackIcon Kind="Calendar" Width="18" Height="18" Foreground="#757575" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding StayDuration}" FontSize="13"/>
+                                                <TextBlock Text="{Binding StayDuration}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <materialDesign:PackIcon Kind="Check" Width="18" Height="18" Foreground="#388E3C" Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13"/>
+                                                <materialDesign:PackIcon Kind="{Binding CleanStatusIcon}" Width="18" Height="18" Margin="0,0,4,0" Foreground="{Binding CleanStatusIconColor}"/>
+                                                <TextBlock Text="{Binding CleanStatus}" FontSize="13" Foreground="{Binding CardForeground}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Grid>
@@ -184,4 +184,4 @@
             </ScrollViewer>
         </Border>
     </Grid>
-</UserControl> 
+</UserControl>

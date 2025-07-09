@@ -8,6 +8,8 @@ namespace HotelManagementSystem.Views.UserControls
         public RoomStatusUserControl()
         {
             InitializeComponent();
+            var viewModel = new RoomStatusViewModel();
+            DataContext = viewModel;
         }
     }
 } 
