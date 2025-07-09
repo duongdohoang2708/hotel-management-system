@@ -4,7 +4,19 @@
              xmlns:local="clr-namespace:HotelManagementSystem"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
+        <ResourceDictionary>
+            <!-- Converter phải nằm trong ResourceDictionary -->
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
+            <!-- Merge theme của MaterialDesign -->
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Base Material theme (required) -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+                <!-- Optional: Color theme -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
-

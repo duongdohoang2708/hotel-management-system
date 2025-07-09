@@ -1,0 +1,74 @@
+<Window x:Class="HotelManagementSystem.Views.Windows.RoomDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Chi tiết phòng" Height="520" Width="900" WindowStartupLocation="CenterScreen">
+    <Border Background="#FFF" CornerRadius="18" Padding="24" Margin="12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!-- Tiêu đề phòng -->
+            <TextBlock Text="{Binding RoomNumber}" FontSize="32" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Center"/>
+            <!-- Nội dung chính -->
+            <StackPanel Grid.Row="1" Margin="0,18,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Account" Width="24" Height="24"/>
+                        <TextBlock Text="{Binding GuestName}" FontSize="18" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Calendar" Width="22" Height="22"/>
+                        <TextBlock Text="{Binding CheckInPlan, StringFormat='dd/MM/yyyy HH:mm'}" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CalendarCheck" Width="22" Height="22"/>
+                        <TextBlock Text="{Binding StayDuration}" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountGroup" Width="22" Height="22"/>
+                        <TextBlock Text="{Binding GuestCount}" FontSize="16"/>
+                    </StackPanel>
+                </StackPanel>
+                <Grid Margin="0,18,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Trạng thái bên trái -->
+                    <Border Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="10" Padding="16" Margin="0,0,12,0" Background="#FAFAFA">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Tình trạng phòng" FontWeight="Bold" Foreground="#1976D2"/>
+                            <TextBlock Text="{Binding Status}" FontSize="16" Margin="0,8,0,0"/>
+                            <TextBlock Text="Tình trạng dọn dẹp" FontWeight="Bold" Foreground="#1976D2" Margin="0,18,0,0"/>
+                            <ComboBox ItemsSource="{Binding CleanStatusOptions}" SelectedItem="{Binding CleanStatus, Mode=TwoWay}" Width="180" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Dịch vụ bên phải -->
+                    <Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="10" Padding="12" Background="#FAFAFA">
+                        <DataGrid ItemsSource="{Binding Services}" AutoGenerateColumns="False" Height="180" CanUserAddRows="False" CanUserDeleteRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Dịch vụ" Binding="{Binding ServiceName}" Width="*"/>
+                                <DataGridTextColumn Header="SL" Binding="{Binding Quantity}" Width="60"/>
+                                <DataGridTextColumn Header="Thành tiền" Binding="{Binding TotalPrice}" Width="120"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+            <!-- Nút thao tác -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,0">
+                <Button Content="Nhận phòng" Command="{Binding CheckInCommand}" Width="120" Height="38" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="{Binding ShowCheckInButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="Thêm dịch vụ" Command="{Binding AddServiceCommand}" Width="120" Height="38" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="{Binding ShowAddServiceButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="Thanh toán" Command="{Binding CheckoutCommand}" Width="120" Height="38" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="{Binding ShowCheckoutButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="Lưu" Command="{Binding SaveCommand}" Width="120" Height="38" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                <Button Content="Thoát" Command="{Binding CloseCommand}" Width="120" Height="38" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window> 

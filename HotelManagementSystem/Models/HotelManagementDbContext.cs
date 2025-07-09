@@ -212,21 +212,32 @@ public partial class HotelManagementDbContext : DbContext
             entity.HasIndex(e => e.RoomNumber, "UQ__Rooms__AE10E07A0D7204EA").IsUnique();
 
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
+
+            // ↓↓↓  BỔ SUNG / SỬA ĐỔI
+            entity.Property(e => e.Status)
+                  .HasMaxLength(20)                 // tên dài “Phòng đang thuê”
+                  .IsUnicode()                      // giữ Unicode (mặc định là true)
+                  .HasDefaultValue("Phòng trống");
+
             entity.Property(e => e.CleanStatus)
-                .HasMaxLength(8)
-                .IsUnicode(false)
-                .HasDefaultValue("Clean");
+                  .HasMaxLength(20)
+                  .IsUnicode()
+                  .HasDefaultValue("Đã dọn dẹp");
+
+            entity.HasCheckConstraint("CK_Room_Status",
+                "[Status] IN (N'Phòng trống', N'Phòng đã đặt', N'Phòng đang thuê')");
+
+            entity.HasCheckConstraint("CK_Room_CleanStatus",
+                "[CleanStatus] IN (N'Đã dọn dẹp', N'Chưa dọn dẹp', N'Sửa chữa')");
+
+            /* giữ nguyên các cột/quan hệ còn lại */
             entity.Property(e => e.RoomNumber).HasMaxLength(10);
             entity.Property(e => e.RoomTypeId).HasColumnName("RoomTypeID");
-            entity.Property(e => e.Status)
-                .HasMaxLength(12)
-                .IsUnicode(false)
-                .HasDefaultValue("Vacant");
 
             entity.HasOne(d => d.RoomType).WithMany(p => p.Rooms)
-                .HasForeignKey(d => d.RoomTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Room_RoomType");
+                  .HasForeignKey(d => d.RoomTypeId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_Room_RoomType");
         });
 
         modelBuilder.Entity<RoomAmenity>(entity =>

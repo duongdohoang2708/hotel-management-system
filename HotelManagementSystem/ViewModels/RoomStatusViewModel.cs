@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using HotelManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Input;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -53,6 +54,9 @@ namespace HotelManagementSystem.ViewModels
         public IEnumerable<RoomStatusItem> SingleRooms => Rooms.Where(r => r.RoomType == "Đơn" && IsMatch(r));
         public IEnumerable<RoomStatusItem> DoubleRooms => Rooms.Where(r => r.RoomType == "Đôi" && IsMatch(r));
         public IEnumerable<RoomStatusItem> FamilyRooms => Rooms.Where(r => r.RoomType == "Gia đình" && IsMatch(r));
+
+        public Action<RoomStatusItem>? OpenRoomDetailAction { get; set; }
+        public ICommand OpenRoomDetailCommand { get; }
 
         public RoomStatusViewModel()
         {
@@ -118,6 +122,11 @@ namespace HotelManagementSystem.ViewModels
                 });
             }
             Rooms = new ObservableCollection<RoomStatusItem>(items);
+            OpenRoomDetailCommand = new RelayCommand(item =>
+            {
+                if (item is RoomStatusItem room)
+                    OpenRoomDetailAction?.Invoke(room);
+            });
         }
     }
 } 

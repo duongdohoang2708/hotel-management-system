@@ -63,7 +63,9 @@
                             <DataTemplate>
                                 <Border Width="240" Height="110" Margin="10" CornerRadius="14" 
                                         Background="{Binding CardBackground}" 
-                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                        BorderBrush="#E0E0E0" BorderThickness="1"
+                                        MouseLeftButtonUp="CardBorder_MouseLeftButtonUp"
+                                        Cursor="Hand">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*"/>
@@ -106,7 +108,9 @@
                             <DataTemplate>
                                 <Border Width="240" Height="110" Margin="10" CornerRadius="14" 
                                         Background="{Binding CardBackground}" 
-                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                        BorderBrush="#E0E0E0" BorderThickness="1"
+                                        MouseLeftButtonUp="CardBorder_MouseLeftButtonUp"
+                                        Cursor="Hand">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*"/>
@@ -149,7 +153,9 @@
                             <DataTemplate>
                                 <Border Width="240" Height="110" Margin="10" CornerRadius="14" 
                                         Background="{Binding CardBackground}" 
-                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                        BorderBrush="#E0E0E0" BorderThickness="1"
+                                        MouseLeftButtonUp="CardBorder_MouseLeftButtonUp"
+                                        Cursor="Hand">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*"/>

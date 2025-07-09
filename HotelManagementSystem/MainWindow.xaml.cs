@@ -61,6 +61,43 @@ namespace HotelManagementSystem
                 AppSession.CurrentAccount = null;
                 this.Close();
             };
+
+            // Gán action mở chi tiết phòng mỗi khi CurrentView đổi
+            if (this.DataContext is MainWindowViewModel mainVM)
+            {
+                SetRoomDetailAction(mainVM.CurrentView);
+                // Lắng nghe thay đổi CurrentView nếu có implement INotifyPropertyChanged
+                mainVM.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(mainVM.CurrentView))
+                    {
+                        SetRoomDetailAction(mainVM.CurrentView);
+                    }
+                };
+            }
+        }
+
+        private void SetRoomDetailAction(object? currentView)
+        {
+            if (currentView is HotelManagementSystem.Views.UserControls.RoomStatusUserControl uc &&
+                uc.DataContext is HotelManagementSystem.ViewModels.RoomStatusViewModel vm)
+            {
+                vm.OpenRoomDetailAction = room =>
+                {
+                    var detailWindow = new HotelManagementSystem.Views.Windows.RoomDetailWindow();
+                    var detailVm = new RoomDetailViewModel(room);
+                    detailWindow.DataContext = detailVm;
+                    // Lắng nghe event reload
+                    detailWindow.RequestReloadRoomStatus += () =>
+                    {
+                        if (this.DataContext is MainWindowViewModel mainVm)
+                        {
+                            mainVm.CurrentView = new RoomStatusUserControl();
+                        }
+                    };
+                    detailWindow.ShowDialog();
+                };
+            }
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
