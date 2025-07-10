@@ -26,4 +26,5 @@ public partial class Employee
     public decimal? Salary { get; set; }
 
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+    public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
 }

@@ -88,26 +88,34 @@ public partial class HotelManagementDbContext : DbContext
             entity.HasKey(e => e.BillId).HasName("PK__Bills__11F2FC4ADF655064");
 
             entity.Property(e => e.BillId).HasColumnName("BillID");
-            entity.Property(e => e.FinalAmount).HasColumnType("decimal(12, 2)");
-            entity.Property(e => e.IssueDate)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
-            entity.Property(e => e.PaymentMethod)
-                .HasMaxLength(20)
-                .IsUnicode(false);
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
+
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");  
+
+            entity.Property(e => e.IssueDate)
+                  .HasPrecision(0)
+                  .HasDefaultValueSql("(sysutcdatetime())");
+
             entity.Property(e => e.RoomCharge).HasColumnType("decimal(12, 2)");
             entity.Property(e => e.ServiceCharge).HasColumnType("decimal(12, 2)");
             entity.Property(e => e.Vatpct)
-                .HasDefaultValue(0m)
-                .HasColumnType("decimal(5, 2)")
-                .HasColumnName("VATPct");
+                  .HasColumnType("decimal(5, 2)")
+                  .HasColumnName("VATPct")
+                  .HasDefaultValue(0m);
 
-            entity.HasOne(d => d.Reservation).WithMany(p => p.Bills)
-                .HasForeignKey(d => d.ReservationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Bill_Reservation");
+            entity.HasOne(d => d.Reservation)
+                  .WithMany(p => p.Bills)
+                  .HasForeignKey(d => d.ReservationId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_Bill_Reservation");
+
+            entity.HasOne(d => d.Employee)                     
+                  .WithMany(p => p.Bills)
+                  .HasForeignKey(d => d.EmployeeId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_Bill_Employee");
         });
+
 
         modelBuilder.Entity<Customer>(entity =>
         {
