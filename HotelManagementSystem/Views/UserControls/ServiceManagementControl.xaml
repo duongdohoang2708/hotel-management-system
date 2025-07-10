@@ -1,0 +1,31 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.ServiceManagementControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,10" VerticalAlignment="Center">
+            <TextBox Width="300" Margin="0,0,10,0"
+                     materialDesign:HintAssist.Hint="Nhập tên hoặc loại dịch vụ"
+                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Thêm dịch vụ" Width="180" Command="{Binding AddCommand}" Background="#4CAF50" Foreground="White"/>
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding FilteredServiceList}" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã dịch vụ" Binding="{Binding ServiceId}" Width="80"/>
+                <DataGridTextColumn Header="Tên dịch vụ" Binding="{Binding ServiceName}" Width="200"/>
+                <DataGridTextColumn Header="Loại dịch vụ" Binding="{Binding Category.CategoryName}" Width="180"/>
+                <DataGridTextColumn Header="Đơn giá" Binding="{Binding UnitPrice}" Width="120"/>
+                <DataGridTemplateColumn Header="Sửa" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                <TextBlock Text="✏️"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl> 
