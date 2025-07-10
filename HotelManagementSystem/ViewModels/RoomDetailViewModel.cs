@@ -85,6 +85,7 @@ namespace HotelManagementSystem.ViewModels
                     db.SaveChanges();
                 }
             }
+            System.Windows.MessageBox.Show("Nhận phòng thành công!", "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             // Gửi event reload lại danh sách phòng
             RequestReloadRoomStatus?.Invoke();
             // Đóng cửa sổ chi tiết phòng
