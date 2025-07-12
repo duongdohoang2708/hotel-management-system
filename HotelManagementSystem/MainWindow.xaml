@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:HotelManagementSystem.Converters"
         xmlns:views="clr-namespace:HotelManagementSystem.Views.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1200">
+        Title="Quản lý khách sạn" Height="800" Width="1200">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>

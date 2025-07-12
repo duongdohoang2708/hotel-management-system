@@ -123,6 +123,7 @@ namespace HotelManagementSystem.ViewModels
                 }
                 db.SaveChanges();
             }
+            System.Windows.MessageBox.Show("Thêm dịch vụ thành công!", "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             RequestReloadRoomDetail?.Invoke();
             RequestClose?.Invoke();
         }

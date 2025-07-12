@@ -87,12 +87,6 @@
                     <TextBlock Text="QL phòng" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button Command="{Binding RoomTypeCommand}" Visibility="{Binding ShowRoomType, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="ViewList" Width="24" Height="24" Foreground="#0288D1" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL loại phòng" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
             <Button Command="{Binding ServiceCommand}" Visibility="{Binding ShowService, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <materialDesign:PackIcon Kind="Bell" Width="24" Height="24" Foreground="#C62828" Margin="0,0,10,0"/>

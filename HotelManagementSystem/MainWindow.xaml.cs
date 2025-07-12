@@ -42,7 +42,6 @@ namespace HotelManagementSystem
                 {
                     mainVm.CurrentView = new WelcomeUserControl();
                 }
-                    
             };
 
             // Đăng ký event chuyển MH trạng thái phòng
@@ -52,7 +51,15 @@ namespace HotelManagementSystem
                 {
                     mainVm.CurrentView = new RoomStatusUserControl();
                 }
+            };
 
+            // Đăng ký event chuyển MH QL phòng
+            sideBarviewModel.RoomManagementRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    mainVm.CurrentView = new RoomManagementControl();
+                }
             };
 
             // Đăng ký event logout
@@ -60,6 +67,70 @@ namespace HotelManagementSystem
             {
                 AppSession.CurrentAccount = null;
                 this.Close();
+            };
+
+            // Đăng ký event chuyển MH QL khách hàng
+            sideBarviewModel.CustomerRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    mainVm.CurrentView = new CustomerManagementUserControl();
+                }
+            };
+
+            // Đăng ký event chuyển MH QL dịch vụ
+            sideBarviewModel.ServiceRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var control = new ServiceManagementControl();
+                    control.DataContext = new ServiceManagementViewModel();
+                    mainVm.CurrentView = control;
+                }
+            };
+
+            // Đăng ký event chuyển MH QL loại dịch vụ
+            sideBarviewModel.ServiceCategoryRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var control = new ServiceCategoryManagementControl();
+                    control.DataContext = new ServiceCategoryManagementViewModel();
+                    mainVm.CurrentView = control;
+                }
+            };
+
+            // Đăng ký event chuyển MH QL tiện nghi
+            sideBarviewModel.AmenityRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var control = new AmenityManagementControl();
+                    control.DataContext = new AmenityManagementViewModel();
+                    mainVm.CurrentView = control;
+                }
+            };
+
+            // Đăng ký event chuyển MH QL chi tiết tiện nghi
+            sideBarviewModel.RoomAmenityRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var control = new RoomAmenityManagementControl();
+                    control.DataContext = new RoomAmenityManagementViewModel();
+                    mainVm.CurrentView = control;
+                }
+            };
+
+            // Đăng ký event chuyển MH QL nhân viên
+            sideBarviewModel.EmployeeRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var control = new EmployeeManagementControl();
+                    control.DataContext = new EmployeeManagementViewModel();
+                    mainVm.CurrentView = control;
+                }
             };
 
             // Gán action mở chi tiết phòng mỗi khi CurrentView đổi

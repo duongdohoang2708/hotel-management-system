@@ -15,13 +15,13 @@ namespace HotelManagementSystem
 
             while (true)
             {
-                var loginWindow = new Views.Windows.LoginWindow();
-                var result = loginWindow.ShowDialog();
-                if (result == true && AppSession.CurrentAccount != null)
-                {
-                    var mainWindow = new MainWindow();
-                    MainWindow = mainWindow;
-                    mainWindow.ShowDialog();
+            var loginWindow = new Views.Windows.LoginWindow();
+            var result = loginWindow.ShowDialog();
+            if (result == true && AppSession.CurrentAccount != null)
+            {
+                var mainWindow = new MainWindow();
+                MainWindow = mainWindow;
+                mainWindow.ShowDialog();
                 }
                 else
                 {

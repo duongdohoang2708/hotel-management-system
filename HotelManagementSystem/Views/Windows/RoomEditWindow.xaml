@@ -1,7 +1,7 @@
 <Window x:Class="HotelManagementSystem.Views.Windows.RoomEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Chỉnh sửa phòng" Height="270" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        Title="Thêm/Chỉnh sửa phòng" Height="270" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

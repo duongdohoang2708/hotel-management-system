@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Thêm dịch vụ" Height="540" Width="1000" WindowStartupLocation="CenterOwner">
+        Title="Thêm dịch vụ" Height="540" Width="1000" WindowStartupLocation="CenterScreen">
     <Border Background="#fff" CornerRadius="14" Padding="18" Margin="8">
         <StackPanel>
             <TextBlock Text="Thêm dịch vụ" FontSize="28" FontWeight="Bold" Foreground="#039BE5" Margin="0,-8,0,17" HorizontalAlignment="Center"/>

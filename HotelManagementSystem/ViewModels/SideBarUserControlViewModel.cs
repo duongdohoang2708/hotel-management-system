@@ -19,7 +19,6 @@ namespace HotelManagementSystem.ViewModels
         public bool ShowBill { get; set; }
         public bool ShowCustomer { get; set; }
         public bool ShowRoomManagement { get; set; }
-        public bool ShowRoomType { get; set; }
         public bool ShowService { get; set; }
         public bool ShowServiceCategory { get; set; }
         public bool ShowAmenity { get; set; }
@@ -35,7 +34,6 @@ namespace HotelManagementSystem.ViewModels
         public ICommand BillCommand { get; }
         public ICommand CustomerCommand { get; }
         public ICommand RoomManagementCommand { get; }
-        public ICommand RoomTypeCommand { get; }
         public ICommand ServiceCommand { get; }
         public ICommand ServiceCategoryCommand { get; }
         public ICommand AmenityCommand { get; }
@@ -48,6 +46,13 @@ namespace HotelManagementSystem.ViewModels
         public event Action? HomeRequested;
         public event Action? RoomRequested;
         public event Action? LogoutRequested;
+        public event Action? CustomerRequested;
+        public event Action? RoomManagementRequested;
+        public event Action? ServiceRequested;
+        public event Action? ServiceCategoryRequested;
+        public event Action? AmenityRequested;
+        public event Action? RoomAmenityRequested;
+        public event Action? EmployeeRequested;
 
         public SideBarUserControlViewModel(string role, string userName = "")
         {
@@ -59,7 +64,6 @@ namespace HotelManagementSystem.ViewModels
             ShowBooking = role == "Manager" || role == "Receptionist";
             ShowRoom = role == "Manager" || role == "Receptionist";
             ShowRoomManagement = role == "Manager";
-            ShowRoomType = role == "Manager";
             ShowCustomer = role == "Manager" || role == "Receptionist";
             ShowBill = role == "Manager" || role == "Receptionist";
             ShowService = role == "Manager" || role == "Receptionist";
@@ -74,15 +78,14 @@ namespace HotelManagementSystem.ViewModels
             RoomCommand = new RelayCommand(_ => Room());
             BookingCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Đặt Phòng */ });
             BillCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Hóa đơn */ });
-            CustomerCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL khách hàng */ });
-            RoomManagementCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL phòng */ });
-            RoomTypeCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL loại phòng */ });
-            ServiceCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL dịch vụ */ });
-            ServiceCategoryCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL loại dịch vụ */ });
-            AmenityCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL tiện nghi */ });
-            RoomAmenityCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL chi tiết tiện nghi */ });
+            CustomerCommand = new RelayCommand(_ => Customer());
+            RoomManagementCommand = new RelayCommand(_ => RoomManagement());
+            ServiceCommand = new RelayCommand(_ => Service());
+            ServiceCategoryCommand = new RelayCommand(_ => ServiceCategory());
+            AmenityCommand = new RelayCommand(_ => Amenity());
+            RoomAmenityCommand = new RelayCommand(_ => RoomAmenity());
             AccountCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL tài khoản */ });
-            EmployeeCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL nhân viên */ });
+            EmployeeCommand = new RelayCommand(_ => Employee());
             StatisticCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Thống kê */ });
             LogoutCommand = new RelayCommand(_ => LogOut());
         }
@@ -95,6 +98,41 @@ namespace HotelManagementSystem.ViewModels
         private void Room()
         {
             RoomRequested.Invoke();
+        }
+
+        private void Customer()
+        {
+            CustomerRequested?.Invoke();
+        }
+
+        private void RoomManagement()
+        {
+            RoomManagementRequested?.Invoke();
+        }
+
+        private void Service()
+        {
+            ServiceRequested?.Invoke();
+        }
+
+        private void ServiceCategory()
+        {
+            ServiceCategoryRequested?.Invoke();
+        }
+
+        private void Amenity()
+        {
+            AmenityRequested?.Invoke();
+        }
+
+        private void RoomAmenity()
+        {
+            RoomAmenityRequested?.Invoke();
+        }
+
+        private void Employee()
+        {
+            EmployeeRequested?.Invoke();
         }
 
         private void LogOut()
