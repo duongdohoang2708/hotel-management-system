@@ -23,8 +23,9 @@ namespace HotelManagementSystem
         public MainWindow()
         {
             InitializeComponent();
-            SidebarColumn.Width = new GridLength(0);
-            Sidebar.Visibility = Visibility.Collapsed;
+            SidebarColumn.Width = new GridLength(220);
+            Sidebar.Visibility = Visibility.Visible;
+            WindowState= WindowState.Maximized;
 
             // Gán DataContext cho MainWindow để binding hoạt động
             this.DataContext = new MainWindowViewModel();
@@ -67,6 +68,14 @@ namespace HotelManagementSystem
             {
                 AppSession.CurrentAccount = null;
                 this.Close();
+                var loginWindow = new HotelManagementSystem.Views.Windows.LoginWindow();
+                var result = loginWindow.ShowDialog();
+                if (result == true && AppSession.CurrentAccount != null)
+                {
+                    var mainWindow = new MainWindow();
+                    App.Current.MainWindow = mainWindow;
+                    mainWindow.ShowDialog();
+                }
             };
 
             // Đăng ký event chuyển MH QL khách hàng

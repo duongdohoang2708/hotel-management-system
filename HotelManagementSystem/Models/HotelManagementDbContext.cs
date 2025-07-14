@@ -62,7 +62,7 @@ public partial class HotelManagementDbContext : DbContext
 
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.PasswordHash).HasMaxLength(200);
+            entity.Property(e => e.Password).HasMaxLength(200);
             entity.Property(e => e.Role)
                 .HasMaxLength(15)
                 .IsUnicode(false);

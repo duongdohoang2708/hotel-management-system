@@ -16,15 +16,16 @@ namespace HotelManagementSystem.Services
 
         public Account? Authenticate(string username, string password)
         {
-            var hash = HashPassword(password);
-            return _context.Accounts.FirstOrDefault(a => a.Username == username && a.PasswordHash == hash);
+            //var hash = HashPassword(password);
+            return _context.Accounts.FirstOrDefault(a => a.Username == username && a.Password == password);
         }
 
         public bool ChangePassword(string username, string newPassword)
         {
             var account = _context.Accounts.FirstOrDefault(a => a.Username == username);
             if(account == null) return false;
-            account.PasswordHash = HashPassword(newPassword);
+            //account.PasswordHash = HashPassword(newPassword);
+            account.Password = newPassword; // Không mã hóa mật khẩu
             _context.SaveChanges();
             return true;
         }
