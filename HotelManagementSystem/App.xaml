@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <!-- Converter phải nằm trong ResourceDictionary -->
-            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <!--<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" /> -->
 
             <!-- Merge theme của MaterialDesign -->
             <ResourceDictionary.MergedDictionaries>

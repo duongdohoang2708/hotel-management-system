@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using HotelManagementSystem.Models;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -11,36 +13,7 @@ namespace HotelManagementSystem.ViewModels
     {
         public string UserName { get; set; }
         public string Role { get; set; }
-
-        // Các thuộc tính để ẩn/hiện menu
-        public bool ShowHome { get; set; }
-        public bool ShowRoom { get; set; }
-        public bool ShowBooking { get; set; }
-        public bool ShowBill { get; set; }
-        public bool ShowCustomer { get; set; }
-        public bool ShowRoomManagement { get; set; }
-        public bool ShowService { get; set; }
-        public bool ShowServiceCategory { get; set; }
-        public bool ShowAmenity { get; set; }
-        public bool ShowRoomAmenity { get; set; }
-        public bool ShowAccount { get; set; }
-        public bool ShowEmployee { get; set; }
-        public bool ShowStatistic { get; set; }
-
-        // Command cho từng nút
-        public ICommand HomeCommand { get; }
-        public ICommand RoomCommand { get; }
-        public ICommand BookingCommand { get; }
-        public ICommand BillCommand { get; }
-        public ICommand CustomerCommand { get; }
-        public ICommand RoomManagementCommand { get; }
-        public ICommand ServiceCommand { get; }
-        public ICommand ServiceCategoryCommand { get; }
-        public ICommand AmenityCommand { get; }
-        public ICommand RoomAmenityCommand { get; }
-        public ICommand AccountCommand { get; }
-        public ICommand EmployeeCommand { get; }
-        public ICommand StatisticCommand { get; }
+        public ObservableCollection<MenuItemModel> MenuItems { get; set; }
         public ICommand LogoutCommand { get; }
 
         public event Action? HomeRequested;
@@ -58,36 +31,72 @@ namespace HotelManagementSystem.ViewModels
         {
             Role = role;
             UserName = userName;
-
-            // Phân quyền hợp lý cho 3 role: admin, manager, receptionist
-            ShowHome = true;
-            ShowBooking = role == "Manager" || role == "Receptionist";
-            ShowRoom = role == "Manager" || role == "Receptionist";
-            ShowRoomManagement = role == "Manager";
-            ShowCustomer = role == "Manager" || role == "Receptionist";
-            ShowBill = role == "Manager" || role == "Receptionist";
-            ShowService = role == "Manager" || role == "Receptionist";
-            ShowServiceCategory = role == "Manager";
-            ShowAmenity = role == "Manager";
-            ShowRoomAmenity = role == "Manager";
-            ShowAccount = role == "Admin";
-            ShowEmployee = role == "Admin" || role == "Manager";
-            ShowStatistic = role == "Admin" || role == "Manager";
-
-            HomeCommand = new RelayCommand(_ => Home());
-            RoomCommand = new RelayCommand(_ => Room());
-            BookingCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Đặt Phòng */ });
-            BillCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Hóa đơn */ });
-            CustomerCommand = new RelayCommand(_ => Customer());
-            RoomManagementCommand = new RelayCommand(_ => RoomManagement());
-            ServiceCommand = new RelayCommand(_ => Service());
-            ServiceCategoryCommand = new RelayCommand(_ => ServiceCategory());
-            AmenityCommand = new RelayCommand(_ => Amenity());
-            RoomAmenityCommand = new RelayCommand(_ => RoomAmenity());
-            AccountCommand = new RelayCommand(_ => { /* Xử lý chuyển trang QL tài khoản */ });
-            EmployeeCommand = new RelayCommand(_ => Employee());
-            StatisticCommand = new RelayCommand(_ => { /* Xử lý chuyển trang Thống kê */ });
             LogoutCommand = new RelayCommand(_ => LogOut());
+            MenuItems = new ObservableCollection<MenuItemModel>
+            {
+                new MenuItemModel
+                {
+                    Title = "Trang chủ",
+                    Icon = "🏠",
+                    Command = new RelayCommand(_ => Home())
+                },
+                new MenuItemModel
+                {
+                    Title = "Quản lý phòng",
+                    Icon = "🛏",
+                    Children = new ObservableCollection<MenuItemModel>
+                    {
+                        new MenuItemModel { Title = "Danh sách phòng", Command = new RelayCommand(_ => OpenRooms()) },
+                        new MenuItemModel { Title = "Loại phòng", Command = new RelayCommand(_ => OpenRoomTypes()) },
+                        new MenuItemModel { Title = "Tiện nghi", Command = new RelayCommand(_ => OpenAmenities()) }
+                    }
+                },
+                new MenuItemModel
+                {
+                    Title = "Đặt phòng",
+                    Icon = "📅",
+                    Command = new RelayCommand(_ => OpenReservations())
+                },
+                new MenuItemModel
+                {
+                    Title = "Dịch vụ",
+                    Icon = "🧴",
+                    Children = new ObservableCollection<MenuItemModel>
+                    {
+                        new MenuItemModel { Title = "Danh sách dịch vụ", Command = new RelayCommand(_ => OpenServices()) },
+                        new MenuItemModel { Title = "Loại dịch vụ", Command = new RelayCommand(_ => OpenServiceCategories()) }
+                    }
+                },
+                new MenuItemModel
+                {
+                    Title = "Khách hàng & Nhân viên",
+                    Icon = "👥",
+                    Children = new ObservableCollection<MenuItemModel>
+                    {
+                        new MenuItemModel { Title = "Khách hàng", Command = new RelayCommand(_ => OpenCustomers()) },
+                        new MenuItemModel { Title = "Nhân viên", Command = new RelayCommand(_ => OpenEmployees()) },
+                        new MenuItemModel { Title = "Tài khoản", Command = new RelayCommand(_ => OpenAccounts()) }
+                    }
+                },
+                new MenuItemModel
+                {
+                    Title = "Hóa đơn",
+                    Icon = "💵",
+                    Command = new RelayCommand(_ => OpenBills())
+                },
+                new MenuItemModel
+                {
+                    Title = "Thống kê",
+                    Icon = "📊",
+                    Command = new RelayCommand(_ => OpenReports())
+                },
+                new MenuItemModel
+                {
+                    Title = "Đăng xuất",
+                    Icon = "🚪",
+                    Command = LogoutCommand
+                }
+            };
         }
 
         private void Home()
@@ -95,44 +104,63 @@ namespace HotelManagementSystem.ViewModels
             HomeRequested?.Invoke();
         }
 
-        private void Room()
+        private void OpenRooms()
         {
-            RoomRequested.Invoke();
+            RoomRequested?.Invoke();
         }
 
-        private void Customer()
-        {
-            CustomerRequested?.Invoke();
-        }
-
-        private void RoomManagement()
+        private void OpenRoomTypes()
         {
             RoomManagementRequested?.Invoke();
         }
 
-        private void Service()
-        {
-            ServiceRequested?.Invoke();
-        }
-
-        private void ServiceCategory()
-        {
-            ServiceCategoryRequested?.Invoke();
-        }
-
-        private void Amenity()
+        private void OpenAmenities()
         {
             AmenityRequested?.Invoke();
         }
 
-        private void RoomAmenity()
+        private void OpenReservations()
         {
-            RoomAmenityRequested?.Invoke();
+            // This command is not directly mapped to a specific action in the new menu structure
+            // It might need to be handled differently if it triggers a navigation
         }
 
-        private void Employee()
+        private void OpenServices()
+        {
+            ServiceRequested?.Invoke();
+        }
+
+        private void OpenServiceCategories()
+        {
+            ServiceCategoryRequested?.Invoke();
+        }
+
+        private void OpenCustomers()
+        {
+            CustomerRequested?.Invoke();
+        }
+
+        private void OpenEmployees()
         {
             EmployeeRequested?.Invoke();
+        }
+
+        private void OpenAccounts()
+        {
+            // This command is not directly mapped to a specific action in the new menu structure
+            // It might need to be handled differently if it triggers a navigation
+        }
+
+        private void OpenBills()
+        {
+            // This command is not directly mapped to a specific action in the new menu structure
+            // It might need to be handled differently if it triggers a navigation
+        }
+
+        private void OpenReports()
+        {
+            // This command is not directly mapped to a specific action in the new menu structure
+            // It might need to be handled differently if it triggers a navigation
         }
 
         private void LogOut()

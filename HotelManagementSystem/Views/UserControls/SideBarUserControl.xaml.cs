@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using HotelManagementSystem.Models;
 
 namespace HotelManagementSystem.Views.UserControls
 {
@@ -23,6 +24,15 @@ namespace HotelManagementSystem.Views.UserControls
         public SideBarUserControl()
         {
             InitializeComponent();
+        }
+
+        private void TreeViewItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeViewItem item && item.DataContext is MenuItemModel menuItem && menuItem.Command != null && menuItem.Command.CanExecute(null))
+            {
+                menuItem.Command.Execute(null);
+                e.Handled = true;
+            }
         }
     }
 }

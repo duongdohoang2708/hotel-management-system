@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:HotelManagementSystem.Converters"
+             xmlns:models="clr-namespace:HotelManagementSystem.Models"
              Height="Auto" Width="220">
     <UserControl.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -10,7 +11,7 @@
             <Setter Property="Foreground" Value="#222"/>
             <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="0,10,0,0"/>
             <Setter Property="Padding" Value="20,14"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -50,85 +51,23 @@
                 </StackPanel>
             </Border>
             <Separator Margin="0,0,0,12" Background="#E0E0E0"/>
-            <!-- Menu Items with Material Design Icons -->
-            <Button Command="{Binding HomeCommand}" Visibility="{Binding ShowHome, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Home" Width="24" Height="24" Foreground="#1976D2" Margin="0,0,10,0"/>
-                    <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding RoomCommand}" Visibility="{Binding ShowRoom, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="BedKing" Width="24" Height="24" Foreground="#8D6E63" Margin="0,0,10,0"/>
-                    <TextBlock Text="Phòng" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding BookingCommand}" Visibility="{Binding ShowBooking, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="ClipboardText" Width="24" Height="24" Foreground="#43A047" Margin="0,0,10,0"/>
-                    <TextBlock Text="Đặt Phòng" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding BillCommand}" Visibility="{Binding ShowBill, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="CashMultiple" Width="24" Height="24" Foreground="#F9A825" Margin="0,0,10,0"/>
-                    <TextBlock Text="Hóa đơn" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding CustomerCommand}" Visibility="{Binding ShowCustomer, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Account" Width="24" Height="24" Foreground="#1976D2" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL khách hàng" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding RoomManagementCommand}" Visibility="{Binding ShowRoomManagement, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="OfficeBuilding" Width="24" Height="24" Foreground="#6D4C41" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL phòng" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding ServiceCommand}" Visibility="{Binding ShowService, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Bell" Width="24" Height="24" Foreground="#C62828" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL dịch vụ" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding ServiceCategoryCommand}" Visibility="{Binding ShowServiceCategory, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Cube" Width="24" Height="24" Foreground="#8E24AA" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL loại dịch vụ" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding AmenityCommand}" Visibility="{Binding ShowAmenity, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Basket" Width="24" Height="24" Foreground="#43A047" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL tiện nghi" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding RoomAmenityCommand}" Visibility="{Binding ShowRoomAmenity, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="ClipboardList" Width="24" Height="24" Foreground="#1976D2" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL chi tiết tiện nghi" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding AccountCommand}" Visibility="{Binding ShowAccount, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Key" Width="24" Height="24" Foreground="#F4511E" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL tài khoản" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding EmployeeCommand}" Visibility="{Binding ShowEmployee, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" Foreground="#1976D2" Margin="0,0,10,0"/>
-                    <TextBlock Text="QL nhân viên" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding StatisticCommand}" Visibility="{Binding ShowStatistic, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SidebarButtonStyle}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="ChartBar" Width="24" Height="24" Foreground="#388E3C" Margin="0,0,10,0"/>
-                    <TextBlock Text="Thống kê" VerticalAlignment="Center"/>
-            </StackPanel>
-            </Button>
+            <!-- TreeView Menu -->
+            <TreeView ItemsSource="{Binding MenuItems}">
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type models:MenuItemModel}" ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Icon}" FontSize="16" Width="32" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Title}" FontSize="16" FontWeight ="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="Margin" Value="0,6,0,6"/>
+                        <EventSetter Event="MouseLeftButtonUp" Handler="TreeViewItem_MouseLeftButtonUp"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
         </StackPanel>
     </Border>
 </UserControl>
