@@ -15,5 +15,5 @@ public partial class Service
 
     public virtual ServiceCategory Category { get; set; } = null!;
 
-    public virtual ICollection<ReservationRoomService> ReservationRoomServices { get; set; } = new List<ReservationRoomService>();
+    public virtual ICollection<RoomServiceUsage> RoomServiceUsages { get; set; } = new List<RoomServiceUsage>();
 }

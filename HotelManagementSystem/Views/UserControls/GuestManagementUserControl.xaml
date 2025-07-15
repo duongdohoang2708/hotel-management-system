@@ -1,0 +1,31 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.GuestManagementUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <StackPanel>
+        <TextBox Width="300" Margin="0,10,0,10"
+                 materialDesign:HintAssist.Hint="Nhập tên hoặc SĐT khách hàng"
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        <DataGrid ItemsSource="{Binding FilteredGuests}" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã KH" Binding="{Binding GuestId}" Width="75"/>
+                <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="145"/>
+                <DataGridTextColumn Header="Giới tính" Binding="{Binding GenderDisplay}" Width="90"/>
+                <DataGridTextColumn Header="Ngày sinh" Binding="{Binding Dob}" Width="100"/>
+                <DataGridTextColumn Header="CCCD" Binding="{Binding IdCardNo}" Width="120"/>
+                <DataGridTextColumn Header="SĐT" Binding="{Binding Phone}" Width="110"/>
+                <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" Width="200"/>
+                <DataGridTemplateColumn Header="Sửa" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.EditGuestCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                <TextBlock Text="✏️"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl> 

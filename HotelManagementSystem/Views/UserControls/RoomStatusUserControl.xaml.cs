@@ -16,7 +16,7 @@ namespace HotelManagementSystem.Views.UserControls
 
         private void CardBorder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is Border border && border.DataContext is HotelManagementSystem.Models.RoomStatusItem room)
+            if (sender is Border border && border.DataContext is HotelManagementSystem.ViewModels.RoomStatusItem room)
             {
                 if (DataContext is HotelManagementSystem.ViewModels.RoomStatusViewModel vm && vm.OpenRoomDetailCommand.CanExecute(room))
                 {

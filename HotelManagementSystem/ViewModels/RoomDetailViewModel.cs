@@ -4,6 +4,7 @@ using HotelManagementSystem.Models;
 using System.Windows.Input;
 using System.Linq;
 using HotelManagementSystem.Views.Windows;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -47,19 +48,21 @@ namespace HotelManagementSystem.ViewModels
             // Lấy danh sách dịch vụ thực tế từ DB
             using (var db = new HotelManagementDbContext())
             {
-                var reservationRoom = db.ReservationRooms
-                    .Where(rr => rr.Room.RoomNumber == RoomNumber)
-                    .OrderByDescending(rr => rr.Reservation.CheckInPlan)
+                var bookedRoom = db.BookedRooms
+                    .Include(br => br.Booking)
+                        .ThenInclude(b => b.Guest)
+                    .Where(br => br.Room.RoomNumber == RoomNumber && br.Booking != null)
+                    .OrderByDescending(br => br.Booking.CheckIn)
                     .FirstOrDefault();
-                if (reservationRoom != null)
+                if (bookedRoom != null && bookedRoom.Booking != null)
                 {
-                    var services = db.ReservationRoomServices
-                        .Where(s => s.ReservationId == reservationRoom.ReservationId && s.RoomId == reservationRoom.RoomId)
+                    var services = db.RoomServiceUsages
+                        .Where(s => s.BookedRoomId == bookedRoom.BookedRoomId)
                         .Select(s => new ServiceItem
                         {
                             ServiceName = s.Service.ServiceName,
-                            Quantity = s.Qty,
-                            TotalPrice = s.UnitPrice * s.Qty
+                            Quantity = s.Quantity,
+                            TotalPrice = s.UnitPrice * s.Quantity
                         }).ToList();
                     foreach (var s in services)
                         Services.Add(s);
@@ -107,28 +110,29 @@ namespace HotelManagementSystem.ViewModels
         }
         private void OnAddService()
         {
-            // Lấy RoomId và ReservationId hiện tại
+            // Lấy RoomId và BookingId hiện tại
             int roomId = 0;
-            int reservationId = 0;
+            int bookingId = 0;
             using (var db = new HotelManagementDbContext())
             {
                 var room = db.Rooms.FirstOrDefault(r => r.RoomNumber == RoomNumber);
                 if (room != null)
                 {
                     roomId = room.RoomId;
-                    // Lấy reservation gần nhất
-                    var reservationRoom = db.ReservationRooms
-                        .Where(rr => rr.RoomId == room.RoomId)
-                        .OrderByDescending(rr => rr.Reservation.CheckInPlan)
+                    // Lấy BookedRoom gần nhất
+                    var bookedRoom = db.BookedRooms
+                        .Include(br => br.Booking)
+                        .Where(br => br.RoomId == room.RoomId && br.Booking != null)
+                        .OrderByDescending(br => br.Booking.CheckIn)
                         .FirstOrDefault();
-                    if (reservationRoom != null)
-                        reservationId = reservationRoom.ReservationId;
+                    if (bookedRoom != null && bookedRoom.Booking != null)
+                        bookingId = bookedRoom.Booking.BookingId;
                 }
             }
-            if (roomId == 0 || reservationId == 0) return;
+            if (roomId == 0 || bookingId == 0) return;
             // Mở cửa sổ thêm dịch vụ
             var addServiceWindow = new AddServiceWindow();
-            var addServiceVm = new AddServiceViewModel(roomId, reservationId);
+            var addServiceVm = new AddServiceViewModel(roomId, bookingId);
             addServiceWindow.DataContext = addServiceVm;
             addServiceVm.RequestReloadRoomDetail += () => ReloadServices();
             addServiceWindow.ShowDialog();
@@ -142,19 +146,20 @@ namespace HotelManagementSystem.ViewModels
                 var room = db.Rooms.FirstOrDefault(r => r.RoomNumber == RoomNumber);
                 if (room != null)
                 {
-                    var reservationRoom = db.ReservationRooms
-                        .Where(rr => rr.RoomId == room.RoomId)
-                        .OrderByDescending(rr => rr.Reservation.CheckInPlan)
+                    var bookedRoom = db.BookedRooms
+                        .Include(br => br.Booking)
+                        .Where(br => br.RoomId == room.RoomId && br.Booking != null)
+                        .OrderByDescending(br => br.Booking.CheckIn)
                         .FirstOrDefault();
-                    if (reservationRoom != null)
+                    if (bookedRoom != null && bookedRoom.Booking != null)
                     {
-                        var services = db.ReservationRoomServices
-                            .Where(s => s.ReservationId == reservationRoom.ReservationId && s.RoomId == reservationRoom.RoomId)
+                        var services = db.RoomServiceUsages
+                            .Where(s => s.BookedRoomId == bookedRoom.BookedRoomId)
                             .Select(s => new ServiceItem
                             {
                                 ServiceName = s.Service.ServiceName,
-                                Quantity = s.Qty,
-                                TotalPrice = s.UnitPrice * s.Qty
+                                Quantity = s.Quantity,
+                                TotalPrice = s.UnitPrice * s.Quantity
                             }).ToList();
                         foreach (var s in services)
                             Services.Add(s);

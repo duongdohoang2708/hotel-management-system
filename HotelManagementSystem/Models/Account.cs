@@ -13,7 +13,7 @@ public partial class Account
 
     public string Role { get; set; } = null!;
 
-    public int EmployeeId { get; set; }
+    public int StaffId { get; set; }
 
-    public virtual Employee Employee { get; set; } = null!;
+    public virtual Staff Staff { get; set; } = null!;
 }

@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Models;
 
@@ -18,23 +17,23 @@ public partial class HotelManagementDbContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
-    public virtual DbSet<Amenity> Amenities { get; set; }
+    public virtual DbSet<BookedRoom> BookedRooms { get; set; }
 
-    public virtual DbSet<Bill> Bills { get; set; }
+    public virtual DbSet<Booking> Bookings { get; set; }
 
-    public virtual DbSet<Customer> Customers { get; set; }
+    public virtual DbSet<Facility> Facilities { get; set; }
 
-    public virtual DbSet<Employee> Employees { get; set; }
+    public virtual DbSet<Guest> Guests { get; set; }
 
-    public virtual DbSet<Reservation> Reservations { get; set; }
+    public virtual DbSet<Invoice> Invoices { get; set; }
 
-    public virtual DbSet<ReservationRoom> ReservationRooms { get; set; }
-
-    public virtual DbSet<ReservationRoomService> ReservationRoomServices { get; set; }
+    public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
     public virtual DbSet<Room> Rooms { get; set; }
 
-    public virtual DbSet<RoomAmenity> RoomAmenities { get; set; }
+    public virtual DbSet<RoomFacility> RoomFacilities { get; set; }
+
+    public virtual DbSet<RoomServiceUsage> RoomServiceUsages { get; set; }
 
     public virtual DbSet<RoomType> RoomTypes { get; set; }
 
@@ -42,234 +41,195 @@ public partial class HotelManagementDbContext : DbContext
 
     public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DBContext"));
-        }
+    public virtual DbSet<Staff> Staff { get; set; }
 
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=HotelManagementDB;User Id=sa;Password=123;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Latin1_General_CI_AS");
+
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.AccountId).HasName("PK__Accounts__349DA586A3949CF0");
-
-            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E4858C2F3D").IsUnique();
+            entity.HasKey(e => e.AccountId).HasName("PK__Accounts__349DA5867B8FC892");
 
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.Password).HasMaxLength(200);
             entity.Property(e => e.Role)
                 .HasMaxLength(15)
                 .IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.Username).HasMaxLength(50);
 
-            entity.HasOne(d => d.Employee).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.EmployeeId)
+            entity.HasOne(d => d.Staff).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.StaffId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Account_Employee");
+                .HasConstraintName("FK_Accounts_Employees");
         });
 
-        modelBuilder.Entity<Amenity>(entity =>
+        modelBuilder.Entity<BookedRoom>(entity =>
         {
-            entity.HasKey(e => e.AmenityId).HasName("PK__Amenitie__842AF52B7E0C5F0E");
+            entity.Property(e => e.BookedRoomId)
+                .ValueGeneratedNever()
+                .HasColumnName("BookedRoomID");
+            entity.Property(e => e.BookingId).HasColumnName("BookingID");
+            entity.Property(e => e.RoomId).HasColumnName("RoomID");
+            entity.Property(e => e.RoomPrice).HasColumnType("decimal(12, 2)");
 
-            entity.Property(e => e.AmenityId).HasColumnName("AmenityID");
-            entity.Property(e => e.AmenityName).HasMaxLength(50);
+            entity.HasOne(d => d.Booking).WithMany(p => p.BookedRooms)
+                .HasForeignKey(d => d.BookingId)
+                .HasConstraintName("FK_BookedRooms_Bookings");
+
+            entity.HasOne(d => d.Room).WithMany(p => p.BookedRooms)
+                .HasForeignKey(d => d.RoomId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BookedRooms_Rooms");
+        });
+
+        modelBuilder.Entity<Booking>(entity =>
+        {
+            entity.HasKey(e => e.BookingId).HasName("PK__Reservat__B7EE5F0459672E60");
+
+            entity.Property(e => e.BookingId).HasColumnName("BookingID");
+            entity.Property(e => e.BookingDate).HasPrecision(0);
+            entity.Property(e => e.CheckIn).HasPrecision(0);
+            entity.Property(e => e.CheckOut).HasPrecision(0);
+            entity.Property(e => e.GuestId).HasColumnName("GuestID");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+            entity.HasOne(d => d.Guest).WithMany(p => p.Bookings)
+                .HasForeignKey(d => d.GuestId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Bookings_Guests");
+        });
+
+        modelBuilder.Entity<Facility>(entity =>
+        {
+            entity.HasKey(e => e.FacilityId).HasName("PK__Amenitie__842AF52BEBA01F1B");
+
+            entity.Property(e => e.FacilityId).HasColumnName("FacilityID");
             entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.FacilityName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Bill>(entity =>
+        modelBuilder.Entity<Guest>(entity =>
         {
-            entity.HasKey(e => e.BillId).HasName("PK__Bills__11F2FC4ADF655064");
+            entity.HasKey(e => e.GuestId).HasName("PK__Customer__A4AE64B8305EF3E3");
 
-            entity.Property(e => e.BillId).HasColumnName("BillID");
-            entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
-
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");  
-
-            entity.Property(e => e.IssueDate)
-                  .HasPrecision(0)
-                  .HasDefaultValueSql("(sysutcdatetime())");
-
-            entity.Property(e => e.RoomCharge).HasColumnType("decimal(12, 2)");
-            entity.Property(e => e.ServiceCharge).HasColumnType("decimal(12, 2)");
-            entity.Property(e => e.Vatpct)
-                  .HasColumnType("decimal(5, 2)")
-                  .HasColumnName("VATPct")
-                  .HasDefaultValue(0m);
-
-            entity.HasOne(d => d.Reservation)
-                  .WithMany(p => p.Bills)
-                  .HasForeignKey(d => d.ReservationId)
-                  .OnDelete(DeleteBehavior.ClientSetNull)
-                  .HasConstraintName("FK_Bill_Reservation");
-
-            entity.HasOne(d => d.Employee)                     
-                  .WithMany(p => p.Bills)
-                  .HasForeignKey(d => d.EmployeeId)
-                  .OnDelete(DeleteBehavior.ClientSetNull)
-                  .HasConstraintName("FK_Bill_Employee");
-        });
-
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B8B3538090");
-
-            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.GuestId).HasColumnName("GuestID");
             entity.Property(e => e.Address).HasMaxLength(200);
-            entity.Property(e => e.Dob).HasColumnName("DOB");
             entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.Gender)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
             entity.Property(e => e.IdCardNo).HasMaxLength(20);
             entity.Property(e => e.Phone).HasMaxLength(20);
         });
 
-        modelBuilder.Entity<Employee>(entity =>
+        modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__7AD04FF1EE21AA93");
+            entity.HasKey(e => e.InvoiceId).HasName("PK__Bills__11F2FC4A0438D4CB");
 
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.Address).HasMaxLength(255);
-            entity.Property(e => e.CitizenId).HasMaxLength(20);
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.Gender).HasMaxLength(10);
-            entity.Property(e => e.Phone).HasMaxLength(20);
-            entity.Property(e => e.Position).HasMaxLength(50);
-            entity.Property(e => e.Salary).HasColumnType("decimal(18, 2)");
+            entity.ToTable("Invoice");
+
+            entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
+            entity.Property(e => e.BookingId).HasColumnName("BookingID");
+            entity.Property(e => e.IssueDate).HasPrecision(0);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(12, 2)");
+            entity.Property(e => e.Vat)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("VAT");
+
+            entity.HasOne(d => d.Booking).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.BookingId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Bills_Reservations");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Bills_Employees");
         });
 
-        modelBuilder.Entity<Reservation>(entity =>
+        modelBuilder.Entity<InvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.ReservationId).HasName("PK__Reservat__B7EE5F0437C15B9F");
+            entity.HasKey(e => e.InvoiceItemId);
 
-            entity.HasIndex(e => new { e.CheckInPlan, e.CheckOutPlan }, "IX_Reservations_Date");
-
-            entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
-            entity.Property(e => e.CheckInPlan).HasPrecision(0);
-            entity.Property(e => e.CheckOutPlan).HasPrecision(0);
-            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Reservations)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Reservation_Customer");
-        });
-
-        modelBuilder.Entity<ReservationRoom>(entity =>
-        {
-            entity.HasKey(e => new { e.ReservationId, e.RoomId });
-
-            entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
-            entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.GuestCount).HasDefaultValue(1);
-            entity.Property(e => e.RoomPrice).HasColumnType("decimal(12, 2)");
-
-            entity.HasOne(d => d.Reservation).WithMany(p => p.ReservationRooms)
-                .HasForeignKey(d => d.ReservationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RR_Reservation");
-
-            entity.HasOne(d => d.Room).WithMany(p => p.ReservationRooms)
-                .HasForeignKey(d => d.RoomId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RR_Room");
-        });
-
-        modelBuilder.Entity<ReservationRoomService>(entity =>
-        {
-            entity.HasKey(e => new { e.ReservationId, e.RoomId, e.ServiceLineId }).HasName("PK_RRS");
-
-            entity.HasIndex(e => e.ReservationId, "IX_RRS_Reservation");
-
-            entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
-            entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.ServiceLineId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("ServiceLineID");
-            entity.Property(e => e.Qty).HasDefaultValue(1);
-            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+            entity.Property(e => e.InvoiceItemId)
+                .ValueGeneratedNever()
+                .HasColumnName("InvoiceItemID");
+            entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
+            entity.Property(e => e.ItemType).HasMaxLength(50);
+            entity.Property(e => e.TotalPrice).HasColumnType("decimal(12, 2)");
             entity.Property(e => e.UnitPrice).HasColumnType("decimal(12, 2)");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.ReservationRoomServices)
-                .HasForeignKey(d => d.ServiceId)
+            entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceDetails)
+                .HasForeignKey(d => d.InvoiceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RRS_Service");
-
-            entity.HasOne(d => d.ReservationRoom).WithMany(p => p.ReservationRoomServices)
-                .HasForeignKey(d => new { d.ReservationId, d.RoomId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RRS_RR");
+                .HasConstraintName("FK_InvoiceDetails_Invoice");
         });
 
         modelBuilder.Entity<Room>(entity =>
         {
-            entity.HasKey(e => e.RoomId).HasName("PK__Rooms__3286391976BBC437");
-
-            entity.HasIndex(e => e.Status, "IX_Room_Status");
-
-            entity.HasIndex(e => e.RoomNumber, "UQ__Rooms__AE10E07A0D7204EA").IsUnique();
+            entity.HasKey(e => e.RoomId).HasName("PK__Rooms__328639190F54EA91");
 
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
-
-            // ↓↓↓  BỔ SUNG / SỬA ĐỔI
-            entity.Property(e => e.Status)
-                  .HasMaxLength(20)                 // tên dài “Phòng đang thuê”
-                  .IsUnicode()                      // giữ Unicode (mặc định là true)
-                  .HasDefaultValue("Phòng trống");
-
-            entity.Property(e => e.CleanStatus)
-                  .HasMaxLength(20)
-                  .IsUnicode()
-                  .HasDefaultValue("Đã dọn dẹp");
-
-            entity.HasCheckConstraint("CK_Room_Status",
-                "[Status] IN (N'Phòng trống', N'Phòng đã đặt', N'Phòng đang thuê')");
-
-            entity.HasCheckConstraint("CK_Room_CleanStatus",
-                "[CleanStatus] IN (N'Đã dọn dẹp', N'Chưa dọn dẹp', N'Sửa chữa')");
-
-            /* giữ nguyên các cột/quan hệ còn lại */
+            entity.Property(e => e.CleanStatus).HasMaxLength(20);
             entity.Property(e => e.RoomNumber).HasMaxLength(10);
             entity.Property(e => e.RoomTypeId).HasColumnName("RoomTypeID");
+            entity.Property(e => e.Status).HasMaxLength(20);
 
             entity.HasOne(d => d.RoomType).WithMany(p => p.Rooms)
-                  .HasForeignKey(d => d.RoomTypeId)
-                  .OnDelete(DeleteBehavior.ClientSetNull)
-                  .HasConstraintName("FK_Room_RoomType");
+                .HasForeignKey(d => d.RoomTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Rooms_RoomTypes");
         });
 
-        modelBuilder.Entity<RoomAmenity>(entity =>
+        modelBuilder.Entity<RoomFacility>(entity =>
         {
-            entity.HasKey(e => new { e.RoomId, e.AmenityId });
-
+            entity.Property(e => e.RoomFacilityId)
+                .ValueGeneratedNever()
+                .HasColumnName("RoomFacilityID");
+            entity.Property(e => e.FacilityId).HasColumnName("FacilityID");
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.AmenityId).HasColumnName("AmenityID");
-            entity.Property(e => e.Quantity).HasDefaultValue(1);
 
-            entity.HasOne(d => d.Amenity).WithMany(p => p.RoomAmenities)
-                .HasForeignKey(d => d.AmenityId)
+            entity.HasOne(d => d.Facility).WithMany(p => p.RoomFacilities)
+                .HasForeignKey(d => d.FacilityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RA_Amenity");
+                .HasConstraintName("FK_RoomFacilities_Facilities");
 
-            entity.HasOne(d => d.Room).WithMany(p => p.RoomAmenities)
+            entity.HasOne(d => d.Room).WithMany(p => p.RoomFacilities)
                 .HasForeignKey(d => d.RoomId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RA_Room");
+                .HasConstraintName("FK_RoomFacilities_Rooms");
+        });
+
+        modelBuilder.Entity<RoomServiceUsage>(entity =>
+        {
+            entity.HasKey(e => e.UsageId).HasName("PK_ReservationRoomServices");
+
+            entity.ToTable("RoomServiceUsage");
+
+            entity.Property(e => e.UsageId).HasColumnName("UsageID");
+            entity.Property(e => e.BookedRoomId).HasColumnName("BookedRoomID");
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+            entity.Property(e => e.UnitPrice).HasColumnType("decimal(12, 2)");
+            entity.Property(e => e.UsageTime).HasPrecision(0);
+
+            entity.HasOne(d => d.BookedRoom).WithMany(p => p.RoomServiceUsages)
+                .HasForeignKey(d => d.BookedRoomId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ReservationRoomServices_Reservations");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.RoomServiceUsages)
+                .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ReservationRoomServices_Services");
         });
 
         modelBuilder.Entity<RoomType>(entity =>
         {
-            entity.HasKey(e => e.RoomTypeId).HasName("PK__RoomType__BCC896116945F1DB");
+            entity.HasKey(e => e.RoomTypeId).HasName("PK__RoomType__BCC896111A71CCA8");
 
             entity.Property(e => e.RoomTypeId).HasColumnName("RoomTypeID");
             entity.Property(e => e.BasePrice).HasColumnType("decimal(12, 2)");
@@ -279,7 +239,7 @@ public partial class HotelManagementDbContext : DbContext
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Services__C51BB0EA6AC5A49B");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Services__C51BB0EA81111AB9");
 
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -289,15 +249,26 @@ public partial class HotelManagementDbContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Services)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Service_Category");
+                .HasConstraintName("FK_Services_ServiceCategories1");
         });
 
         modelBuilder.Entity<ServiceCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__ServiceC__19093A2BC827F2F7");
+            entity.HasKey(e => e.CategoryId).HasName("PK__ServiceC__19093A2BAEF27162");
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Staff>(entity =>
+        {
+            entity.HasKey(e => e.StaffId).HasName("PK__Employee__7AD04FF190FE06C6");
+
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Phone).HasMaxLength(20);
+            entity.Property(e => e.Role).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

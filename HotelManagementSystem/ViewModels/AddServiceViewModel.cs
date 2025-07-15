@@ -51,12 +51,12 @@ namespace HotelManagementSystem.ViewModels
         public event Action? RequestReloadRoomDetail;
 
         private readonly int _roomId;
-        private readonly int _reservationId;
+        private readonly int _bookingId;
 
-        public AddServiceViewModel(int roomId, int reservationId)
+        public AddServiceViewModel(int roomId, int bookingId)
         {
             _roomId = roomId;
-            _reservationId = reservationId;
+            _bookingId = bookingId;
             using (var db = new HotelManagementDbContext())
             {
                 ServiceCategoryList = new ObservableCollection<ServiceCategory>(db.ServiceCategories.ToList());
@@ -109,17 +109,24 @@ namespace HotelManagementSystem.ViewModels
         {
             using (var db = new HotelManagementDbContext())
             {
+                // Tìm BookedRoomId dựa trên _roomId và _bookingId
+                var bookedRoom = db.BookedRooms.FirstOrDefault(br => br.RoomId == _roomId && br.BookingId == _bookingId);
+                if (bookedRoom == null)
+                {
+                    System.Windows.MessageBox.Show("Không tìm thấy BookedRoom phù hợp!", "Lỗi", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    return;
+                }
+                int bookedRoomId = bookedRoom.BookedRoomId;
                 foreach (var item in SelectedServices)
                 {
-                    var rrs = new ReservationRoomService
+                    var usage = new RoomServiceUsage
                     {
-                        ReservationId = _reservationId,
-                        RoomId = _roomId,
+                        BookedRoomId = bookedRoomId,
                         ServiceId = item.ServiceId,
-                        Qty = item.Quantity,
+                        Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     };
-                    db.ReservationRoomServices.Add(rrs);
+                    db.RoomServiceUsages.Add(usage);
                 }
                 db.SaveChanges();
             }

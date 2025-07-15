@@ -15,22 +15,23 @@
         <!-- Layout chính -->
         <Grid Panel.ZIndex="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="SidebarColumn" Width="220"/>
+                <ColumnDefinition x:Name="SidebarColumn" Width="300"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar -->
             <views:SideBarUserControl x:Name="Sidebar"
                                       Visibility="{Binding IsSidebarOpen, Converter={StaticResource BoolToVisibilityConverter}}"
-                                      HorizontalAlignment="Left"
-                                      Grid.Column="0"
-                                      Effect="{x:Null}"/>
+                                      HorizontalAlignment="Center"
+                                      Effect="{x:Null}" Width="280" Template="{DynamicResource PopupContentClassicTemplate}"/>
 
             <!-- Main Content -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="66*"/>
+                    <RowDefinition Height="67*"/>
                 </Grid.RowDefinitions>
                 <!-- Topbar -->
                 <DockPanel Grid.Row="0" Background="#F5F5F5" Opacity="0.95" LastChildFill="True" Height="60">
@@ -40,9 +41,7 @@
                 </DockPanel>
                 <!-- Nội dung chính động -->
                 <ContentControl Grid.Row="1"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Stretch"
-                               Content="{Binding CurrentView}"/>
+                               Content="{Binding CurrentView}" Grid.RowSpan="3"/>
             </Grid>
         </Grid>
     </Grid>

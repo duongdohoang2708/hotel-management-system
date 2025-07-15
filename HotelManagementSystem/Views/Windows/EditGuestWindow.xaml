@@ -1,0 +1,39 @@
+<Window x:Class="HotelManagementSystem.Views.Windows.EditGuestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Sửa khách hàng" Height="500" Width="400" WindowStartupLocation="CenterScreen">
+    <Border Background="#fff" CornerRadius="14" Padding="18" Margin="8">
+        <StackPanel>
+            <TextBlock Text="Sửa thông tin khách hàng" FontSize="20" FontWeight="Bold" Margin="0,0,0,16" HorizontalAlignment="Center"/>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Họ và tên"/>
+                <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Giới tính"/>
+                <ComboBox SelectedItem="{Binding GenderDisplay}" ItemsSource="{Binding Genders}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Ngày sinh"/>
+                <DatePicker SelectedDate="{Binding Dob}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="CCCD"/>
+                <TextBox Text="{Binding IdCardNo}" IsReadOnly="True"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Số điện thoại"/>
+                <TextBox Text="{Binding Phone}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Địa chỉ"/>
+                <TextBox Text="{Binding Address}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+                <Button Content="Cập nhật" Command="{Binding UpdateCommand}" Width="100" Margin="0,0,8,0"/>
+                <Button Content="Hủy bỏ" IsCancel="True" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window> 

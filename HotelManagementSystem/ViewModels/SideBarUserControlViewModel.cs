@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
 using HotelManagementSystem.Models;
+using HotelManagementSystem;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -13,24 +14,33 @@ namespace HotelManagementSystem.ViewModels
     {
         public string UserName { get; set; }
         public string Role { get; set; }
+
+        public string StaffName{ get; set; }
+
         public ObservableCollection<MenuItemModel> MenuItems { get; set; }
         public ICommand LogoutCommand { get; }
 
         public event Action? HomeRequested;
         public event Action? RoomRequested;
         public event Action? LogoutRequested;
-        public event Action? CustomerRequested;
+        public event Action? GuestRequested;
         public event Action? RoomManagementRequested;
         public event Action? ServiceRequested;
         public event Action? ServiceCategoryRequested;
-        public event Action? AmenityRequested;
-        public event Action? RoomAmenityRequested;
-        public event Action? EmployeeRequested;
+        public event Action? FacilityRequested;
+        public event Action? RoomFacilityRequested;
+        public event Action? StaffRequested;
+        public event Action? ExitRequested;
 
-        public SideBarUserControlViewModel(string role, string userName = "")
+        public SideBarUserControlViewModel(Account account)
         {
-            Role = role;
-            UserName = userName;
+            Role = account.Role;
+            UserName = account.Username;
+
+            var db = new HotelManagementDbContext();
+            var staff = db.Staff.FirstOrDefault(s => s.StaffId == account.StaffId);
+            StaffName = staff != null ? staff.FullName : "Người dùng ẩn danh";
+
             LogoutCommand = new RelayCommand(_ => LogOut());
             MenuItems = new ObservableCollection<MenuItemModel>
             {
@@ -48,7 +58,7 @@ namespace HotelManagementSystem.ViewModels
                     {
                         new MenuItemModel { Title = "Danh sách phòng", Command = new RelayCommand(_ => OpenRooms()) },
                         new MenuItemModel { Title = "Loại phòng", Command = new RelayCommand(_ => OpenRoomTypes()) },
-                        new MenuItemModel { Title = "Tiện nghi", Command = new RelayCommand(_ => OpenAmenities()) }
+                        new MenuItemModel { Title = "Tiện nghi", Command = new RelayCommand(_ => OpenFacilities()) }
                     }
                 },
                 new MenuItemModel
@@ -73,8 +83,8 @@ namespace HotelManagementSystem.ViewModels
                     Icon = "👥",
                     Children = new ObservableCollection<MenuItemModel>
                     {
-                        new MenuItemModel { Title = "Khách hàng", Command = new RelayCommand(_ => OpenCustomers()) },
-                        new MenuItemModel { Title = "Nhân viên", Command = new RelayCommand(_ => OpenEmployees()) },
+                        new MenuItemModel { Title = "Khách hàng", Command = new RelayCommand(_ => OpenGuests()) },
+                        new MenuItemModel { Title = "Nhân viên", Command = new RelayCommand(_ => OpenStaff()) },
                         new MenuItemModel { Title = "Tài khoản", Command = new RelayCommand(_ => OpenAccounts()) }
                     }
                 },
@@ -92,9 +102,9 @@ namespace HotelManagementSystem.ViewModels
                 },
                 new MenuItemModel
                 {
-                    Title = "Đăng xuất",
+                    Title = "Thoát",
                     Icon = "🚪",
-                    Command = LogoutCommand
+                    Command = new RelayCommand(_ => Exit())
                 }
             };
         }
@@ -114,9 +124,9 @@ namespace HotelManagementSystem.ViewModels
             RoomManagementRequested?.Invoke();
         }
 
-        private void OpenAmenities()
+        private void OpenFacilities()
         {
-            AmenityRequested?.Invoke();
+            FacilityRequested?.Invoke();
         }
 
         private void OpenReservations()
@@ -135,14 +145,14 @@ namespace HotelManagementSystem.ViewModels
             ServiceCategoryRequested?.Invoke();
         }
 
-        private void OpenCustomers()
+        private void OpenGuests()
         {
-            CustomerRequested?.Invoke();
+            GuestRequested?.Invoke();
         }
 
-        private void OpenEmployees()
+        private void OpenStaff()
         {
-            EmployeeRequested?.Invoke();
+            StaffRequested?.Invoke();
         }
 
         private void OpenAccounts()
@@ -166,6 +176,11 @@ namespace HotelManagementSystem.ViewModels
         private void LogOut()
         {
             LogoutRequested?.Invoke();
+        }
+
+        private void Exit()
+        {
+            ExitRequested?.Invoke();
         }
     }
 }

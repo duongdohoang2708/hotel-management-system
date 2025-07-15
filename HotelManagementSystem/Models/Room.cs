@@ -17,9 +17,9 @@ public partial class Room
 
     public string CleanStatus { get; set; } = null!;
 
-    public virtual ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>();
+    public virtual ICollection<BookedRoom> BookedRooms { get; set; } = new List<BookedRoom>();
 
-    public virtual ICollection<RoomAmenity> RoomAmenities { get; set; } = new List<RoomAmenity>();
+    public virtual ICollection<RoomFacility> RoomFacilities { get; set; } = new List<RoomFacility>();
 
     public virtual RoomType RoomType { get; set; } = null!;
 }

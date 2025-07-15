@@ -64,21 +64,21 @@ namespace HotelManagementSystem.ViewModels
             var now = DateTime.Now;
             var roomList = db.Rooms
                 .Include(r => r.RoomType)
-                .Include(r => r.ReservationRooms)
-                    .ThenInclude(rr => rr.Reservation)
-                        .ThenInclude(res => res.Customer)
+                .Include(r => r.BookedRooms)
+                    .ThenInclude(br => br.Booking)
+                        .ThenInclude(b => b.Guest)
                 .ToList();
 
             var items = new List<RoomStatusItem>();
             foreach (var room in roomList)
             {
-                // Lấy reservation gần nhất (reservation có CheckInPlan lớn nhất)
-                var latestReservationRoom = room.ReservationRooms
-                    .OrderByDescending(rr => rr.Reservation.CheckInPlan)
-                    .FirstOrDefault();
-                string? guestName = latestReservationRoom?.Reservation.Customer.FullName;
-                DateTime? checkIn = latestReservationRoom?.Reservation.CheckInPlan;
-                DateTime? checkOut = latestReservationRoom?.Reservation.CheckOutPlan;
+                // Lấy booking gần nhất (booking có CheckIn lớn nhất)
+                var latestBookedRoom = room.BookedRooms
+                    .OrderByDescending(br => br.Booking != null ? br.Booking.CheckIn : DateTime.MinValue)
+                    .FirstOrDefault(br => br.Booking != null);
+                string? guestName = latestBookedRoom?.Booking?.Guest.FullName;
+                DateTime? checkIn = latestBookedRoom?.Booking?.CheckIn;
+                DateTime? checkOut = latestBookedRoom?.Booking?.CheckOut;
                 string? stayDuration = null;
                 if (checkIn.HasValue && checkOut.HasValue)
                 {
@@ -86,7 +86,7 @@ namespace HotelManagementSystem.ViewModels
                     stayDuration = days > 0 ? $"{days} ngày" : "1 ngày";
                 }
 
-                int? guestCount = latestReservationRoom != null ? latestReservationRoom.GuestCount : (int?)null;
+                int? guestCount = latestBookedRoom?.GuestCount;
 
                 // Màu nền và màu chữ card theo trạng thái phòng (màu nhạt)
                 (string cardBg, string cardFg) = room.Status switch

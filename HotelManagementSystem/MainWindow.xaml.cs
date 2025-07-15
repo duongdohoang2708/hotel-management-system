@@ -23,7 +23,7 @@ namespace HotelManagementSystem
         public MainWindow()
         {
             InitializeComponent();
-            SidebarColumn.Width = new GridLength(220);
+            SidebarColumn.Width = new GridLength(250);
             Sidebar.Visibility = Visibility.Visible;
             WindowState= WindowState.Maximized;
 
@@ -33,7 +33,7 @@ namespace HotelManagementSystem
             // Lấy role và userName từ tài khoản đăng nhập
             string role = AppSession.CurrentAccount?.Role ?? "Guest";
             string userName = AppSession.CurrentAccount?.Username ?? "";
-            var sideBarviewModel = new SideBarUserControlViewModel(role, userName);
+            var sideBarviewModel = new SideBarUserControlViewModel(AppSession.CurrentAccount);
             Sidebar.DataContext = sideBarviewModel;
 
             // Đăng ký event chuyển MH trang chủ
@@ -79,11 +79,11 @@ namespace HotelManagementSystem
             };
 
             // Đăng ký event chuyển MH QL khách hàng
-            sideBarviewModel.CustomerRequested += () =>
+            sideBarviewModel.GuestRequested += () =>
             {
                 if (this.DataContext is MainWindowViewModel mainVm)
                 {
-                    mainVm.CurrentView = new CustomerManagementUserControl();
+                    mainVm.CurrentView = new GuestManagementUserControl();
                 }
             };
 
@@ -110,34 +110,33 @@ namespace HotelManagementSystem
             };
 
             // Đăng ký event chuyển MH QL tiện nghi
-            sideBarviewModel.AmenityRequested += () =>
+            sideBarviewModel.FacilityRequested += () =>
             {
                 if (this.DataContext is MainWindowViewModel mainVm)
                 {
-                    var control = new AmenityManagementControl();
-                    control.DataContext = new AmenityManagementViewModel();
+                    var control = new FacilityManagementControl();
+                    control.DataContext = new FacilityManagementViewModel();
                     mainVm.CurrentView = control;
                 }
             };
 
             // Đăng ký event chuyển MH QL chi tiết tiện nghi
-            sideBarviewModel.RoomAmenityRequested += () =>
+            sideBarviewModel.RoomFacilityRequested += () =>
             {
                 if (this.DataContext is MainWindowViewModel mainVm)
                 {
-                    var control = new RoomAmenityManagementControl();
-                    control.DataContext = new RoomAmenityManagementViewModel();
+                    var control = new RoomFacilityManagementControl();
+                    control.DataContext = new RoomFacilityManagementViewModel();
                     mainVm.CurrentView = control;
                 }
             };
 
             // Đăng ký event chuyển MH QL nhân viên
-            sideBarviewModel.EmployeeRequested += () =>
+            sideBarviewModel.StaffRequested += () =>
             {
                 if (this.DataContext is MainWindowViewModel mainVm)
                 {
-                    var control = new EmployeeManagementControl();
-                    control.DataContext = new EmployeeManagementViewModel();
+                    var control = new StaffManagementControl();
                     mainVm.CurrentView = control;
                 }
             };
@@ -155,6 +154,16 @@ namespace HotelManagementSystem
                     }
                 };
             }
+
+            // Đăng ký event chuyển MH QL nhân viên
+            sideBarviewModel.ExitRequested += () =>
+            {
+                var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn thoát ứng dụng?", "Xác nhận thoát", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirmResult == MessageBoxResult.Yes)
+                {
+                    Application.Current.Shutdown();
+                }
+            };
         }
 
         private void SetRoomDetailAction(object? currentView)
@@ -189,7 +198,7 @@ namespace HotelManagementSystem
             }
             else
             {
-                SidebarColumn.Width = new GridLength(220);
+                SidebarColumn.Width = new GridLength(250);
                 Sidebar.Visibility = Visibility.Visible;
             }
             isSidebarOpen = !isSidebarOpen;
