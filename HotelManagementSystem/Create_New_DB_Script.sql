@@ -5,9 +5,9 @@ GO
 CREATE DATABASE [HotelManagementDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'HotelManagementDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\HotelManagementDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'HotelManagementDB', FILENAME = N'C:\Database\HotelManagementDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'HotelManagementDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\HotelManagementDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'HotelManagementDB_log', FILENAME = N'C:\Database\HotelManagementDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
 
@@ -128,7 +128,7 @@ GO
 
 CREATE TABLE [dbo].[Staff](
 	[StaffID] [int] NOT NULL,
-	[FullName] [nvarchar](100) NULL,
+	[FullName] [nvarchar](100) NOT NULL,
 	[Email] [nvarchar](100) NULL,
 	[Phone] [nvarchar](20) NULL,
 	[Role] [nvarchar](50) NULL,
@@ -148,8 +148,8 @@ GO
 
 CREATE TABLE [dbo].[Accounts](
 	[AccountID] [int] NOT NULL,
-	[Username] [nvarchar](50) NULL,
-	[Password] [nvarchar](200) NULL,
+	[Username] [nvarchar](50) NOT NULL,
+	[Password] [nvarchar](200) NOT NULL,
 	[Role] [varchar](15) NULL,
 	[StaffID] [int] NOT NULL,
 PRIMARY KEY CLUSTERED 
@@ -163,8 +163,6 @@ ALTER TABLE [dbo].[Accounts]  WITH CHECK ADD FOREIGN KEY([StaffID])
 REFERENCES [dbo].[Staff] ([StaffID])
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[Facilities]    Script Date: 16/07/2025 17:52:52 ******/
 SET ANSI_NULLS ON
@@ -175,7 +173,7 @@ GO
 
 CREATE TABLE [dbo].[Facilities](
 	[FacilityID] [int] NOT NULL,
-	[FacilityName] [nvarchar](50) NULL,
+	[FacilityName] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](200) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -184,8 +182,6 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[Guests]    Script Date: 16/07/2025 17:53:33 ******/
 SET ANSI_NULLS ON
@@ -196,7 +192,7 @@ GO
 
 CREATE TABLE [dbo].[Guests](
 	[GuestID] [int] NOT NULL,
-	[FullName] [nvarchar](100) NULL,
+	[FullName] [nvarchar](100) NOT NULL,
 	[Address] [nvarchar](200) NULL,
 	[Phone] [nvarchar](20) NULL,
 	[IdCardNo] [nvarchar](20) NULL,
@@ -216,7 +212,7 @@ GO
 
 CREATE TABLE [dbo].[RoomTypes](
 	[RoomTypeID] [int] NOT NULL,
-	[TypeName] [nvarchar](50) NULL,
+	[TypeName] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](200) NULL,
 	[BasePrice] [decimal](12, 2) NULL,
 PRIMARY KEY CLUSTERED 
@@ -236,7 +232,7 @@ GO
 
 CREATE TABLE [dbo].[ServiceCategories](
 	[CategoryID] [int] NOT NULL,
-	[CategoryName] [nvarchar](50) NULL,
+	[CategoryName] [nvarchar](50) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[CategoryID] ASC
@@ -255,9 +251,10 @@ GO
 
 CREATE TABLE [dbo].[Services](
 	[ServiceID] [int] NOT NULL,
-	[ServiceName] [nvarchar](100) NULL,
-	[UnitPrice] [decimal](12, 2) NULL,
 	[CategoryID] [int] NOT NULL,
+	[ServiceName] [nvarchar](100) NOT NULL,
+	[UnitPrice] [decimal](12, 2) NULL,
+	
 PRIMARY KEY CLUSTERED 
 (
 	[ServiceID] ASC
@@ -279,10 +276,11 @@ GO
 
 CREATE TABLE [dbo].[Rooms](
 	[RoomID] [int] NOT NULL,
-	[RoomNumber] [nvarchar](10) NULL,
+	[RoomTypeID] [int] NOT NULL,
+	[RoomNumber] [nvarchar](10) NOT NULL,
 	[Status] [nvarchar](20) NULL,
 	[CleanStatus] [nvarchar](20) NULL,
-	[RoomTypeID] [int] NOT NULL,
+	
 PRIMARY KEY CLUSTERED 
 (
 	[RoomID] ASC
@@ -321,8 +319,6 @@ ALTER TABLE [dbo].[RoomFacilities]  WITH CHECK ADD FOREIGN KEY([RoomID])
 REFERENCES [dbo].[Rooms] ([RoomID])
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[Bookings]    Script Date: 16/07/2025 17:58:16 ******/
 SET ANSI_NULLS ON
@@ -333,11 +329,12 @@ GO
 
 CREATE TABLE [dbo].[Bookings](
 	[BookingID] [int] NOT NULL,
+	[GuestID] [int] NOT NULL,
+	[StaffID] [int] NOT NULL,
 	[BookingDate] [datetime2](0) NULL,
 	[CheckIn] [datetime2](0) NULL,
 	[CheckOut] [datetime2](0) NULL,
-	[GuestID] [int] NOT NULL,
-	[StaffID] [int] NULL,
+	
 PRIMARY KEY CLUSTERED 
 (
 	[BookingID] ASC
@@ -353,8 +350,6 @@ ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([StaffID])
 REFERENCES [dbo].[Staff] ([StaffID])
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[BookedRooms]    Script Date: 16/07/2025 17:58:32 ******/
 SET ANSI_NULLS ON
@@ -365,9 +360,9 @@ GO
 
 CREATE TABLE [dbo].[BookedRooms](
 	[BookedRoomID] [int] NOT NULL,
-	[BookingID] [int] NULL,
+	[BookingID] [int] NOT NULL,
 	[RoomID] [int] NOT NULL,
-	[RoomPrice] [decimal](12, 2) NULL,
+	[RoomPrice] [decimal](12, 2) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[BookedRoomID] ASC
@@ -381,9 +376,6 @@ GO
 
 ALTER TABLE [dbo].[BookedRooms]  WITH CHECK ADD FOREIGN KEY([RoomID])
 REFERENCES [dbo].[Rooms] ([RoomID])
-GO
-
-USE [HotelManagementDB]
 GO
 
 /****** Object:  Table [dbo].[RoomServiceUsage]    Script Date: 16/07/2025 17:58:56 ******/
@@ -414,8 +406,6 @@ ALTER TABLE [dbo].[RoomServiceUsage]  WITH CHECK ADD FOREIGN KEY([ServiceID])
 REFERENCES [dbo].[Services] ([ServiceID])
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[Invoice]    Script Date: 16/07/2025 17:59:17 ******/
 SET ANSI_NULLS ON
@@ -446,8 +436,6 @@ ALTER TABLE [dbo].[Invoice]  WITH CHECK ADD FOREIGN KEY([StaffID])
 REFERENCES [dbo].[Staff] ([StaffID])
 GO
 
-USE [HotelManagementDB]
-GO
 
 /****** Object:  Table [dbo].[InvoiceDetails]    Script Date: 16/07/2025 17:59:26 ******/
 SET ANSI_NULLS ON
