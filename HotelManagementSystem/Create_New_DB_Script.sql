@@ -1,0 +1,477 @@
+USE [master]
+GO
+
+/****** Object:  Database [HotelManagementDB]    Script Date: 16/07/2025 17:50:05 ******/
+CREATE DATABASE [HotelManagementDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'HotelManagementDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\HotelManagementDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'HotelManagementDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\HotelManagementDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [HotelManagementDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET AUTO_CLOSE ON 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET  ENABLE_BROKER 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET RECOVERY SIMPLE 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [HotelManagementDB] SET DB_CHAINING OFF 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+
+ALTER DATABASE [HotelManagementDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+
+ALTER DATABASE [HotelManagementDB] SET QUERY_STORE = OFF
+GO
+
+ALTER DATABASE [HotelManagementDB] SET  READ_WRITE 
+GO
+
+
+/****** CREATE TABLES ******/
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[Staff]    Script Date: 16/07/2025 17:51:31 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Staff](
+	[StaffID] [int] NOT NULL,
+	[FullName] [nvarchar](100) NULL,
+	[Email] [nvarchar](100) NULL,
+	[Phone] [nvarchar](20) NULL,
+	[Role] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[StaffID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Accounts]    Script Date: 16/07/2025 17:51:04 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Accounts](
+	[AccountID] [int] NOT NULL,
+	[Username] [nvarchar](50) NULL,
+	[Password] [nvarchar](200) NULL,
+	[Role] [varchar](15) NULL,
+	[StaffID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[AccountID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Accounts]  WITH CHECK ADD FOREIGN KEY([StaffID])
+REFERENCES [dbo].[Staff] ([StaffID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[Facilities]    Script Date: 16/07/2025 17:52:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Facilities](
+	[FacilityID] [int] NOT NULL,
+	[FacilityName] [nvarchar](50) NULL,
+	[Description] [nvarchar](200) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[FacilityID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[Guests]    Script Date: 16/07/2025 17:53:33 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Guests](
+	[GuestID] [int] NOT NULL,
+	[FullName] [nvarchar](100) NULL,
+	[Address] [nvarchar](200) NULL,
+	[Phone] [nvarchar](20) NULL,
+	[IdCardNo] [nvarchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[GuestID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[RoomTypes]    Script Date: 16/07/2025 17:54:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RoomTypes](
+	[RoomTypeID] [int] NOT NULL,
+	[TypeName] [nvarchar](50) NULL,
+	[Description] [nvarchar](200) NULL,
+	[BasePrice] [decimal](12, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoomTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+/****** Object:  Table [dbo].[ServiceCategories]    Script Date: 16/07/2025 17:54:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ServiceCategories](
+	[CategoryID] [int] NOT NULL,
+	[CategoryName] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+/****** Object:  Table [dbo].[Services]    Script Date: 16/07/2025 17:56:12 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Services](
+	[ServiceID] [int] NOT NULL,
+	[ServiceName] [nvarchar](100) NULL,
+	[UnitPrice] [decimal](12, 2) NULL,
+	[CategoryID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ServiceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Services]  WITH CHECK ADD FOREIGN KEY([CategoryID])
+REFERENCES [dbo].[ServiceCategories] ([CategoryID])
+GO
+
+
+/****** Object:  Table [dbo].[Rooms]    Script Date: 16/07/2025 17:54:44 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Rooms](
+	[RoomID] [int] NOT NULL,
+	[RoomNumber] [nvarchar](10) NULL,
+	[Status] [nvarchar](20) NULL,
+	[CleanStatus] [nvarchar](20) NULL,
+	[RoomTypeID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoomID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Rooms]  WITH CHECK ADD FOREIGN KEY([RoomTypeID])
+REFERENCES [dbo].[RoomTypes] ([RoomTypeID])
+GO
+
+
+/****** Object:  Table [dbo].[RoomFacilities]    Script Date: 16/07/2025 17:54:57 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RoomFacilities](
+	[RoomFacilityID] [int] NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[FacilityID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoomFacilityID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[RoomFacilities]  WITH CHECK ADD FOREIGN KEY([FacilityID])
+REFERENCES [dbo].[Facilities] ([FacilityID])
+GO
+
+ALTER TABLE [dbo].[RoomFacilities]  WITH CHECK ADD FOREIGN KEY([RoomID])
+REFERENCES [dbo].[Rooms] ([RoomID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[Bookings]    Script Date: 16/07/2025 17:58:16 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Bookings](
+	[BookingID] [int] NOT NULL,
+	[BookingDate] [datetime2](0) NULL,
+	[CheckIn] [datetime2](0) NULL,
+	[CheckOut] [datetime2](0) NULL,
+	[GuestID] [int] NOT NULL,
+	[StaffID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BookingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([GuestID])
+REFERENCES [dbo].[Guests] ([GuestID])
+GO
+
+ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([StaffID])
+REFERENCES [dbo].[Staff] ([StaffID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[BookedRooms]    Script Date: 16/07/2025 17:58:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BookedRooms](
+	[BookedRoomID] [int] NOT NULL,
+	[BookingID] [int] NULL,
+	[RoomID] [int] NOT NULL,
+	[RoomPrice] [decimal](12, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BookedRoomID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[BookedRooms]  WITH CHECK ADD FOREIGN KEY([BookingID])
+REFERENCES [dbo].[Bookings] ([BookingID])
+GO
+
+ALTER TABLE [dbo].[BookedRooms]  WITH CHECK ADD FOREIGN KEY([RoomID])
+REFERENCES [dbo].[Rooms] ([RoomID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[RoomServiceUsage]    Script Date: 16/07/2025 17:58:56 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RoomServiceUsage](
+	[UsageID] [int] NOT NULL,
+	[BookedRoomID] [int] NOT NULL,
+	[ServiceID] [int] NOT NULL,
+	[UsageTime] [datetime2](0) NULL,
+	[UnitPrice] [decimal](12, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UsageID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[RoomServiceUsage]  WITH CHECK ADD FOREIGN KEY([BookedRoomID])
+REFERENCES [dbo].[BookedRooms] ([BookedRoomID])
+GO
+
+ALTER TABLE [dbo].[RoomServiceUsage]  WITH CHECK ADD FOREIGN KEY([ServiceID])
+REFERENCES [dbo].[Services] ([ServiceID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[Invoice]    Script Date: 16/07/2025 17:59:17 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Invoice](
+	[InvoiceID] [int] NOT NULL,
+	[BookingID] [int] NOT NULL,
+	[StaffID] [int] NOT NULL,
+	[IssueDate] [datetime2](0) NULL,
+	[TotalAmount] [decimal](12, 2) NULL,
+	[VAT] [decimal](5, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[InvoiceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Invoice]  WITH CHECK ADD FOREIGN KEY([BookingID])
+REFERENCES [dbo].[Bookings] ([BookingID])
+GO
+
+ALTER TABLE [dbo].[Invoice]  WITH CHECK ADD FOREIGN KEY([StaffID])
+REFERENCES [dbo].[Staff] ([StaffID])
+GO
+
+USE [HotelManagementDB]
+GO
+
+/****** Object:  Table [dbo].[InvoiceDetails]    Script Date: 16/07/2025 17:59:26 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[InvoiceDetails](
+	[InvoiceItemID] [int] NOT NULL,
+	[InvoiceID] [int] NOT NULL,
+	[ItemType] [nvarchar](50) NULL,
+	[UnitPrice] [decimal](12, 2) NULL,
+	[TotalPrice] [decimal](12, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[InvoiceItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[InvoiceDetails]  WITH CHECK ADD FOREIGN KEY([InvoiceID])
+REFERENCES [dbo].[Invoice] ([InvoiceID])
+GO
+
+
+
