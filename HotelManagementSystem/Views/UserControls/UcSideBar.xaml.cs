@@ -18,9 +18,9 @@ namespace HotelManagementSystem.Views.UserControls
     /// <summary>
     /// Interaction logic for SideBarUserControl1.xaml
     /// </summary>
-    public partial class SideBarUserControl1 : UserControl
+    public partial class UcSideBar : UserControl
     {
-        public SideBarUserControl1()
+        public UcSideBar()
         {
             InitializeComponent();
         }

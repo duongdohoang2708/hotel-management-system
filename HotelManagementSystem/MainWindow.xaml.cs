@@ -18,12 +18,12 @@ namespace HotelManagementSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool isSidebarOpen = false;
+        private bool isSidebarOpen = true;
 
         public MainWindow()
         {
             InitializeComponent();
-            SidebarColumn.Width = new GridLength(250);
+            SidebarColumn.Width = new GridLength(270);
             Sidebar.Visibility = Visibility.Visible;
             WindowState= WindowState.Maximized;
 
@@ -33,8 +33,18 @@ namespace HotelManagementSystem
             // Lấy role và userName từ tài khoản đăng nhập
             string role = AppSession.CurrentAccount?.Role ?? "Guest";
             string userName = AppSession.CurrentAccount?.Username ?? "";
-            var sideBarviewModel = new SideBarUserControlViewModel(AppSession.CurrentAccount);
+            var sideBarviewModel = new VmUcSidebar(AppSession.CurrentAccount);
+            
             Sidebar.DataContext = sideBarviewModel;
+
+            //Đăng ký event chuyển sang view Quản lý Account
+            sideBarviewModel.OpenAccountRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    mainVm.CurrentView = new UC_AccountManagement();
+                }
+            };
 
             // Đăng ký event chuyển MH trang chủ
             sideBarviewModel.HomeRequested += () =>
@@ -198,7 +208,7 @@ namespace HotelManagementSystem
             }
             else
             {
-                SidebarColumn.Width = new GridLength(250);
+                SidebarColumn.Width = new GridLength(270);
                 Sidebar.Visibility = Visibility.Visible;
             }
             isSidebarOpen = !isSidebarOpen;

@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="HotelManagementSystem.Views.UserControls.UcSideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             Height="Auto" Width="280">
+    <Grid Background="#2C3E50" Height="NaN" Margin="2,0,2,0">
+        <StackPanel Margin="10" VerticalAlignment="Top">
+            <!-- TÀI KHOẢN ĐĂNG NHẬP -->
+            <TextBlock Text="NGƯỜI DÙNG" Foreground="#FFD5F904" Margin="1,10,0,3" FontWeight="Bold" FontSize="14"/>
+            <TextBlock Text="Nguyễn Xuân Minh" Foreground="#FF7EFDD4" Margin="30,0,0,3" FontSize="14" FontFamily="Tahoma"/>
+            <TextBlock Text="Quản lý" Foreground="#FF7EFDD4" Margin="30,0,0,10" FontSize="14" FontFamily="Tahoma"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding LogoutCommand}" HorizontalAlignment="Left" Width="100" Background="#FF046C4B" Height="30"  Margin="25,0,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  >
+                        <iconPacks:PackIconMaterial Kind="Logout" Width="15" Margin="0,0,8,0" Foreground="White"/>
+                        <TextBlock Text="Đăng xuất" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding ExitCommand}" Width="100" Background="#FF046C4B" Height="30" Margin="10,0,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="15,0,0,0">
+                        <iconPacks:PackIconMaterial Kind="WindowClose" Width="15" Margin="0,0,8,0" Foreground="White"/>
+                        <TextBlock Text="Thoát" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- QUY TRÌNH PHỤC VỤ -->
+            <TextBlock Text="NGHIỆP VỤ" Foreground="#FFD1E506" Margin="0,30,0,10" FontWeight="Bold" FontSize="14" HorizontalAlignment="Left"/>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateBookingCommand}"  Background="#FF39562D" Height="40" Margin="20,2,20,1">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="PhoneIncoming" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Đặt phòng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateCheckInCommand}" Margin="20,10,20,0" Height="40" Background="#FF39562D">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="CheckboxMarked" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Nhận phòng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateCheckOutCommand}" Margin="20,10,20,0" Height="40" Background="#FF39562D">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="LocationExit" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Trả phòng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateServiceUsageCommand}" Margin="20,10,20,0" Height="40" Background="#FF39562D">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="RoomServiceOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Sử dụng dịch vụ" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateReportCommand}" Margin="20,10,20,0" Height="40" Background="#FF39562D">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ChartBar" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Báo cáo" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <!-- QUẢN TRỊ HỆ THỐNG -->
+            <TextBlock Text="HỆ THỐNG" Foreground="#FFF9F004" Margin="0,30,0,10" FontWeight="Bold" FontSize="14" TextAlignment="Center" HorizontalAlignment="Left"/>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateGuestCommand}" Background="#FF4E7091" Height="40" Margin="20,2,20,0">
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,0" >
+                    <iconPacks:PackIconMaterial Kind="AccountMultipleOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Khách hàng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateRoomCommand}" Margin="20,10,20,0" Background="#FF4E7091" Height="40">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" >
+                    <iconPacks:PackIconMaterial Kind="BedOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Danh sách phòng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateServiceCommand}" Background="#FF4E7091" Height="40" Margin="20,10,20,0">
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                    <iconPacks:PackIconMaterial Kind="CartOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Danh mục dịch vụ" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateStaffCommand}" Height="40" Background="#FF4E7091" Margin="20,10,20,0">
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                    <iconPacks:PackIconMaterial Kind="AccountTieOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Nhân sự" Foreground="White"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding AccountCommand}" Margin="20,10,20,20" Background="#FF4E7091" Height="40" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                    <iconPacks:PackIconMaterial Kind="AccountTieOutline" Width="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="Tài khoản người dùng" Foreground="White"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

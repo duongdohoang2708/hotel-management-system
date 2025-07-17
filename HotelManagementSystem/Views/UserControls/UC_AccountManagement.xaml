@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="HotelManagementSystem.Views.UserControls.UC_AccountManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:HotelManagementSystem.Views.UserControls"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Nút thêm -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+        </Grid.RowDefinitions>
+
+        <!-- Nút Thêm nằm ở trên -->
+        <Button Content="➕ Thêm tài khoản" Width="160" HorizontalAlignment="Left" Margin="0,0,0,10"
+                Grid.Row="0" Click="AddAccount_Click"/>
+
+        <!-- DataGrid với các nút biểu tượng -->
+        <DataGrid x:Name="AccountsDataGrid" Grid.Row="1" AutoGenerateColumns="False"
+                  CanUserAddRows="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Định danh" Binding="{Binding AccountID}" Width="*" />
+                <DataGridTextColumn Header="Tên đăng nhập" Binding="{Binding Username}" Width="*" />
+                <DataGridTextColumn Header="Mật khẩu" Binding="{Binding Password}" Width="*" />
+                <DataGridTextColumn Header="Vai trò" Binding="{Binding Role}" Width="*" />
+                <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="*" />
+                <DataGridTextColumn Header="Ngày sinh" Binding="{Binding DateOfBirth}" Width="*" />
+                <DataGridTextColumn Header="Vị trí công việc" Binding="{Binding Position}" Width="*" />
+
+                <!-- Cột nút Sửa -->
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="✏️" ToolTip="Sửa" Click="EditAccount_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Cột nút Xóa -->
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="🗑️" ToolTip="Xóa" Click="DeleteAccount_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

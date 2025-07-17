@@ -12,7 +12,7 @@ namespace HotelManagementSystem.ViewModels
     {
         public class StaffDisplay : Staff
         {
-            public string DateOfBirthDisplay => DateOfBirth.HasValue ? DateOfBirth.Value.ToString("dd/MM/yyyy") : "";
+     
         }
 
         private ObservableCollection<StaffDisplay> _staffList;
@@ -60,7 +60,7 @@ namespace HotelManagementSystem.ViewModels
                         Role = s.Role,
                         Phone = s.Phone,
                         Email = s.Email,
-                        DateOfBirth = s.DateOfBirth
+                        
                     })
                 );
             }

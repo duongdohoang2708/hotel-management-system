@@ -62,7 +62,7 @@ namespace HotelManagementSystem.ViewModels
                 Role = staff.Role;
                 Phone = staff.Phone;
                 Email = staff.Email;
-                DateOfBirth = staff.DateOfBirth;
+                
             }
             SaveCommand = new RelayCommand(_ => Save());
             CancelCommand = new RelayCommand(_ => RequestClose?.Invoke());
@@ -156,7 +156,7 @@ namespace HotelManagementSystem.ViewModels
                     staff.Role = Role;
                     staff.Phone = Phone;
                     staff.Email = Email;
-                    staff.DateOfBirth = DateOfBirth;
+                    
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace HotelManagementSystem.ViewModels
                         Role = Role,
                         Phone = Phone,
                         Email = Email,
-                        DateOfBirth = DateOfBirth
+                        
                     };
                     db.Staff.Add(staff);
                 }
