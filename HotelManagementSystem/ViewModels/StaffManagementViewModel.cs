@@ -57,7 +57,7 @@ namespace HotelManagementSystem.ViewModels
                     {
                         StaffId = s.StaffId,
                         FullName = s.FullName,
-                        Role = s.Role,
+                        Position = s.Position,
                         Phone = s.Phone,
                         Email = s.Email,
                         
@@ -77,7 +77,7 @@ namespace HotelManagementSystem.ViewModels
                 query = query.Where(s =>
                     (!string.IsNullOrEmpty(s.FullName) && s.FullName.ToLower().Contains(keyword)) ||
                     (!string.IsNullOrEmpty(s.Phone) && s.Phone.ToLower().Contains(keyword)) ||
-                    (!string.IsNullOrEmpty(s.Role) && s.Role.ToLower().Contains(keyword))
+                    (!string.IsNullOrEmpty(s.Position) && s.Position.ToLower().Contains(keyword))
                 );
             }
 

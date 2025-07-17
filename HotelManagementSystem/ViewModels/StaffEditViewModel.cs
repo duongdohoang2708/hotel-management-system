@@ -59,7 +59,7 @@ namespace HotelManagementSystem.ViewModels
                 _isEditMode = true;
                 _editingStaff = staff;
                 FullName = staff.FullName;
-                Role = staff.Role;
+                Role = staff.Position;
                 Phone = staff.Phone;
                 Email = staff.Email;
                 
@@ -153,7 +153,7 @@ namespace HotelManagementSystem.ViewModels
                 {
                     staff = db.Staff.FirstOrDefault(s => s.StaffId == _editingStaff.StaffId) ?? _editingStaff;
                     staff.FullName = FullName;
-                    staff.Role = Role;
+                    staff.Position = Role;
                     staff.Phone = Phone;
                     staff.Email = Email;
                     
@@ -163,7 +163,7 @@ namespace HotelManagementSystem.ViewModels
                     staff = new Staff
                     {
                         FullName = FullName,
-                        Role = Role,
+                        Position = Role,
                         Phone = Phone,
                         Email = Email,
                         

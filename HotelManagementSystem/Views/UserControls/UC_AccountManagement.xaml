@@ -17,7 +17,7 @@
 
         <!-- Nút Thêm nằm ở trên -->
         <Button Content="➕ Thêm tài khoản" Width="160" HorizontalAlignment="Left" Margin="0,0,0,10"
-                Grid.Row="0" Click="AddAccount_Click"/>
+                Grid.Row="0" Command="{Binding AddAccountCommand}"/>
 
         <!-- DataGrid với các nút biểu tượng -->
         <DataGrid x:Name="AccountsDataGrid" Grid.Row="1" AutoGenerateColumns="False"
@@ -35,7 +35,7 @@
                 <DataGridTemplateColumn Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="✏️" ToolTip="Sửa" Click="EditAccount_Click"/>
+                            <Button Content="✏️" ToolTip="Sửa" Command="{Binding EditAccountCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -44,7 +44,7 @@
                 <DataGridTemplateColumn Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="🗑️" ToolTip="Xóa" Click="DeleteAccount_Click"/>
+                            <Button Content="🗑️" ToolTip="Xóa" Command="{Binding DeleteAccountCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -42,7 +42,9 @@ namespace HotelManagementSystem
             {
                 if (this.DataContext is MainWindowViewModel mainVm)
                 {
-                    mainVm.CurrentView = new UC_AccountManagement();
+                    var control = new UC_AccountManagement();
+                    control.DataContext = new VM_AccountManagement();
+                    mainVm.CurrentView = control;
                 }
             };
 
