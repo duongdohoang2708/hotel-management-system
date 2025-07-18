@@ -5,10 +5,7 @@
     <Compile Update="Views\UserControls\SideBarUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\UcSideBar.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\UserControls\UC_AccountManagement.xaml.cs">
+    <Compile Update="Views\UserControls\AccountManagementUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -38,8 +38,8 @@ namespace HotelManagementSystem.ViewModels
         public LoginViewModel(AccountService accountService)
         {
             _accountService = accountService;
-            Username = "quanly";
-            Password = "quanly123"; 
+            Username = "tranthibinh";
+            Password = "123456"; 
             LoginCommand = new RelayCommand(_ => Login());
             OpenForgotPasswordCommand = new RelayCommand(_ => OpenForgotPassword());
         }

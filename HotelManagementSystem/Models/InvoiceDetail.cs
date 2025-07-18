@@ -9,11 +9,11 @@ public partial class InvoiceDetail
 
     public int InvoiceId { get; set; }
 
-    public string? ItemType { get; set; }
-
-    public int Quantity { get; set; }
+    public string Content { get; set; } = null!;
 
     public decimal UnitPrice { get; set; }
+
+    public int Quantity { get; set; }
 
     public decimal TotalPrice { get; set; }
 

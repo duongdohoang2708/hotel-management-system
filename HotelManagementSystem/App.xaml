@@ -10,19 +10,22 @@
             <!--<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" /> -->
 
             <!-- Merge theme của MaterialDesign -->
-            <ResourceDictionary.MergedDictionaries>
-                <!-- Base Material theme (required) -->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+        <!--
+        <ResourceDictionary.MergedDictionaries>
+            
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
 
-                <!-- Optional: Color theme -->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml" />
-                
-            </ResourceDictionary.MergedDictionaries>
-
-            <Style x:Key="SideBarButtonStyle" TargetType="Button">
+            
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml" />
+        
+        </ResourceDictionary.MergedDictionaries>
+        -->
+            
+        <Style x:Key="SideBarButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="Margin" Value="10,2"/>
@@ -32,7 +35,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                                 <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0"/>
                             </Border>
                         </ControlTemplate>
@@ -40,7 +43,15 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#34495E"/>
+                        <Setter Property="Background" Value="#FFFDE9B3"/>
+                        <Setter Property="Foreground" Value="#222"/>
+                        <Setter Property="BorderBrush" Value="#FFD700"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="0" Opacity="0.3"/>
+                            </Setter.Value>
+                        </Setter>
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Setter Property="Background" Value="#1F2C3C"/>

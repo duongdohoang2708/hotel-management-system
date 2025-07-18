@@ -11,7 +11,7 @@ public partial class RoomFacility
 
     public int FacilityId { get; set; }
 
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     public virtual Facility Facility { get; set; } = null!;
 

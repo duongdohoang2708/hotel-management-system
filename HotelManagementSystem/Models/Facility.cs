@@ -7,7 +7,7 @@ public partial class Facility
 {
     public int FacilityId { get; set; }
 
-    public string FacilityName { get; set; } = null!;
+    public string? FacilityName { get; set; }
 
     public string? Description { get; set; }
 

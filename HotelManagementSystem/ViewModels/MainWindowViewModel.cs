@@ -22,8 +22,7 @@ namespace HotelManagementSystem.ViewModels
         public MainWindowViewModel()
         {
             CurrentView = new WelcomeUserControl();
-            CustomerCommand = new RelayCommand(_ => CurrentView = new GuestManagementUserControl());
-            RoomManagementCommand = new RelayCommand(_ => CurrentView = new RoomManagementControl());
+            
         }
     }
 }

@@ -1,18 +1,39 @@
+using HotelManagementSystem.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
-using HotelManagementSystem.Models;
-using Microsoft.EntityFrameworkCore;
-using HotelManagementSystem.Views.Windows;
 using System.Windows;
+using System.Windows.Input;
+using static HotelManagementSystem.ViewModels.AccountManagementViewModel;
 
 namespace HotelManagementSystem.ViewModels
 {
     public class StaffManagementViewModel : ViewModelBase
     {
-        public class StaffDisplay : Staff
+        public ICommand AddStaffCommand { get; }
+        public ICommand EditStaffCommand { get; }
+        public ICommand DeleteStaffCommand { get; }
+
+        //public event Action? AddStaffRequested;
+        //public event Action<StaffDisplay>? EditStaffRequested;
+       
+        private AccountDisplay _selectedAccount;
+        public event Action<Staff?>? RequestAddEditStaff;
+
+        private StaffDisplay _selectedStaff;
+        public StaffDisplay SelectedStaff
         {
-     
+            get => _selectedStaff;
+            set => SetProperty(ref _selectedStaff, value);
+        }
+
+        public class StaffDisplay
+        {
+            public int StaffId { get; set; }
+            public string FullName { get; set; }
+            public string Email { get; set; }
+            public string Phone { get; set; }
+            public string Position { get; set; }
         }
 
         private ObservableCollection<StaffDisplay> _staffList;
@@ -22,114 +43,64 @@ namespace HotelManagementSystem.ViewModels
             set => SetProperty(ref _staffList, value);
         }
 
-        private ObservableCollection<StaffDisplay> _filteredStaffList;
-        public ObservableCollection<StaffDisplay> FilteredStaffList
-        {
-            get => _filteredStaffList;
-            set => SetProperty(ref _filteredStaffList, value);
-        }
-
-        private string _searchKeyword = "";
-        public string SearchKeyword
-        {
-            get => _searchKeyword;
-            set { if (SetProperty(ref _searchKeyword, value)) FilterStaff(); }
-        }
-
-        public ICommand EditCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand AddCommand { get; }
-
         public StaffManagementViewModel()
         {
+            AddStaffCommand = new RelayCommand(_ => RequestAddEditStaff?.Invoke(null));
+            EditStaffCommand = new RelayCommand(param =>
+            {
+                var staff = param as StaffDisplay;
+                if (staff != null)
+                {
+                    using (var db = new HotelManagementDbContext())
+                    {
+                        var dbStaff = db.Staff.FirstOrDefault(s => s.StaffId == staff.StaffId);
+                        if (dbStaff != null)
+                            RequestAddEditStaff?.Invoke(dbStaff);
+                    }
+                }
+            });
+            DeleteStaffCommand = new RelayCommand(param => DeleteStaff(param as StaffDisplay));
             LoadStaff();
-            EditCommand = new RelayCommand(e => EditStaff(e as StaffDisplay));
-            DeleteCommand = new RelayCommand(e => DeleteStaff(e as StaffDisplay));
-            AddCommand = new RelayCommand(_ => AddStaff());
         }
 
-        private void LoadStaff()
+        public void LoadStaff()
         {
             using (var db = new HotelManagementDbContext())
             {
+                var staffs = db.Staff.ToList();
                 StaffList = new ObservableCollection<StaffDisplay>(
-                    db.Staff.Include(s => s.Accounts).ToList().Select(s => new StaffDisplay
+                    staffs.Select(s => new StaffDisplay
                     {
                         StaffId = s.StaffId,
                         FullName = s.FullName,
-                        Position = s.Position,
-                        Phone = s.Phone,
                         Email = s.Email,
-                        
+                        Phone = s.Phone,
+                        Position = s.Position
                     })
                 );
             }
-            FilteredStaffList = new ObservableCollection<StaffDisplay>(StaffList);
         }
 
-        private void FilterStaff()
-        {
-            var keyword = SearchKeyword?.Trim().ToLower() ?? "";
-            var query = StaffList.AsEnumerable();
-
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                query = query.Where(s =>
-                    (!string.IsNullOrEmpty(s.FullName) && s.FullName.ToLower().Contains(keyword)) ||
-                    (!string.IsNullOrEmpty(s.Phone) && s.Phone.ToLower().Contains(keyword)) ||
-                    (!string.IsNullOrEmpty(s.Position) && s.Position.ToLower().Contains(keyword))
-                );
-            }
-
-            FilteredStaffList = new ObservableCollection<StaffDisplay>(query);
-        }
-
-        private void EditStaff(StaffDisplay? staff)
+        private void DeleteStaff(StaffDisplay staff)
         {
             if (staff == null) return;
-            var editWindow = new StaffEditWindow();
-            var vm = new StaffEditViewModel(staff);
-            editWindow.DataContext = vm;
-            vm.RequestClose += () => editWindow.Close();
-            vm.EmployeeSaved += _ => LoadStaff();
-            editWindow.Owner = System.Windows.Application.Current.MainWindow;
-            editWindow.ShowDialog();
-        }
-
-        private void DeleteStaff(StaffDisplay? staff)
-        {
-            if (staff == null) return;
-            if (AppSession.CurrentAccount != null && AppSession.CurrentAccount.StaffId == staff.StaffId)
-            {
-                System.Windows.MessageBox.Show("Không thể xóa nhân viên đang đăng nhập!", "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
-                return;
-            }
-            var result = System.Windows.MessageBox.Show($"Bạn có chắc chắn muốn xóa nhân viên '{staff.FullName}'?", "Xác nhận xóa", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
-            if (result != System.Windows.MessageBoxResult.Yes)
+            var result = MessageBox.Show($"Khi xóa nhân viên sẽ xóa cả tài khoản có liên quan. Bạn có chắc chắn muốn xóa nhân viên '{staff.FullName}'?", "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
                 return;
             using (var db = new HotelManagementDbContext())
             {
-                var accounts = db.Accounts.Where(a => a.StaffId == staff.StaffId).ToList();
-                db.Accounts.RemoveRange(accounts);
                 var dbStaff = db.Staff.FirstOrDefault(s => s.StaffId == staff.StaffId);
                 if (dbStaff != null)
                 {
+                    // Xóa các Account liên quan trước
+                    var relatedAccounts = db.Accounts.Where(a => a.StaffId == dbStaff.StaffId).ToList();
+                    db.Accounts.RemoveRange(relatedAccounts);
+                    // Xóa staff
                     db.Staff.Remove(dbStaff);
                     db.SaveChanges();
                 }
             }
             LoadStaff();
-        }
-
-        private void AddStaff()
-        {
-            var addWindow = new StaffEditWindow();
-            var vm = new StaffEditViewModel();
-            addWindow.DataContext = vm;
-            vm.RequestClose += () => addWindow.Close();
-            vm.EmployeeSaved += _ => LoadStaff();
-            addWindow.Owner = System.Windows.Application.Current.MainWindow;
-            addWindow.ShowDialog();
         }
     }
 } 
