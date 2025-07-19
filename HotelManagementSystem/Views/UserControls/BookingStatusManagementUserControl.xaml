@@ -1,4 +1,4 @@
-<UserControl x:Class="HotelManagementSystem.Views.UserControls.StaffManagementUserControl"
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.BookingStatusManagementUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,8 +16,8 @@
         </Grid.ColumnDefinitions>
         
         <!-- Nút Thêm nằm ở bên trái -->
-        <Button Content="➕ Thêm nhân viên" Width="160" HorizontalAlignment="Left" Margin="0,0,0,10"
-                Grid.Row="0" Grid.Column="0" Command="{Binding AddStaffCommand}"/>
+        <Button Content="➕ Thêm" Width="100" HorizontalAlignment="Left" Margin="0,0,0,10"
+                Grid.Row="0" Grid.Column="0" Command="{Binding AddBookingStatusCommand}"/>
         
         <!-- Khung tìm kiếm nằm ở bên phải -->
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
@@ -39,7 +39,7 @@
                     </Style>
                 </TextBox.Style>
                 <TextBox.ToolTip>
-                    <ToolTip Content="Tìm kiếm theo họ tên, email, số điện thoại hoặc vị trí công việc"/>
+                    <ToolTip Content="Tìm kiếm theo tên trạng thái"/>
                 </TextBox.ToolTip>
             </TextBox>
             <Button Content="🔍 Tìm kiếm" Width="80" Height="25" Margin="0,0,5,0"
@@ -83,11 +83,11 @@
         </StackPanel>
         
         <!-- DataGrid với các nút biểu tượng -->
-        <DataGrid x:Name="StaffDataGrid" Grid.Row="1" Grid.ColumnSpan="2" AutoGenerateColumns="False"
+        <DataGrid x:Name="BookingStatusDataGrid" Grid.Row="1" Grid.ColumnSpan="2" AutoGenerateColumns="False"
                   CanUserAddRows="False" SelectionMode="Single"
-                  ItemsSource="{Binding StaffList}"
+                  ItemsSource="{Binding BookingStatusList}"
                   IsReadOnly="True"
-                  SelectedItem="{Binding SelectedStaff, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedBookingStatus, Mode=TwoWay}">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="White"/>
@@ -100,17 +100,14 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Mã nhân viên" Binding="{Binding StaffId}" Width="Auto" />
-                <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="Auto" />
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="Auto" />
-                <DataGridTextColumn Header="Số điện thoại" Binding="{Binding Phone}" Width="Auto" />
-                <DataGridTextColumn Header="Vị trí công việc" Binding="{Binding Position}" Width="Auto" />
+                <DataGridTextColumn Header="Mã trạng thái" Binding="{Binding StatusId}" Width="Auto" />
+                <DataGridTextColumn Header="Tên trạng thái" Binding="{Binding StatusName}" Width="Auto" />
                 <!-- Cột nút Sửa -->
                 <DataGridTemplateColumn Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button ToolTip="Sửa"
-                                    Command="{Binding DataContext.EditStaffCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Command="{Binding DataContext.EditBookingStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}"
                                     Width="32" Height="32">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -139,7 +136,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button ToolTip="Xóa"
-                                    Command="{Binding DataContext.DeleteStaffCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Command="{Binding DataContext.DeleteBookingStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}"
                                     Width="32" Height="32">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

@@ -4,48 +4,38 @@ using HotelManagementSystem.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 namespace HotelManagementSystem.ViewModels
 {
-    public class FacilityAddEditViewModel : ViewModelBase, INotifyDataErrorInfo
+    public class BookingStatusAddEditViewModel : ViewModelBase, INotifyDataErrorInfo
     {
-        private int _facilityId;
-        public int FacilityId
+        private int _statusId;
+        public int StatusId
         {
-            get => _facilityId;
-            set => SetProperty(ref _facilityId, value);
+            get => _statusId;
+            set => SetProperty(ref _statusId, value);
         }
 
-        private string _facilityName;
-        public string FacilityName
+        private string? _statusName;
+        public string? StatusName
         {
-            get => _facilityName;
+            get => _statusName;
             set
             {
-                if (SetProperty(ref _facilityName, value))
+                if (SetProperty(ref _statusName, value))
                 {
-                    ValidateFacilityName();
+                    ValidateStatusName();
                 }
             }
         }
 
-        private string _description;
-        public string Description
-        {
-            get => _description;
-            set => SetProperty(ref _description, value);
-        }
-
         public bool IsEditMode { get; set; }
-        public string WindowTitle => IsEditMode ? "Sửa thiết bị" : "Thêm thiết bị";
-
-        public bool IsSaveEnabled => !string.IsNullOrWhiteSpace(FacilityName);
+        public string WindowTitle => IsEditMode ? "Sửa trạng thái đặt phòng" : "Thêm trạng thái đặt phòng";
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
         public event Action? RequestClose;
-        public event Action<Facility>? FacilitySaved;
+        public event Action<BookingStatus>? BookingStatusSaved;
 
         private readonly Dictionary<string, List<string>> _errors = new();
         public bool HasErrors => _errors.Count > 0;
@@ -75,14 +65,21 @@ namespace HotelManagementSystem.ViewModels
             }
         }
 
-        public FacilityAddEditViewModel(bool isEditMode = false, Facility? facility = null)
+        public bool CanSave
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(StatusName);
+            }
+        }
+
+        public BookingStatusAddEditViewModel(bool isEditMode = false, BookingStatus? bookingStatus = null)
         {
             IsEditMode = isEditMode;
-            if (isEditMode && facility != null)
+            if (isEditMode && bookingStatus != null)
             {
-                FacilityId = facility.FacilityId;
-                FacilityName = facility.FacilityName;
-                Description = facility.Description;
+                StatusId = bookingStatus.StatusId;
+                StatusName = bookingStatus.StatusName;
             }
             SaveCommand = new RelayCommand(_ => Save());
             CancelCommand = new RelayCommand(_ => RequestClose?.Invoke());
@@ -90,7 +87,7 @@ namespace HotelManagementSystem.ViewModels
 
         private void Save()
         {
-            ValidateFacilityName();
+            ValidateStatusName();
             if (HasErrors)
             {
                 return;
@@ -99,39 +96,35 @@ namespace HotelManagementSystem.ViewModels
             {
                 if (IsEditMode)
                 {
-                    var f = db.Facilities.Find(FacilityId);
-                    if (f != null)
+                    var bs = db.BookingStatuses.Find(StatusId);
+                    if (bs != null)
                     {
-                        f.FacilityName = FacilityName;
-                        f.Description = Description;
+                        bs.StatusName = StatusName;
                         db.SaveChanges();
-                        FacilitySaved?.Invoke(f);
+                        BookingStatusSaved?.Invoke(bs);
                     }
                 }
                 else
                 {
-                    var f = new Facility
+                    var bs = new BookingStatus
                     {
-                        FacilityName = FacilityName,
-                        Description = Description
+                        StatusName = StatusName
                     };
-                    db.Facilities.Add(f);
+                    db.BookingStatuses.Add(bs);
                     db.SaveChanges();
-                    FacilitySaved?.Invoke(f);
+                    BookingStatusSaved?.Invoke(bs);
                 }
             }
             RequestClose?.Invoke();
         }
 
-        public void ValidateFacilityName()
+        public void ValidateStatusName()
         {
-            ClearErrors(nameof(FacilityName));
-            if (string.IsNullOrWhiteSpace(FacilityName))
+            ClearErrors(nameof(StatusName));
+            if (string.IsNullOrWhiteSpace(StatusName))
             {
-                AddError(nameof(FacilityName), "Tên thiết bị không được để trống!");
+                AddError(nameof(StatusName), "Tên trạng thái không được để trống!");
             }
         }
-
-       
     }
 } 

@@ -21,5 +21,15 @@ namespace HotelManagementSystem.Views.Windows
                 vm.Password = pb.Password;
             }
         }
+        private void Username_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AccountAddEditViewModel vm)
+                vm.ValidateUsername();
+        }
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AccountAddEditViewModel vm)
+                vm.ValidatePassword();
+        }
     }
 } 

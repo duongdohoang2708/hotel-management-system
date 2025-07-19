@@ -6,23 +6,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections;
+using System.ComponentModel;
 
 namespace HotelManagementSystem.ViewModels
 {
-    public class AccountAddEditViewModel : ViewModelBase
+    public class AccountAddEditViewModel : ViewModelBase, INotifyDataErrorInfo
     {
         private string _username;
         public string Username
         {
             get => _username;
-            set => SetProperty(ref _username, value);
+            set
+            {
+                if (SetProperty(ref _username, value))
+                {
+                    ValidateUsername();
+                }
+            }
         }
 
         private string _password;
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set
+            {
+                if (SetProperty(ref _password, value))
+                {
+                    ValidatePassword();
+                }
+            }
         }
 
         private string _role;
@@ -40,6 +54,7 @@ namespace HotelManagementSystem.ViewModels
         }
 
         public ObservableCollection<Staff> StaffList { get; set; }
+        public ObservableCollection<string> Roles { get; set; } = new ObservableCollection<string> { "Admin", "Manager", "Receptionist", "Cashier" };
 
         public bool IsEditMode { get; set; }
         public int AccountID { get; set; }
@@ -50,6 +65,34 @@ namespace HotelManagementSystem.ViewModels
         public ICommand CancelCommand { get; }
         public event Action? RequestClose;
         public event Action<Account>? AccountSaved;
+
+        private readonly Dictionary<string, List<string>> _errors = new();
+        public bool HasErrors => _errors.Count > 0;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public IEnumerable GetErrors(string? propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                return null;
+            return _errors.ContainsKey(propertyName) ? _errors[propertyName] : null;
+        }
+        private void AddError(string propertyName, string error)
+        {
+            if (!_errors.ContainsKey(propertyName))
+                _errors[propertyName] = new List<string>();
+            if (!_errors[propertyName].Contains(error))
+            {
+                _errors[propertyName].Add(error);
+                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            }
+        }
+        private void ClearErrors(string propertyName)
+        {
+            if (_errors.ContainsKey(propertyName))
+            {
+                _errors.Remove(propertyName);
+                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            }
+        }
 
         public AccountAddEditViewModel(bool isEditMode = false, Account? account = null)
         {
@@ -81,6 +124,12 @@ namespace HotelManagementSystem.ViewModels
 
         private void Save()
         {
+            ValidateUsername();
+            ValidatePassword();
+            if (HasErrors)
+            {
+                return;
+            }
             using (var db = new HotelManagementDbContext())
             {
                 if (IsEditMode)
@@ -110,6 +159,23 @@ namespace HotelManagementSystem.ViewModels
                 }
             }
             RequestClose?.Invoke();
+        }
+
+        public void ValidateUsername()
+        {
+            ClearErrors(nameof(Username));
+            if (string.IsNullOrWhiteSpace(Username))
+            {
+                AddError(nameof(Username), "Tên đăng nhập không được để trống!");
+            }
+        }
+        public void ValidatePassword()
+        {
+            ClearErrors(nameof(Password));
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                AddError(nameof(Password), "Mật khẩu không được để trống!");
+            }
         }
     }
 }

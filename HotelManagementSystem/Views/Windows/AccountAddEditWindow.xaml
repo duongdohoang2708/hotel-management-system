@@ -2,9 +2,21 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:HotelManagementSystem.Converters"
-        Title="{Binding WindowTitle}" Height="261" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        Title="{Binding WindowTitle}" Height="370" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder/>
+                            <TextBlock Foreground="Red" FontSize="12" Text="{Binding [0].ErrorContent}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}" Path="DataContext"/>
@@ -25,20 +37,22 @@
         </Grid.ColumnDefinitions>
 
         <!-- AccountID (chỉ hiển thị khi sửa) -->
-        <TextBlock Text="Mã tài khoản:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <TextBox Text="{Binding AccountID}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBlock Text="Mã tài khoản:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBox Text="{Binding AccountID}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,25" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="26"/>
 
         <!-- Username -->
-        <TextBlock Text="Tên đăng nhập:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Username}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8"/>
+        <TextBlock Text="Tên đăng nhập:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Username, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,25" LostFocus="Username_LostFocus" Height="26"/>
 
         <!-- Password -->
-        <TextBlock Text="Mật khẩu:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,8" PasswordChanged="PasswordBox_PasswordChanged"/>
+        <TextBlock Text="Mật khẩu:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,25" PasswordChanged="PasswordBox_PasswordChanged" LostFocus="PasswordBox_LostFocus"/>
 
         <!-- Role -->
-        <TextBlock Text="Vai trò:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Role}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,8"/>
+        <TextBlock Text="Vai trò:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,25"
+                  ItemsSource="{Binding Roles}"
+                  SelectedItem="{Binding Role, Mode=TwoWay}"/>
 
         <!-- Staff (chỉ cho chọn khi thêm) -->
         <TextBlock Text="Nhân viên:" Grid.Row="4" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>

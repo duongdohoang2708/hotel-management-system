@@ -44,7 +44,7 @@
                 <DockPanel Grid.Row="0" Background="#FF2C3E50" Opacity="0.95" LastChildFill="True" Height="60">
                     <Button Content="☰" Width="50" Height="50" Margin="5,5,0,5" Click="HamburgerButton_Click" DockPanel.Dock="Left"
                             Style="{x:Null}" FontSize="22" Background="#FF374859" BorderThickness="0" Foreground="#FFF5EEEE"/>
-                    <TextBlock Text="DD Luxury Hotel" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="16,0,0,0" Foreground="#FFD5F904"/>
+                    <TextBlock Text="{Binding CurrentViewTitle}" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="16,0,0,0" Foreground="#FFD5F904"/>
                 </DockPanel>
                 <!-- Nội dung chính động -->
                 <ContentControl Grid.Row="1"

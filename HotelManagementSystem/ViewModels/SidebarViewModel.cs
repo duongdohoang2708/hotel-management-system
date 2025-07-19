@@ -23,12 +23,18 @@ namespace HotelManagementSystem.ViewModels
         public ICommand AccountCommand { get; }
         public ICommand StaffCommand { get; }
         public ICommand FacilityCommand { get; }
+        public ICommand RoomTypeCommand { get; }
+        public ICommand BookingStatusCommand { get; }
+        public ICommand GuestCommand { get; }
+        public ICommand ServiceCategoryCommand { get; }
+        public ICommand ServiceCommand { get; }
+        public ICommand RoomCommand { get; }
 
         public event Action? HomeRequested;
-        public event Action? RoomRequested;
+        public event Action? OpenRoomRequested;
         public event Action? LogoutRequested;
-        public event Action? GuestRequested;
-        public event Action? RoomManagementRequested;
+        public event Action? OpenGuestRequested;
+        //public event Action? RoomManagementRequested;
         public event Action? ServiceRequested;
         public event Action? ServiceCategoryRequested;
         public event Action? OpenFacilityRequested;
@@ -36,6 +42,8 @@ namespace HotelManagementSystem.ViewModels
         public event Action? OpenStaffRequested;
         public event Action? ExitRequested;
         public event Action? OpenAccountRequested;
+        public event Action? OpenRoomTypeRequested;
+        public event Action? OpenBookingStatusRequested;
 
         public SidebarViewModel(Account account)
         {
@@ -52,6 +60,12 @@ namespace HotelManagementSystem.ViewModels
             AccountCommand = new RelayCommand(_ => OpenAccounts());
             StaffCommand = new RelayCommand(_ => OpenStaff());
             FacilityCommand = new RelayCommand(_ => OpenFacilities());
+            RoomTypeCommand = new RelayCommand(_ => OpenRoomTypes());
+            BookingStatusCommand = new RelayCommand(_ => OpenBookingStatuses());
+            GuestCommand = new RelayCommand(_ => OpenGuests());
+            ServiceCategoryCommand = new RelayCommand(_ => OpenServiceCategories());
+            ServiceCommand = new RelayCommand(_ => OpenServices());
+            RoomCommand = new RelayCommand(_ => OpenRooms());
         }
 
         private void Home()
@@ -61,12 +75,17 @@ namespace HotelManagementSystem.ViewModels
 
         private void OpenRooms()
         {
-            RoomRequested?.Invoke();
+            OpenRoomRequested?.Invoke();
         }
 
         private void OpenRoomTypes()
         {
-            RoomManagementRequested?.Invoke();
+            OpenRoomTypeRequested?.Invoke();
+        }
+
+        private void OpenBookingStatuses()
+        {
+            OpenBookingStatusRequested?.Invoke();
         }
 
         private void OpenFacilities()
@@ -92,7 +111,7 @@ namespace HotelManagementSystem.ViewModels
 
         private void OpenGuests()
         {
-            GuestRequested?.Invoke();
+            OpenGuestRequested?.Invoke();
         }
 
         private void OpenStaff()

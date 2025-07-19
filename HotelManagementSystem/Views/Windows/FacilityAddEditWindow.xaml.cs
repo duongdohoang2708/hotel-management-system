@@ -11,5 +11,11 @@ namespace HotelManagementSystem.Views.Windows
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
         }
+
+        private void FacilityName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is FacilityAddEditViewModel vm)
+                vm.ValidateFacilityName();
+        }
     }
 } 

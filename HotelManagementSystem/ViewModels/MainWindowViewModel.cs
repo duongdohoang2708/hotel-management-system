@@ -17,12 +17,18 @@ namespace HotelManagementSystem.ViewModels
             get => _currentView;
             set => SetProperty(ref _currentView, value);
         }
-        public ICommand CustomerCommand { get; }
-        public ICommand RoomManagementCommand { get; }
+
+        private string _currentViewTitle;
+        public string CurrentViewTitle
+        {
+            get => _currentViewTitle;
+            set => SetProperty(ref _currentViewTitle, value);
+        }
+        
         public MainWindowViewModel()
         {
             CurrentView = new WelcomeUserControl();
-            
+            CurrentViewTitle = "Trang chủ";
         }
     }
 }

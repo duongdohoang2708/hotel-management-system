@@ -4,12 +4,12 @@ using System.Windows;
 
 namespace HotelManagementSystem.Views.UserControls
 {
-    public partial class FacilitiesManagementUserControl : UserControl
+    public partial class GuestManagementUserControl : UserControl
     {
-        public FacilitiesManagementUserControl()
+        public GuestManagementUserControl()
         {
             InitializeComponent();
-            var vm = new FacilitiesManagementViewModel();
+            var vm = new GuestManagementViewModel();
             this.DataContext = vm;
         }
     }

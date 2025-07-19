@@ -1,0 +1,52 @@
+<Window x:Class="HotelManagementSystem.Views.Windows.RoomFacilityAddEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:HotelManagementSystem.Converters"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        Title="{Binding WindowTitle}" Height="350" Width="450" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Margin="20,20,20,3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- RoomFacilityId (chỉ hiển thị khi sửa) -->
+        <TextBlock Text="Mã thiết bị:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBox Text="{Binding RoomFacilityId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <!-- RoomInfo -->
+        <TextBlock Text="Phòng:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding RoomInfo}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8" VerticalAlignment="Center" FontWeight="SemiBold"/>
+
+        <!-- Facility -->
+        <TextBlock Text="Thiết bị:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,8"
+                  ItemsSource="{Binding Facilities}"
+                  SelectedItem="{Binding SelectedFacility}"
+                  DisplayMemberPath="FacilityName"
+                  SelectedValuePath="FacilityId"/>
+
+        <!-- Quantity -->
+        <TextBlock Text="Số lượng:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
+        <mah:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="0,0,0,8"
+                          Value="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Minimum="0" Maximum="1000"/>
+
+        <!-- Nút Lưu và Hủy -->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="106,24,0,24">
+            <Button Content="Lưu" Width="80" Margin="0,0,8,0" Command="{Binding SaveCommand}" Height="23"/>
+            <Button Content="Hủy" Width="80" Command="{Binding CancelCommand}" Height="22"/>
+        </StackPanel>
+    </Grid>
+</Window> 

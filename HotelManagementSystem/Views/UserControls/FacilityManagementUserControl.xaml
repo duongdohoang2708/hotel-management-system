@@ -1,4 +1,4 @@
-<UserControl x:Class="HotelManagementSystem.Views.UserControls.FacilitiesManagementUserControl"
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.FacilityManagementUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,11 +10,80 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- Nút Thêm nằm ở trên -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Nút Thêm nằm ở bên trái -->
         <Button Content="➕ Thêm thiết bị" Width="160" HorizontalAlignment="Left" Margin="0,0,0,10"
-                Grid.Row="0" Command="{Binding AddFacilityCommand}"/>
+                Grid.Row="0" Grid.Column="0" Command="{Binding AddFacilityCommand}"/>
+        
+        <!-- Khung tìm kiếm nằm ở bên phải -->
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+            <TextBox Width="200" Height="25" Margin="0,0,5,0" 
+                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center"
+                     FontSize="12">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Padding" Value="5,2"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#007ACC"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+                <TextBox.ToolTip>
+                    <ToolTip Content="Tìm kiếm theo tên thiết bị hoặc mô tả"/>
+                </TextBox.ToolTip>
+            </TextBox>
+            <Button Content="🔍 Tìm kiếm" Width="80" Height="25" Margin="0,0,5,0"
+                    Command="{Binding SearchCommand}"
+                    Background="#007ACC" Foreground="White" 
+                    BorderBrush="#005A9E" BorderThickness="1">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#007ACC"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#005A9E"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#005A9E"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="❌ Xóa" Width="60" Height="25" 
+                    Command="{Binding ClearSearchCommand}"
+                    Background="#FF5252" Foreground="White" 
+                    BorderBrush="#B71C1C" BorderThickness="1">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#FF5252"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#B71C1C"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1744"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+        
         <!-- DataGrid với các nút biểu tượng -->
-        <DataGrid x:Name="FacilityDataGrid" Grid.Row="1" AutoGenerateColumns="False"
+        <DataGrid x:Name="FacilityDataGrid" Grid.Row="1" Grid.ColumnSpan="2" AutoGenerateColumns="False"
                   CanUserAddRows="False" SelectionMode="Single"
                   ItemsSource="{Binding FacilityList}"
                   IsReadOnly="True"
@@ -33,7 +102,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Mã thiết bị" Binding="{Binding FacilityId}" Width="Auto" />
                 <DataGridTextColumn Header="Tên thiết bị" Binding="{Binding FacilityName}" Width="Auto" />
-                <DataGridTextColumn Header="Mô tả" Binding="{Binding Description}" Width="*" />
+                <DataGridTextColumn Header="Mô tả" Binding="{Binding Description}" Width="Auto" />
                 <!-- Cột nút Sửa -->
                 <DataGridTemplateColumn Width="60">
                     <DataGridTemplateColumn.CellTemplate>
@@ -43,14 +112,13 @@
                                     CommandParameter="{Binding}"
                                     Width="32" Height="32">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="✏️" FontSize="16" Margin="0,0,4,0"/>
+                                    <TextBlock Text="✏️" FontSize="13"/>
                                 </StackPanel>
                                 <Button.Style>
                                     <Style TargetType="Button">
-                                        <Setter Property="Background" Value="Gold"/>
-                                        <Setter Property="Foreground" Value="Black"/>
-                                        <Setter Property="BorderBrush" Value="DarkGoldenrod"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Foreground" Value="Blue"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
                                         <Setter Property="Cursor" Value="Hand"/>
                                         <Setter Property="ToolTip" Value="Sửa"/>
                                         <Style.Triggers>
@@ -73,14 +141,13 @@
                                     CommandParameter="{Binding}"
                                     Width="32" Height="32">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="🗑️" FontSize="16" Margin="0,0,4,0"/>
+                                    <TextBlock Text="🗑" FontSize="13"/>
                                 </StackPanel>
                                 <Button.Style>
                                     <Style TargetType="Button">
-                                        <Setter Property="Background" Value="#FF5252"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                        <Setter Property="BorderBrush" Value="#B71C1C"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Foreground" Value="Red"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
                                         <Setter Property="Cursor" Value="Hand"/>
                                         <Setter Property="ToolTip" Value="Xóa"/>
                                         <Style.Triggers>

@@ -1,52 +1,45 @@
 using System;
 using System.Windows.Input;
 using HotelManagementSystem.Models;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace HotelManagementSystem.ViewModels
 {
-    public class StaffAddEditViewModel : ViewModelBase, INotifyDataErrorInfo
+    public class GuestAddEditViewModel : ViewModelBase, INotifyDataErrorInfo
     {
-        private int _staffId;
-        public int StaffId
+        private int _guestId;
+        public int GuestId
         {
-            get => _staffId;
-            set => SetProperty(ref _staffId, value);
+            get => _guestId;
+            set => SetProperty(ref _guestId, value);
         }
 
-        private string _fullName;
-        public string FullName
+        private string? _fullName;
+        public string? FullName
         {
             get => _fullName;
             set
             {
                 if (SetProperty(ref _fullName, value))
                 {
-                    ValidateStaffName();
+                    ValidateFullName();
                     OnPropertyChanged(nameof(CanSave));
                 }
             }
         }
 
-        private string _email;
-        public string Email
+        private string? _address;
+        public string? Address
         {
-            get => _email;
-            set
-            {
-                if (SetProperty(ref _email, value))
-                {
-                    ValidateEmail();
-                    OnPropertyChanged(nameof(CanSave));
-                }
-            }
+            get => _address;
+            set => SetProperty(ref _address, value);
         }
 
-        private string _phone;
-        public string Phone
+        private string? _phone;
+        public string? Phone
         {
             get => _phone;
             set
@@ -59,20 +52,27 @@ namespace HotelManagementSystem.ViewModels
             }
         }
 
-        private string _position;
-        public string Position
+        private string? _idCardNo;
+        public string? IdCardNo
         {
-            get => _position;
-            set => SetProperty(ref _position, value);
+            get => _idCardNo;
+            set
+            {
+                if (SetProperty(ref _idCardNo, value))
+                {
+                    ValidateIdCardNo();
+                    OnPropertyChanged(nameof(CanSave));
+                }
+            }
         }
 
         public bool IsEditMode { get; set; }
-        public string WindowTitle => IsEditMode ? "Sửa nhân viên" : "Thêm nhân viên";
+        public string WindowTitle => IsEditMode ? "Sửa thông tin khách hàng" : "Thêm khách hàng mới";
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
         public event Action? RequestClose;
-        public event Action<Staff>? StaffSaved;
+        public event Action<Guest>? GuestSaved;
 
         private readonly Dictionary<string, List<string>> _errors = new();
         public bool HasErrors => _errors.Count > 0;
@@ -106,22 +106,23 @@ namespace HotelManagementSystem.ViewModels
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(FullName)
-                    && IsValidEmail(Email)
-                    && IsValidPhone(Phone);
+                return !HasErrors
+                    && !string.IsNullOrWhiteSpace(FullName)
+                    && !string.IsNullOrWhiteSpace(Phone)
+                    && !string.IsNullOrWhiteSpace(IdCardNo);
             }
         }
 
-        public StaffAddEditViewModel(bool isEditMode = false, Staff? staff = null)
+        public GuestAddEditViewModel(bool isEditMode = false, Guest? guest = null)
         {
             IsEditMode = isEditMode;
-            if (isEditMode && staff != null)
+            if (isEditMode && guest != null)
             {
-                StaffId = staff.StaffId;
-                FullName = staff.FullName;
-                Email = staff.Email;
-                Phone = staff.Phone;
-                Position = staff.Position;
+                GuestId = guest.GuestId;
+                FullName = guest.FullName;
+                Address = guest.Address;
+                Phone = guest.Phone;
+                IdCardNo = guest.IdCardNo;
             }
             SaveCommand = new RelayCommand(_ => Save());
             CancelCommand = new RelayCommand(_ => RequestClose?.Invoke());
@@ -129,85 +130,53 @@ namespace HotelManagementSystem.ViewModels
 
         private void Save()
         {
-            ValidateStaffName();
-            ValidateEmail();
+            // Gọi validate cho tất cả các trường bắt buộc trước khi lưu
+            ValidateFullName();
             ValidatePhone();
+            ValidateIdCardNo();
             if (HasErrors)
             {
+                System.Windows.MessageBox.Show("Vui lòng nhập đầy đủ và đúng thông tin cho các trường bắt buộc!", "Lỗi", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 return;
             }
             using (var db = new HotelManagementDbContext())
             {
                 if (IsEditMode)
                 {
-                    var s = db.Staff.Find(StaffId);
-                    if (s != null)
+                    var g = db.Guests.Find(GuestId);
+                    if (g != null)
                     {
-                        s.FullName = FullName;
-                        s.Email = Email;
-                        s.Phone = Phone;
-                        s.Position = Position;
+                        g.FullName = FullName;
+                        g.Address = Address;
+                        g.Phone = Phone;
+                        g.IdCardNo = IdCardNo;
                         db.SaveChanges();
-                        StaffSaved?.Invoke(s);
+                        GuestSaved?.Invoke(g);
                     }
                 }
                 else
                 {
-                    var s = new Staff
+                    var g = new Guest
                     {
                         FullName = FullName,
-                        Email = Email,
+                        Address = Address,
                         Phone = Phone,
-                        Position = Position
+                        IdCardNo = IdCardNo
                     };
-                    db.Staff.Add(s);
+                    db.Guests.Add(g);
                     db.SaveChanges();
-                    StaffSaved?.Invoke(s);
+                    GuestSaved?.Invoke(g);
                 }
             }
             RequestClose?.Invoke();
         }
 
-        private bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email)) return false;
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private bool IsValidPhone(string phone)
-        {
-            return !string.IsNullOrWhiteSpace(phone)
-                && phone.Length == 10
-                && phone.StartsWith("0")
-                && phone.All(char.IsDigit);
-        }
-
-        public void ValidateStaffName()
+        public void ValidateFullName()
         {
             ClearErrors(nameof(FullName));
             if (string.IsNullOrWhiteSpace(FullName))
             {
-                AddError(nameof(FullName), "Tên nhân viên không được để trống!");
-            }
-        }
-        public void ValidateEmail()
-        {
-            ClearErrors(nameof(Email));
-            if (string.IsNullOrWhiteSpace(Email))
-            {
-                AddError(nameof(Email), "Email không được để trống!");
-            }
-            else if (!IsValidEmail(Email))
-            {
-                AddError(nameof(Email), "Email không hợp lệ!");
+                AddError(nameof(FullName), "Tên khách không được để trống!");
             }
         }
         public void ValidatePhone()
@@ -220,6 +189,18 @@ namespace HotelManagementSystem.ViewModels
             else if (Phone.Length != 10 || !Phone.All(char.IsDigit) || !Phone.StartsWith("0"))
             {
                 AddError(nameof(Phone), "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng số 0!");
+            }
+        }
+        public void ValidateIdCardNo()
+        {
+            ClearErrors(nameof(IdCardNo));
+            if (string.IsNullOrWhiteSpace(IdCardNo))
+            {
+                AddError(nameof(IdCardNo), "CMND/CCCD không được để trống!");
+            }
+            else if (IdCardNo.Length != 12 || !IdCardNo.All(char.IsDigit))
+            {
+                AddError(nameof(IdCardNo), "CMND/CCCD phải gồm đúng 12 chữ số!");
             }
         }
     }
