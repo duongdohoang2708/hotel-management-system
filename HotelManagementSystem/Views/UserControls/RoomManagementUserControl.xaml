@@ -302,7 +302,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button ToolTip="Xóa thiết bị"
-                                                Command="{Binding DataContext.DeleteFacilityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Command="{Binding DataContext.DeleteRoomFacilityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Width="28" Height="28">
                                             <TextBlock Text="🗑" FontSize="13"/>

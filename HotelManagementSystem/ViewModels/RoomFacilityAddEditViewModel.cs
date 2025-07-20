@@ -62,6 +62,7 @@ namespace HotelManagementSystem.ViewModels
                 if (SetProperty(ref _selectedFacility, value))
                 {
                     ValidateSelectedFacility();
+                    FacilityId= value?.FacilityId ?? 0;
                 }
             }
         }
@@ -226,7 +227,7 @@ namespace HotelManagementSystem.ViewModels
                         var rf = new RoomFacility
                         {
                             RoomId = RoomId,
-                            FacilityId = FacilityId,
+                            FacilityId = SelectedFacility.FacilityId,
                             Quantity = Quantity
                         };
                         db.RoomFacilities.Add(rf);
