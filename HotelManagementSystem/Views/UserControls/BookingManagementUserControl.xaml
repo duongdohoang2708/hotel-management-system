@@ -1,0 +1,105 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.BookingManagementUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.2*"/>
+            <ColumnDefinition Width="3.2*"/>
+            <ColumnDefinition Width="2.6*"/>
+        </Grid.ColumnDefinitions>
+        <!-- Vùng trái: Tìm kiếm phòng trống -->
+        <GroupBox Header="Tìm kiếm phòng trống" Grid.Column="0" Margin="5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Ngày nhận:" Width="90" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="CheckInDatePicker" Width="150" materialDesign:HintAssist.Hint="Ngày nhận"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Ngày trả:" Width="90" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="CheckOutDatePicker" Width="150" materialDesign:HintAssist.Hint="Ngày trả"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Loại phòng:" Width="90" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="RoomTypeComboBox" Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Số lượng phòng:" Width="90" VerticalAlignment="Center"/>
+                    <TextBox x:Name="RoomCountTextBox" Width="50"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Người lớn:" Width="90" VerticalAlignment="Center"/>
+                    <TextBox x:Name="AdultCountTextBox" Width="50"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Trẻ em:" Width="90" VerticalAlignment="Center"/>
+                    <TextBox x:Name="ChildCountTextBox" Width="50"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Yêu cầu đặc biệt:" Width="90" VerticalAlignment="Center"/>
+                    <TextBox x:Name="SpecialRequestTextBox" Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                    <Button x:Name="SearchRoomButton" Content="Tìm phòng trống" Width="120" Margin="0,0,10,0"/>
+                    <Button x:Name="ResetButton" Content="Đặt lại" Width="70"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <!-- Vùng giữa: Danh sách phòng trống -->
+        <GroupBox Header="Danh sách phòng trống" Grid.Column="1" Margin="5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <ComboBox x:Name="FilterRoomTypeComboBox" Width="120" Margin="0,0,10,0"/>
+                    <ComboBox x:Name="FilterFloorComboBox" Width="80" Margin="0,0,10,0"/>
+                    <TextBox x:Name="FilterMaxPriceTextBox" Width="100" Margin="0,0,10,0"/>
+                </StackPanel>
+                <DataGrid x:Name="RoomsDataGrid" AutoGenerateColumns="False" Height="350" SelectionMode="Extended" SelectionUnit="FullRow">
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Header="Chọn" Binding="{Binding IsSelected}" Width="50"/>
+                        <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="80"/>
+                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomType}" Width="120"/>
+                        <DataGridTextColumn Header="Giá/đêm" Binding="{Binding Price}" Width="100"/>
+                        <DataGridTextColumn Header="Sức chứa" Binding="{Binding Capacity}" Width="100"/>
+                        <DataGridTextColumn Header="Tầng" Binding="{Binding Floor}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock x:Name="NoRoomText" Text="Không còn phòng phù hợp" Visibility="Collapsed" Foreground="Red" Margin="0,10,0,0"/>
+            </StackPanel>
+        </GroupBox>
+        <!-- Vùng phải: Thông tin khách hàng &amp; Đặt phòng -->
+        <GroupBox Header="Thông tin khách hàng &amp; Đặt phòng" Grid.Column="2" Margin="5">
+            <StackPanel>
+                <!-- Thông tin khách hàng -->
+                <TextBlock Text="Tìm kiếm khách hàng (SĐT/CMND):" Margin="0,0,0,5"/>
+                <TextBox x:Name="CustomerSearchTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="Tên khách hàng:"/>
+                <TextBox x:Name="CustomerNameTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="Số điện thoại:"/>
+                <TextBox x:Name="CustomerPhoneTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="CMND/CCCD:"/>
+                <TextBox x:Name="CustomerIdTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="Địa chỉ:"/>
+                <TextBox x:Name="CustomerAddressTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="Email:"/>
+                <TextBox x:Name="CustomerEmailTextBox" Margin="0,0,0,10"/>
+                <!-- Thông tin đặt phòng -->
+                <Separator Margin="0,10,0,10"/>
+                <TextBlock Text="Dịch vụ đi kèm:"/>
+                <ListBox x:Name="ServiceListBox" SelectionMode="Multiple" Height="60" Margin="0,0,0,10"/>
+                <TextBlock Text="Ghi chú đặc biệt:"/>
+                <TextBox x:Name="BookingNoteTextBox" Margin="0,0,0,10"/>
+                <TextBlock Text="Tóm tắt đơn đặt phòng:" FontWeight="Bold" Margin="0,10,0,5"/>
+                <TextBlock x:Name="BookingSummaryTextBlock" TextWrapping="Wrap" Height="60"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button x:Name="ConfirmBookingButton" Content="Xác nhận đặt phòng" Width="140" Margin="0,0,10,0"/>
+                    <Button x:Name="CancelBookingButton" Content="Hủy" Width="70" Margin="0,0,10,0"/>
+                    <Button x:Name="PrintBookingButton" Content="In xác nhận" Width="100"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl> 

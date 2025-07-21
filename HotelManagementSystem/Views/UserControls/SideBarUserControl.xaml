@@ -28,7 +28,7 @@
                 <!-- QUY TRÌNH PHỤC VỤ -->
                 <TextBlock Text="NGHIỆP VỤ" Foreground="#FFD1E506" Margin="0,30,0,10" FontWeight="Bold" FontSize="14" HorizontalAlignment="Left"/>
 
-                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateBookingCommand}"  Background="#FF39562D" Height="40" Margin="20,2,20,1">
+                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding BookingCommand}"  Background="#FF39562D" Height="40" Margin="20,2,20,1">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="PhoneIncoming" Width="20" Margin="0,0,8,0" Foreground="White"/>
                         <TextBlock Text="Đặt phòng" Foreground="White"/>

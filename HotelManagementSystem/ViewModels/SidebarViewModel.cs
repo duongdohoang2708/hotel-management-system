@@ -29,8 +29,10 @@ namespace HotelManagementSystem.ViewModels
         public ICommand ServiceCategoryCommand { get; }
         public ICommand ServiceCommand { get; }
         public ICommand RoomCommand { get; }
+        public ICommand BookingCommand {get;}
 
         public event Action? HomeRequested;
+        public event Action? OpenBookingRequested;
         public event Action? OpenRoomRequested;
         public event Action? LogoutRequested;
         public event Action? OpenGuestRequested;
@@ -66,12 +68,19 @@ namespace HotelManagementSystem.ViewModels
             ServiceCategoryCommand = new RelayCommand(_ => OpenServiceCategories());
             ServiceCommand = new RelayCommand(_ => OpenServices());
             RoomCommand = new RelayCommand(_ => OpenRooms());
+            BookingCommand = new RelayCommand(_ => OpenBookings());
         }
 
         private void Home()
         {
             HomeRequested?.Invoke();
         }
+
+        private void OpenBookings()
+        {
+            OpenBookingRequested?.Invoke();
+        }
+
 
         private void OpenRooms()
         {

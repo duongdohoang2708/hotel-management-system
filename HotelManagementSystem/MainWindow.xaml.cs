@@ -119,6 +119,7 @@ namespace HotelManagementSystem
                         win.Owner = this;
                         win.ShowDialog();
                     };
+
                     // Gán handler cho OnAddRoomFacilityRequested
                     vm.OnAddRoomFacilityRequested = (vmm) =>
                     {
@@ -162,6 +163,19 @@ namespace HotelManagementSystem
                     control.DataContext = vm;
                     mainVm.CurrentView = control;
                     mainVm.CurrentViewTitle = "Quản lý Loại phòng";
+                }
+            };
+
+             //Đăng ký event chuyển sang view Quản lý Booking
+            sideBarviewModel.OpenBookingRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var vm = new BookingManagementViewModel();
+                    var control = new BookingManagementUserControl();
+                    control.DataContext = vm;
+                    mainVm.CurrentView = control;
+                    mainVm.CurrentViewTitle = "Quản lý đặt phòng";
                 }
             };
 
