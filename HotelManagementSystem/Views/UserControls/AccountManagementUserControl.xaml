@@ -21,68 +21,26 @@
 
         <!-- Nút Thêm nằm ở bên trái -->
         <Button Content="➕ Thêm tài khoản" Width="160" HorizontalAlignment="Left" Margin="0,0,0,10"
-                Grid.Row="0" Grid.Column="0" Command="{Binding AddAccountCommand}"/>
+                Grid.Row="0" Grid.Column="0" Command="{Binding AddAccountCommand}" 
+                Style="{StaticResource ButtonLarge}" />
 
         <!-- Khung tìm kiếm nằm ở bên phải -->
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <TextBox Width="200" Height="25" Margin="0,0,5,0" 
-                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalContentAlignment="Center"
-                     FontSize="12">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Padding" Value="5,2"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush" Value="#007ACC"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
+            <TextBox Width="200" Margin="0,0,5,0" Style="{StaticResource TextboxStyle}"
+                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}">
+                
                 <TextBox.ToolTip>
                     <ToolTip Content="Tìm kiếm theo tên đăng nhập, vai trò, họ tên hoặc vị trí công việc"/>
                 </TextBox.ToolTip>
             </TextBox>
-            <Button Content="🔍 Tìm kiếm" Width="80" Height="25" Margin="0,0,5,0"
+            <Button Content="🔍 Tìm kiếm" Width="80"  Margin="0,0,5,0"
                     Command="{Binding SearchCommand}"
-                    Background="#007ACC" Foreground="White" 
-                    BorderBrush="#005A9E" BorderThickness="1">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="#007ACC"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="BorderBrush" Value="#005A9E"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#005A9E"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
+                    Style="{StaticResource ButtonBlueSmall}" >
             </Button>
             <Button Content="❌ Xóa" Width="60" Height="25" 
                     Command="{Binding ClearSearchCommand}"
-                    Background="#FF5252" Foreground="White" 
-                    BorderBrush="#B71C1C" BorderThickness="1">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="#FF5252"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="BorderBrush" Value="#B71C1C"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF1744"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
+                    Style="{StaticResource ButtonPurpleSmall}" >
+                
             </Button>
         </StackPanel>
 

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Đăng nhập" Height="470" Width="420" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="#f4f6fb">
     <Grid>
-        <Border CornerRadius="16" Background="White" Padding="34" Margin="40">
+        <Border CornerRadius="10" Background="White" Padding="34" Margin="40">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="12" Color="#888"/>
             </Border.Effect>
@@ -11,44 +11,17 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18">
                     <TextBlock Text="Đăng nhập hệ thống" FontWeight="Bold" FontSize="20" Foreground="#2d3a4a" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBlock Text="Tên đăng nhập" FontWeight="SemiBold" FontSize="14" Foreground="#4F8EF7" Margin="0,0,0,2"/>
-                <TextBox Height="32" Width="240" Margin="0,0,0,12" FontSize="15" Padding="5,4" 
+                <TextBlock Text="Tên đăng nhập"  Style="{StaticResource LabelStyle1}"/>
+                <TextBox Height="30" Width="240" Margin="0,0,0,12" FontSize="15" Padding="5,4" 
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Text="Mật khẩu" FontWeight="SemiBold" FontSize="14" Foreground="#4F8EF7" Margin="0,0,0,2"/>
-                <PasswordBox Height="32" Width="240" Margin="0,0,0,12" FontSize="15" Padding="5,4" x:Name="PasswordBox"/>
-                <Button Content="Quên mật khẩu?" Width="120" Height="28" Margin="0,0,0,0" FontSize="13" FontWeight="SemiBold"
-                        Background="Transparent" Foreground="#4F8EF7" BorderThickness="0" Cursor="Hand"
+                <TextBlock Text="Mật khẩu"  Style="{StaticResource LabelStyle1}"/>
+                <PasswordBox Height="30" Width="240" Margin="0,0,0,12" FontSize="15" Padding="5,4" x:Name="PasswordBox"/>
+                <Button Content="Quên mật khẩu?" Width="120" Height="28" Margin="0,0,0,5" FontSize="14" FontWeight="Bold"
+                        Background="Transparent" Foreground="#2566d8" BorderThickness="0" Cursor="Hand"
                         HorizontalAlignment="Center"
                         Command="{Binding OpenForgotPasswordCommand}"/>
-                <Button Content="Đăng nhập" Width="240" Height="36" Margin="0,8,0,0" FontSize="16" FontWeight="Bold"
-                        Background="#4F8EF7" Foreground="White" BorderThickness="0" Cursor="Hand"
-                        Command="{Binding LoginCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#4F8EF7"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#2566d8"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="#174a96"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <Button Content="Đăng nhập" Width="143"  
+                        Command="{Binding LoginCommand}" Style="{StaticResource ButtonLarge}" Height="35"/>
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="#e74c3c" FontWeight="Bold" FontSize="13" Margin="0,12,0,0" TextAlignment="Center"/>
             </StackPanel>
         </Border>

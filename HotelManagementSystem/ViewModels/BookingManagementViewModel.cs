@@ -2,6 +2,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using HotelManagementSystem.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -57,8 +59,20 @@ namespace HotelManagementSystem.ViewModels
             ConfirmBookingCommand = new RelayCommand(ConfirmBooking);
             CancelBookingCommand = new RelayCommand(CancelBooking);
             PrintBookingCommand = new RelayCommand(PrintBooking);
+            
+            LoadGuests();
         }
 
+        private void LoadGuests()
+        {
+            var guests = _dbContext.Guests.ToList();
+            Guests.Clear();
+            foreach (var guest in guests)
+            {
+                Guests.Add(guest);
+            }
+        }
+        
         // Các phương thức xử lý logic (chưa triển khai)
         private void SearchRoom(object obj)
         {
