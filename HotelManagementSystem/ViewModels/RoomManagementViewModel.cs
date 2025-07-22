@@ -103,7 +103,7 @@ namespace HotelManagementSystem.ViewModels
             {
                 if (SelectedRoomDisplay == null)
                     return "Chưa chọn phòng";
-                return $"Phòng {SelectedRoomDisplay.RoomNumber} - {SelectedRoomDisplay.RoomTypeName}";
+                return $"Phòng {SelectedRoomDisplay.RoomNumber} - {SelectedRoomDisplay.TypeName}";
             }
         }
 
@@ -189,15 +189,15 @@ namespace HotelManagementSystem.ViewModels
                 }
 
                 var rooms = query.ToList();
-                RoomList = new ObservableCollection<RoomDisplay>(
-                    rooms.Select(r => new RoomDisplay
+                RoomList = new ObservableCollection<Room>(
+                    rooms.Select(r => new Room
                     {
                         RoomId = r.RoomId,
                         RoomNumber = r.RoomNumber ?? "",
                         Status = r.Status ?? "",
                         CleanStatus = r.CleanStatus ?? "",
                         RoomTypeId = r.RoomTypeId,
-                        RoomTypeName = r.RoomType?.TypeName ?? ""
+                        RoomType = r.RoomType?.TypeName ?? ""
                     })
                 );
             }

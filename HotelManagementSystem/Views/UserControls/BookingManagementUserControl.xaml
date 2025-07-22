@@ -6,6 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesignExtensions="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:HotelManagementSystem.Converters"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="1000">
     <UserControl.Resources>
@@ -77,99 +78,76 @@
         <Style x:Key="CommonTextBlockStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Left"/>
         </Style>
+        <local:StringNotNullOrWhiteSpaceToVisibilityConverter x:Key="StringNotNullOrWhiteSpaceToVisibilityConverter" />
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.8*"/>
             <ColumnDefinition Width="3.2*"/>
-            <ColumnDefinition Width="3.0*"/>
+            <ColumnDefinition Width="3.2*"/>
+            <ColumnDefinition Width="3.2*"/>
         </Grid.ColumnDefinitions>
         <!-- Vùng trái: Tìm kiếm phòng trống -->
-        <GroupBox Header="Tìm kiếm phòng trống" Grid.Column="0" Margin="5" Foreground="#FF2C68CC" FontWeight="Medium">
-            <StackPanel>
-                <!-- Ngày nhận -->
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
-                    <TextBlock Text="Ngày nhận:" Width="90" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="CheckInDatePicker" Width="200" Height="32" SelectedDate="{Binding CheckInDate}" Style="{x:Null}" Margin="10,0,0,0"/>
-                </StackPanel>
-                <!-- Ngày trả -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Ngày trả:" Width="90" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="CheckOutDatePicker" Width="200" Height="32" FontSize="12" SelectedDate="{Binding CheckOutDate}" Style="{x:Null}" Margin="10,0,0,0"/>
-                </StackPanel>
-                <!-- Loại phòng -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Loại phòng:" Width="90" VerticalAlignment="Center"/>
-                    <ComboBox x:Name="RoomTypeComboBox" Width="200" Height="25" Style="{x:Null}" Margin="10,0,0,0"/>
-                </StackPanel>
-                <!-- Số lượng phòng -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Số lượng phòng:" Width="90" VerticalAlignment="Center"/>
-                    <xctk:IntegerUpDown x:Name="RoomCount" Width="200" Height="25" Margin="10,0,0,0" TextAlignment="Center"/>
-                </StackPanel>
-                <!-- Người lớn -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Người lớn:" Width="90" VerticalAlignment="Center"/>
-                    <xctk:IntegerUpDown x:Name="AdultCountTextBox" Width="200" Height="25" Margin="10,0,0,0" TextAlignment="Center"/>
-                </StackPanel>
-                <!-- Trẻ em -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Trẻ em:" Width="90" VerticalAlignment="Center"/>
-                    <xctk:IntegerUpDown x:Name="ChildCountTextBox" Width="200" Height="25" Margin="10,0,0,0" TextAlignment="Center"/>
-                </StackPanel>
-                <!-- Yêu cầu đặc biệt -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <TextBlock Text="Yêu cầu đặc biệt:" Width="90" VerticalAlignment="Center"/>
-                    <TextBox x:Name="SpecialRequestTextBox"
-                             Width="200"
-                             Height="60"
-                             Margin="10,0,0,0"
-                             Style="{x:Null}"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40,0,0">
-                    <Button x:Name="SearchRoomButton" Content="Tìm phòng" Width="100" Margin="0,0,10,0" Style="{StaticResource ButtonBlueMedium}"/>
-                    <Button x:Name="ResetButton" Content="Đặt lại" Width="100" Style="{StaticResource ButtonPurpleMedium}" Margin="10,0,0,0"/>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <!-- Vùng giữa: Chia thành 2 groupbox dọc -->
-        <Grid Grid.Column="1" Margin="5">
+        <Grid Grid.Column="0" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="5*"/>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="9*"/>
             </Grid.RowDefinitions>
+            <GroupBox Header="Tìm kiếm phòng trống" Grid.Column="0"  Foreground="#FF2C68CC" FontWeight="Medium">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                        <!-- Ngày nhận -->
+                        <StackPanel Orientation="Vertical" Margin="0,5,0,0">
+                            <TextBlock Text="Ngày nhận:" Width="90" HorizontalAlignment="Left" Margin="10,0,0,5"/>
+                            <DatePicker x:Name="CheckInDatePicker" Width="150" Height="32" SelectedDate="{Binding CheckInDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{x:Null}" Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding CheckInDateError}" Foreground="Red" FontSize="12" Margin="10,0,0,0" Visibility="{Binding CheckInDateError, Converter={StaticResource StringNotNullOrWhiteSpaceToVisibilityConverter}}"/>
+                        </StackPanel>
+                        <!-- Ngày trả -->
+                        <StackPanel Orientation="Vertical" Margin="30,5,0,0">
+                            <TextBlock Text="Ngày trả:" Width="90" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+                            <DatePicker x:Name="CheckOutDatePicker" Width="150" Height="32" FontSize="12" SelectedDate="{Binding CheckOutDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{x:Null}" Margin="0,0,0,0"/>
+                            <TextBlock Text="{Binding CheckOutDateError}" Foreground="Red" FontSize="12" Margin="0,0,0,0" Visibility="{Binding CheckOutDateError, Converter={StaticResource StringNotNullOrWhiteSpaceToVisibilityConverter}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="20,19,0,0" Width="150" VerticalAlignment="Center" >
+                            <Button x:Name="SearchRoomButton" Content="Tìm phòng" Width="100"  Style="{StaticResource ButtonBlueMedium}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
             <!-- Dòng trên: Danh sách phòng trống -->
-            <GroupBox Header="Danh sách phòng trống" Grid.Row="0" Foreground="#FF2C68CC" FontWeight="Medium" Margin="0,0,0,10">
+            <GroupBox Header="Danh sách phòng trống" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium" Margin="0,10,0,0">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <StackPanel Orientation="Vertical" Margin="0,0,0,0">
+                        <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                             <TextBlock Text="Lọc theo loại phòng:" Width="150" HorizontalAlignment="Left" Margin="10,0,0,5"/>
                             <ComboBox x:Name="FilterRoomTypeComboBox" Width="200" Height="25" Style="{x:Null}" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical" Margin="30,0,0,5">
+                        <StackPanel Orientation="Vertical" Margin="30,10,0,5">
                             <TextBlock Text="Lọc theo giá phòng cao nhất:" Width="200" HorizontalAlignment="Left" Margin="0,0,0,5"/>
                             <TextBox x:Name="FilterMaxPriceTextBox" Width="200" Height="25" Style="{x:Null}" Margin="0,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid x:Name="RoomsDataGrid" AutoGenerateColumns="False" VerticalAlignment="Stretch" SelectionMode="Extended" SelectionUnit="FullRow" VerticalContentAlignment="Center"
-                              ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                              CellStyle="{StaticResource CommonCellStyle}"
-                              RowStyle="{StaticResource CommonRowStyle}">
+                    <DataGrid x:Name="RoomsDataGrid" AutoGenerateColumns="False" VerticalAlignment="Stretch" SelectionMode="Extended" 
+                              SelectionUnit="FullRow" VerticalContentAlignment="Center" Margin="0,10,0,0"
+                  ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                  RowStyle="{StaticResource CommonRowStyle}"
+                  ItemsSource="{Binding AvailableRooms}">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Chọn" Binding="{Binding IsSelected}" Width="Auto"/>
                             <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="Auto"/>
-                            <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomType}" Width="Auto"/>
-                            <DataGridTextColumn Header="Giá/đêm" Binding="{Binding Price}" Width="Auto"/>
-                            <DataGridTextColumn Header="Sức chứa" Binding="{Binding Capacity}" Width="Auto"/>
-                            <DataGridTextColumn Header="Tầng" Binding="{Binding Floor}" Width="Auto"/>
+                            <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomType.TypeName}" Width="Auto"/>
+                            <DataGridTextColumn Header="Giá/đêm" Binding="{Binding RoomType.BasePrice}" Width="Auto"/>
+                            
                         </DataGrid.Columns>
                     </DataGrid>
                     <TextBlock x:Name="NoRoomText" Text="Không còn phòng phù hợp" Visibility="Collapsed" Foreground="Red" Margin="0,10,0,0"/>
                 </StackPanel>
             </GroupBox>
-            <!-- Dòng dưới: Quản lý đặt phòng -->
+        </Grid>
+
+        <!-- Vùng phải: Chia thành 2 groupbox dọc -->
+        <Grid Grid.Column="2" Margin="5">
+            <!-- Quản lý đặt phòng -->
             <GroupBox Header="Quản lý đặt phòng" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
@@ -193,7 +171,7 @@
             </GroupBox>
         </Grid>
         <!-- Vùng phải: Chia thành 2 groupbox dọc -->
-        <Grid Grid.Column="2" Margin="5">
+        <Grid Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="5*"/>
@@ -214,9 +192,12 @@
                             Grid.Row="0" Grid.Column="0"/>
                     <!-- Thanh tìm kiếm bên phải -->
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
-                        <TextBox Width="200" Height="25" Margin="0,0,5,0" VerticalContentAlignment="Center" FontSize="12" Style="{x:Null}"/>
-                        <Button Content="🔍 Tìm" Width="60" Height="25" Margin="0,0,5,0" Style="{StaticResource ButtonBlueSmall}"/>
-                        <Button Content="❌ Xóa" Width="60" Height="25" Style="{StaticResource ButtonPurpleSmall}"/>
+                        <TextBox Width="200" Height="25" Margin="0,0,5,0" VerticalContentAlignment="Center" FontSize="12" Style="{x:Null}"
+                                 Text="{Binding GuestSearchKeyword, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="🔍 Tìm" Width="60" Height="25" Margin="0,0,5,0" Style="{StaticResource ButtonBlueSmall}"
+                                Command="{Binding GuestSearchCommand}"/>
+                        <Button Content="❌ Xóa" Width="60" Height="25" Style="{StaticResource ButtonPurpleSmall}"
+                                Command="{Binding GuestClearSearchCommand}"/>
                     </StackPanel>
                     <!-- DataGrid danh sách khách -->
                     <DataGrid x:Name="GuestDataGrid"
@@ -231,7 +212,8 @@
                               IsReadOnly="True"
                               VerticalAlignment="Stretch"
                               FontWeight="Normal"
-                              VerticalContentAlignment="Center">
+                              VerticalContentAlignment="Center"
+                              SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="Auto">
                                 <DataGridTextColumn.ElementStyle>
@@ -260,16 +242,16 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                             <DataGridTemplateColumn Header="Địa chỉ" Width="*">
-                                 <DataGridTemplateColumn.CellTemplate>
-                                     <DataTemplate>
-                                         <Grid VerticalAlignment="Stretch">
-                                             <TextBlock Text="{Binding Address}" TextWrapping="Wrap" VerticalAlignment="Center" Padding="8,0,8,0" TextAlignment="Left"/>
-                                         </Grid>
-                                     </DataTemplate>
-                                 </DataGridTemplateColumn.CellTemplate>
-                             </DataGridTemplateColumn>
-                            
+                            <DataGridTemplateColumn Header="Địa chỉ" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid VerticalAlignment="Stretch">
+                                            <TextBlock Text="{Binding Address}" TextWrapping="Wrap" VerticalAlignment="Center" Padding="8,0,8,0" TextAlignment="Left"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -279,19 +261,19 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                         <TextBlock Text="Họ và tên:" Width="60" VerticalAlignment="Center"/>
-                        <TextBox x:Name="SelectedGuestNameTextBox" Width="150" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True"/>
+                        <TextBox x:Name="SelectedGuestNameTextBox" Width="150" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True" Text="{Binding SelectedGuestName, Mode=OneWay}" VerticalContentAlignment="Center"/>
                         <TextBlock Text="Ngày nhận:" Width="60" VerticalAlignment="Center" Margin="50,0,0,0"/>
-                        <TextBox x:Name="SelectedCheckOutTextBox" Width="100" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True"/>
+                        <TextBox x:Name="SelectedCheckInTextBox" Width="100" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True" Text="{Binding SelectedCheckInText, Mode=OneWay}" VerticalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Số CCCD:" Width="60" VerticalAlignment="Center"/>
-                        <TextBox x:Name="SelectedGuestIdCardTextBox" Width="150" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True"/>
+                        <TextBox x:Name="SelectedGuestIdCardTextBox" Width="150" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True" Text="{Binding SelectedGuestIdCard, Mode=OneWay}" VerticalContentAlignment="Center"/>
                         <TextBlock Text="Ngày trả:" Width="60" VerticalAlignment="Center" Margin="50,0,0,0"/>
-                        <TextBox x:Name="SelectedCheckInTextBox" Width="100" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True"/>
+                        <TextBox x:Name="SelectedCheckOutTextBox" Width="100" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True" Text="{Binding SelectedCheckOutText, Mode=OneWay}" VerticalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Địa chỉ:" Width="60" VerticalAlignment="Center"/>
-                        <TextBox x:Name="SelectedGuestAddressTextBox" Width="400" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True"/>
+                        <TextBox x:Name="SelectedGuestAddressTextBox" Width="400" Height="25" Margin="10,0,0,0" Style="{x:Null}" IsReadOnly="True" Text="{Binding SelectedGuestAddress, Mode=OneWay}" VerticalContentAlignment="Center"/>
                     </StackPanel>
                     <TextBlock Text="Danh sách phòng đặt:" FontWeight="Bold" Margin="0,10,0,10"/>
                     <Grid>
