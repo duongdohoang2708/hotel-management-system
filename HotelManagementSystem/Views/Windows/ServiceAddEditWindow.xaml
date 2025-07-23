@@ -21,15 +21,15 @@
 
         <!-- ServiceId (chỉ hiển thị khi sửa) -->
         <TextBlock Text="Mã dịch vụ:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <TextBox Text="{Binding ServiceId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBox Text="{Binding ServiceId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="25"/>
 
         <!-- ServiceName -->
         <TextBlock Text="Tên dịch vụ:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding ServiceName}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8"/>
+        <TextBox Text="{Binding ServiceName}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8" Height="25"/>
 
         <!-- UnitPrice -->
         <TextBlock Text="Đơn giá:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding UnitPrice}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,8"/>
+        <TextBox Text="{Binding UnitPrice}" Grid.Row="2" Grid.Column="1" Margin="0,0,0,8" Height="25"/>
 
         <!-- CategoryId -->
         <TextBlock Text="Loại dịch vụ:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
@@ -37,7 +37,7 @@
                   ItemsSource="{Binding ServiceCategories}"
                   SelectedItem="{Binding SelectedCategory}"
                   DisplayMemberPath="CategoryName"
-                  SelectedValuePath="CategoryId"/>
+                  SelectedValuePath="CategoryId" Height="25"/>
 
         <!-- Nút Lưu và Hủy -->
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="106,24,0,24">

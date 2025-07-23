@@ -94,6 +94,8 @@ namespace HotelManagementSystem.ViewModels
             }
         }
 
+        public string PasswordError => _errors.ContainsKey(nameof(Password)) ? _errors[nameof(Password)].FirstOrDefault() : null;
+
         public AccountAddEditViewModel(bool isEditMode = false, Account? account = null)
         {
             IsEditMode = isEditMode;
@@ -126,6 +128,8 @@ namespace HotelManagementSystem.ViewModels
         {
             ValidateUsername();
             ValidatePassword();
+            ValidateRole();
+            ValidateStaff();
             if (HasErrors)
             {
                 return;
@@ -175,6 +179,31 @@ namespace HotelManagementSystem.ViewModels
             if (string.IsNullOrWhiteSpace(Password))
             {
                 AddError(nameof(Password), "Mật khẩu không được để trống!");
+            }
+            OnPropertyChanged(nameof(PasswordError));
+        }
+        public void ValidateRole()
+        {
+            ClearErrors(nameof(Role));
+            if (string.IsNullOrWhiteSpace(Role))
+            {
+                AddError(nameof(Role), "Vai trò không được để trống!");
+            }
+            else if (!Roles.Contains(Role))
+            {
+                AddError(nameof(Role), "Vai trò không hợp lệ!");
+            }
+        }
+        public void ValidateStaff()
+        {
+            ClearErrors(nameof(StaffId));
+            if (StaffId == 0)
+            {
+                AddError(nameof(StaffId), "Nhân viên không được để trống!");
+            }
+            else if (!StaffList.Any(s => s.StaffId == StaffId))
+            {
+                AddError(nameof(StaffId), "Nhân viên không hợp lệ!");
             }
         }
     }

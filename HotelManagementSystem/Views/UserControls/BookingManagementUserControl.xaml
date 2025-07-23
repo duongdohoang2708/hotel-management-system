@@ -221,8 +221,8 @@
             <GroupBox Header="Dữ liệu đặt phòng" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="7*"/>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
                     <!-- Hàng trên: Tìm kiếm + PendingBookingsDataGrid -->
                     <StackPanel Grid.Row="0">
@@ -251,7 +251,6 @@
                                   VerticalContentAlignment="Center"
                                   ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
                                   CellStyle="{StaticResource CommonCellStyle}"
-                                  RowStyle="{StaticResource CommonRowStyle}"
                                   ItemsSource="{Binding PendingBookings}"
                                   SelectedItem="{Binding SelectedPendingBooking, Mode=TwoWay}">
                             <DataGrid.Columns>
@@ -309,7 +308,39 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
+                                <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusName}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đặt">
+                                            <Setter Property="Background" Value="#A5D6A7"/><!-- xanh lá nhạt -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã hủy">
+                                            <Setter Property="Background" Value="#BDBDBD"/><!-- xám -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đến">
+                                            <Setter Property="Background" Value="#90CAF9"/><!-- xanh da trời nhạt -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Không đến">
+                                            <Setter Property="Background" Value="#CE93D8"/><!-- tím nhạt -->
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#FFB0C4DE"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
                         </DataGrid>
                     </StackPanel>
                     <!-- Hàng dưới: Thông tin chi tiết -->
@@ -317,12 +348,12 @@
                         <StackPanel>
                             <TextBlock Text="Thông tin chi tiết đặt phòng" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="Họ tên: " FontWeight="Medium" Width="80"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestName}" Width="200"/>
-                                <TextBlock Text="Số CCCD: " FontWeight="Medium" Width="80" Margin="20,0,0,0"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestIdCard}" Width="150"/>
-                                <TextBlock Text="Địa chỉ: " FontWeight="Medium" Width="80" Margin="20,0,0,0"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestAddress}" Width="250"/>
+                                <TextBlock Text="Họ tên: " FontWeight="Medium" Width="Auto"/>
+                                <TextBlock Text="{Binding SelectedPendingBooking.GuestName}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
+                                <TextBlock Text="Số CCCD: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
+                                <TextBlock Text="{Binding SelectedPendingBooking.GuestIdCard}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
+                                <TextBlock Text="Địa chỉ: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
+                                <TextBlock Text="{Binding SelectedPendingBooking.GuestAddress}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
                             </StackPanel>
                             <DataGrid x:Name="BookingRoomsDataGrid"
                                       AutoGenerateColumns="False"
@@ -389,8 +420,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <!-- Nút Thêm khách bên trái -->
-                    <Button Content="➕ Thêm" Width="60" Height="30" HorizontalAlignment="Left" Margin="0,0,0,10" Style="{StaticResource ButtonBlueSmall}"
-                            Grid.Row="0" Grid.Column="0"/>
+                    <Button Content="➕ Thêm" Width="70" Height="30" HorizontalAlignment="Left" Margin="0,0,0,10" Style="{StaticResource ButtonBlueSmall}"
+                            Grid.Row="0" Grid.Column="0" Command="{Binding AddGuestCommand}"/>
                     <!-- Thanh tìm kiếm bên phải -->
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
                         <TextBox Width="200" Height="25" Margin="0,0,5,0" VerticalContentAlignment="Center" FontSize="12" Style="{x:Null}"

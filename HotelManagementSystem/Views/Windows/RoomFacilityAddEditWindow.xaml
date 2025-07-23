@@ -23,7 +23,7 @@
 
         <!-- RoomFacilityId (chỉ hiển thị khi sửa) -->
         <TextBlock Text="Mã thiết bị:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <TextBox Text="{Binding RoomFacilityId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBox Text="{Binding RoomFacilityId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="25"/>
 
         <!-- RoomInfo -->
         <TextBlock Text="Phòng:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
@@ -35,7 +35,7 @@
                   ItemsSource="{Binding Facilities}"
                   SelectedItem="{Binding SelectedFacility}"
                   DisplayMemberPath="FacilityName"
-                  SelectedValuePath="FacilityId"/>
+                  SelectedValuePath="FacilityId" Height="25"/>
 
         <!-- Quantity -->
         <TextBlock Text="Số lượng:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>

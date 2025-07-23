@@ -112,6 +112,10 @@ namespace HotelManagementSystem.ViewModels
             }
         }
 
+        public string FullNameError => _errors.ContainsKey(nameof(FullName)) ? _errors[nameof(FullName)].FirstOrDefault() : null;
+        public string EmailError => _errors.ContainsKey(nameof(Email)) ? _errors[nameof(Email)].FirstOrDefault() : null;
+        public string PhoneError => _errors.ContainsKey(nameof(Phone)) ? _errors[nameof(Phone)].FirstOrDefault() : null;
+
         public StaffAddEditViewModel(bool isEditMode = false, Staff? staff = null)
         {
             IsEditMode = isEditMode;
@@ -197,6 +201,7 @@ namespace HotelManagementSystem.ViewModels
             {
                 AddError(nameof(FullName), "Tên nhân viên không được để trống!");
             }
+            OnPropertyChanged(nameof(FullNameError));
         }
         public void ValidateEmail()
         {
@@ -209,6 +214,7 @@ namespace HotelManagementSystem.ViewModels
             {
                 AddError(nameof(Email), "Email không hợp lệ!");
             }
+            OnPropertyChanged(nameof(EmailError));
         }
         public void ValidatePhone()
         {
@@ -219,8 +225,9 @@ namespace HotelManagementSystem.ViewModels
             }
             else if (Phone.Length != 10 || !Phone.All(char.IsDigit) || !Phone.StartsWith("0"))
             {
-                AddError(nameof(Phone), "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng số 0!");
+                AddError(nameof(Phone), "Số điện thoại không hợp lệ!");
             }
+            OnPropertyChanged(nameof(PhoneError));
         }
     }
 } 

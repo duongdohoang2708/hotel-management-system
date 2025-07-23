@@ -147,6 +147,8 @@ namespace HotelManagementSystem.ViewModels
             public DateTime? CheckOutDate { get; set; }
             public decimal? Deposit { get; set; }
             public ObservableCollection<RoomDisplay> Rooms { get; set; } = new ObservableCollection<RoomDisplay>();
+            public int? StatusId { get; set; }
+            public string StatusName { get; set; }
         }
 
         private BookingDisplay _selectedPendingBooking;
@@ -195,6 +197,7 @@ namespace HotelManagementSystem.ViewModels
         
         private string _guestSearchKeyword = string.Empty;
         private DispatcherTimer _guestSearchTimer;
+        private bool _isAddingGuest = false;
         public string GuestSearchKeyword
         {
             get => _guestSearchKeyword;
@@ -202,14 +205,18 @@ namespace HotelManagementSystem.ViewModels
             {
                 if (SetProperty(ref _guestSearchKeyword, value))
                 {
-                    _guestSearchTimer?.Stop();
-                    _guestSearchTimer?.Start();
+                    if (!_isAddingGuest)
+                    {
+                        _guestSearchTimer?.Stop();
+                        _guestSearchTimer?.Start();
+                    }
                 }
             }
         }
 
         public ICommand GuestSearchCommand { get; }
         public ICommand GuestClearSearchCommand { get; }
+        public ICommand AddGuestCommand { get; }
 
         private string _filterMaxPrice;
         public string FilterMaxPrice
@@ -286,7 +293,7 @@ namespace HotelManagementSystem.ViewModels
             // Khởi tạo command (RelayCommand hoặc DelegateCommand tuỳ dự án)
             SearchRoomCommand = new RelayCommand(_ => SearchRoom());
             ResetCommand = new RelayCommand(Reset);
-            ConfirmBookingCommand = new RelayCommand(ConfirmBooking);
+            ConfirmBookingCommand = new RelayCommand(ConfirmBooking, _ => CanConfirmBooking());
             CancelBookingCommand = new RelayCommand(CancelBooking);
             PrintBookingCommand = new RelayCommand(PrintBooking);
             GuestSearchCommand = new RelayCommand(_ => LoadGuests());
@@ -338,6 +345,24 @@ namespace HotelManagementSystem.ViewModels
             };
             LoadPendingBookings();
             CancelPendingBookingCommand = new RelayCommand(_ => CancelPendingBooking(), _ => SelectedPendingBooking != null);
+            AddGuestCommand = new RelayCommand(_ =>
+            {
+                var vm = new HotelManagementSystem.ViewModels.GuestAddEditViewModel(false);
+                var win = new HotelManagementSystem.Views.Windows.GuestAddEditWindow(vm);
+                vm.GuestSaved += guest =>
+                {
+                    _isAddingGuest = true;
+                    GuestSearchKeyword = guest.FullName ?? string.Empty;
+                    LoadGuests();
+                    Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        SelectedGuest = Guests.FirstOrDefault(g => g.GuestId == guest.GuestId);
+                        _isAddingGuest = false;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                };
+                win.Owner = Application.Current.MainWindow;
+                win.ShowDialog();
+            });
         }
 
         private void RoomDisplay_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -450,9 +475,65 @@ namespace HotelManagementSystem.ViewModels
             // TODO: Đặt lại điều kiện tìm kiếm
         }
 
+        private bool CanConfirmBooking()
+        {
+            return SelectedGuest != null && SelectedRooms != null && SelectedRooms.Count > 0;
+        }
+
         private void ConfirmBooking(object obj)
         {
-            // TODO: Xác nhận đặt phòng
+            if (SelectedGuest == null || SelectedRooms == null || SelectedRooms.Count == 0)
+                return;
+            string guestName = SelectedGuest.FullName;
+            var result = MessageBox.Show($"Bạn có chắc chắn muốn đặt phòng cho khách hàng '{guestName}' không?", "Xác nhận đặt phòng", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) return;
+            try
+            {
+                using (var db = new HotelManagementDbContext())
+                {
+                    // Tạo booking mới
+                    var booking = new Booking
+                    {
+                        GuestId = SelectedGuest.GuestId,
+                        BookingDate = DateTime.Now,
+                        CheckIn = CheckInDate,
+                        CheckOut = CheckOutDate,
+                        Deposit = Deposit,
+                        StatusId = 1, // Giả sử 1 là trạng thái "Chờ xác nhận"
+                        StaffId = AppSession.CurrentAccount.StaffId // Giả sử 1 là ID của nhân viên đang đăng nhập
+                    };
+                    db.Bookings.Add(booking);
+                    db.SaveChanges();
+                    // Thêm các booked room
+                    foreach (var room in SelectedRooms)
+                    {
+                        var bookedRoom = new BookedRoom
+                        {
+                            BookingId = booking.BookingId,
+                            RoomId = room.RoomId,
+                            RoomPrice = room.Price
+                        };
+                        db.BookedRooms.Add(bookedRoom);
+                    }
+                    db.SaveChanges();
+                }
+                // Sau khi thêm xong, cập nhật lại danh sách PendingBookings
+                LoadPendingBookings();
+                // Lọc theo tên khách vừa đặt
+                BookingSearchKeyword = SelectedGuest.FullName;
+                LoadPendingBookings();
+                // Chọn dòng vừa thêm
+                Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    SelectedPendingBooking = PendingBookings.FirstOrDefault(b => b.GuestName == SelectedGuest.FullName && b.CheckInDate == CheckInDate && b.CheckOutDate == CheckOutDate);
+                }, System.Windows.Threading.DispatcherPriority.Background);
+                // Reset danh sách phòng đã chọn
+                SelectedRooms.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Có lỗi xảy ra khi đặt phòng: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CancelBooking(object obj)
@@ -503,7 +584,9 @@ namespace HotelManagementSystem.ViewModels
                             RoomTypeName = br.Room.RoomType?.TypeName ?? string.Empty,
                             Price = br.RoomPrice ?? br.Room.RoomType?.BasePrice ?? 0
                         })
-                    )
+                    ),
+                    StatusId = b.StatusId,
+                    StatusName = b.Status?.StatusName ?? string.Empty
                 };
                 PendingBookings.Add(bookingDisplay);
             }

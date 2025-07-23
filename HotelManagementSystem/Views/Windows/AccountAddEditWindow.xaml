@@ -5,7 +5,20 @@
         Title="{Binding WindowTitle}" Height="370" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:StringNotNullOrWhiteSpaceToVisibilityConverter x:Key="StringNotNullOrWhiteSpaceToVisibilityConverter"/>
         <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder/>
+                            <TextBlock Foreground="Red" FontSize="12" Text="{Binding [0].ErrorContent}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBox">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
                     <ControlTemplate>
@@ -32,41 +45,46 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="104"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
         <!-- AccountID (chỉ hiển thị khi sửa) -->
-        <TextBlock Text="Mã tài khoản:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <TextBox Text="{Binding AccountID}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,25" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="26"/>
+        <TextBlock Text="Mã tài khoản:" Grid.Column="0" Margin="0,5,8,0" VerticalAlignment="top" 
+                   Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="16"/>
+        <TextBox Text="{Binding AccountID}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,25" 
+                 IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="25"/>
 
         <!-- Username -->
-        <TextBlock Text="Tên đăng nhập:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Username, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,25" LostFocus="Username_LostFocus" Height="26"/>
+        <TextBlock Text="Tên đăng nhập:" Grid.Row="1" Grid.Column="0" Margin="0,5,8,0"  VerticalAlignment="Top" Height="16"/>
+        <TextBox Text="{Binding Username, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" Height="25" Grid.Row="1" Grid.Column="1" Margin="0,0,0,25" LostFocus="Username_LostFocus"/>
 
         <!-- Password -->
-        <TextBlock Text="Mật khẩu:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
-        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,25" PasswordChanged="PasswordBox_PasswordChanged" LostFocus="PasswordBox_LostFocus"/>
+        <TextBlock Text="Mật khẩu:" Grid.Row="2" Grid.Column="0" Margin="0,5,8,0" Height="16" VerticalAlignment="top" />
+        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,25" Height="25" PasswordChanged="PasswordBox_PasswordChanged" LostFocus="PasswordBox_LostFocus"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,30,0,0" Foreground="Red" FontSize="12"
+                   Text="{Binding PasswordError}"
+                   Visibility="{Binding PasswordError, Converter={StaticResource StringNotNullOrWhiteSpaceToVisibilityConverter}}"/>
 
         <!-- Role -->
-        <TextBlock Text="Vai trò:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,25" VerticalAlignment="Center"/>
+        <TextBlock Text="Vai trò:" Grid.Row="3" Grid.Column="0" Margin="0,3,8,0" VerticalAlignment="Top" Height="16"/>
         <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,25"
                   ItemsSource="{Binding Roles}"
-                  SelectedItem="{Binding Role, Mode=TwoWay}"/>
+                  SelectedItem="{Binding Role, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"/>
 
         <!-- Staff (chỉ cho chọn khi thêm) -->
-        <TextBlock Text="Nhân viên:" Grid.Row="4" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,8"
+        <TextBlock Text="Nhân viên:" Grid.Row="4" Grid.Column="0" Margin="0,3,8,0" VerticalAlignment="top" Height="16"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,8" Height="25"
                   ItemsSource="{Binding StaffList}"
                   DisplayMemberPath="FullName"
                   SelectedValuePath="StaffId"
-                  SelectedValue="{Binding StaffId, Mode=TwoWay}"
+                  SelectedValue="{Binding StaffId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"
                   IsEnabled="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}"/>
 
         <!-- Nút Lưu và Hủy -->
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
-            <Button Content="Lưu" Width="80" Margin="0,0,8,0" Command="{Binding SaveCommand}" Height="23"/>
-            <Button Content="Hủy" Width="80" Command="{Binding CancelCommand}" Height="22"/>
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="88,16,0,0" Width="184">
+            <Button Content="Lưu" Width="80" Margin="0,0,25,0" Command="{Binding SaveCommand}" Style="{StaticResource ButtonBlueSmall}"/>
+            <Button Content="Hủy" Width="80" Command="{Binding CancelCommand}"  Style="{StaticResource ButtonPurpleSmall}"/>
         </StackPanel>
     </Grid>
 </Window> 

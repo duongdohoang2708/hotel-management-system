@@ -23,11 +23,11 @@
 
         <!-- RoomId (chỉ hiển thị khi sửa) -->
         <TextBlock Text="Mã phòng:" Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <TextBox Text="{Binding RoomId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBox Text="{Binding RoomId}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" IsReadOnly="True" Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" Height="25"/>
 
         <!-- RoomNumber -->
         <TextBlock Text="Số phòng:" Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding RoomNumber}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8"/>
+        <TextBox Text="{Binding RoomNumber}" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8" Height="25"/>
 
         <!-- RoomType -->
         <TextBlock Text="Loại phòng:" Grid.Row="2" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
@@ -35,19 +35,19 @@
                   ItemsSource="{Binding RoomTypes}"
                   SelectedItem="{Binding SelectedRoomType}"
                   DisplayMemberPath="TypeName"
-                  SelectedValuePath="RoomTypeId"/>
+                  SelectedValuePath="RoomTypeId" Height="25"/>
 
         <!-- Status -->
         <TextBlock Text="Trạng thái:" Grid.Row="3" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,8"
                   ItemsSource="{Binding StatusOptions}"
-                  SelectedItem="{Binding Status}"/>
+                  SelectedItem="{Binding Status}" Height="25"/>
 
         <!-- CleanStatus -->
         <TextBlock Text="Tình trạng dọn dẹp:" Grid.Row="4" Grid.Column="0" Margin="0,0,8,8" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,8"
                   ItemsSource="{Binding CleanStatusOptions}"
-                  SelectedItem="{Binding CleanStatus}"/>
+                  SelectedItem="{Binding CleanStatus}" Height="25"/>
 
         <!-- Nút Lưu và Hủy -->
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="106,24,0,24">

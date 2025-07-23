@@ -59,7 +59,7 @@ public partial class HotelManagementDbContext : DbContext
                 .Build();
 
             // Lấy chuỗi kết nối
-            var connectionString = config.GetConnectionString("AruzeDBContext");
+            var connectionString = config.GetConnectionString("DBContext");
 
             // Cấu hình DbContext
             optionsBuilder.UseSqlServer(connectionString);
