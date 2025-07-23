@@ -1,5 +1,6 @@
 using Microsoft.Xaml.Behaviors.Media;
 using System;
+using System.Windows.Input;
 
 namespace HotelManagementSystem.Models
 {
@@ -14,5 +15,6 @@ namespace HotelManagementSystem.Models
         public decimal Price { get; set; }
         
         public bool IsSelected { get; set; }
+        public ICommand AddRoomCommand { get; set; }
     }
 } 

@@ -25,11 +25,6 @@ namespace HotelManagementSystem.Views.UserControls
             // TODO: Xử lý xác nhận đặt phòng
         }
 
-        private void CancelBookingButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            // TODO: Xử lý hủy thao tác đặt phòng
-        }
-
         private void PrintBookingButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // TODO: Xử lý in xác nhận đặt phòng
