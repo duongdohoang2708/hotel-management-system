@@ -165,7 +165,7 @@
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="Medium"/>
-                <Setter Property="Height" Value="25"/>
+                <Setter Property="Height" Value="28"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -199,7 +199,41 @@
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="Medium"/>
-                <Setter Property="Height" Value="25"/>
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="DarkRed"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="0" Opacity="0.3"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="RosyBrown"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Style nút lệnh màu đỏ cỡ nhỏ -->
+            <Style x:Key="ButtonOrangeSmall" TargetType="Button">
+                <Setter Property="Background" Value="DarkGreen"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Height" Value="28"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">

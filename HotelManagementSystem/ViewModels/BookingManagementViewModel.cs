@@ -258,7 +258,7 @@ namespace HotelManagementSystem.ViewModels
             {
                 if (SetProperty(ref _bookingSearchKeyword, value))
                 {
-                    LoadPendingBookings();
+                    LoadBookings();
                 }
             }
         }
@@ -343,7 +343,7 @@ namespace HotelManagementSystem.ViewModels
                 }
                 OnPropertyChanged(nameof(TotalRoomPricePerDay));
             };
-            LoadPendingBookings();
+            LoadBookings();
             CancelPendingBookingCommand = new RelayCommand(_ => CancelPendingBooking(), _ => SelectedPendingBooking != null);
             AddGuestCommand = new RelayCommand(_ =>
             {
@@ -518,10 +518,10 @@ namespace HotelManagementSystem.ViewModels
                     db.SaveChanges();
                 }
                 // Sau khi thêm xong, cập nhật lại danh sách PendingBookings
-                LoadPendingBookings();
+                LoadBookings();
                 // Lọc theo tên khách vừa đặt
                 BookingSearchKeyword = SelectedGuest.FullName;
-                LoadPendingBookings();
+                LoadBookings();
                 // Chọn dòng vừa thêm
                 Application.Current.Dispatcher.InvokeAsync(() =>
                 {
@@ -549,22 +549,23 @@ namespace HotelManagementSystem.ViewModels
         }
 
         // Load các booking đang chờ (ví dụ: StatusId = 1)
-        private void LoadPendingBookings()
+        private void LoadBookings()
         {
             PendingBookings.Clear();
-            var pendingQuery = _dbContext.Bookings
+            var bookingQuery = _dbContext.Bookings
                 .Include(b => b.Guest)
+                .Include(b=>b.Status)
                 .Include(b => b.BookedRooms).ThenInclude(br => br.Room).ThenInclude(r => r.RoomType)
-                .Where(b => b.StatusId == 1); // Giả sử 1 là trạng thái "Chờ xác nhận"
+                .Where(b => b.StatusId <= 5); // Load all
             if (!string.IsNullOrWhiteSpace(BookingSearchKeyword))
             {
                 string keyword = BookingSearchKeyword.Trim().ToLower();
-                pendingQuery = pendingQuery.Where(b => b.Guest.FullName.ToLower().Contains(keyword));
+                bookingQuery = bookingQuery.Where(b => b.Guest.FullName.ToLower().Contains(keyword));
             }
-            var pending = pendingQuery
+            var booking = bookingQuery
                 .OrderBy(b => b.CheckIn)
                 .ToList();
-            foreach (var b in pending)
+            foreach (var b in booking)
             {
                 var bookingDisplay = new BookingDisplay
                 {
