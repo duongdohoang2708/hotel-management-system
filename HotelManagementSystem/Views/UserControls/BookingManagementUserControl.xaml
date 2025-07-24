@@ -61,8 +61,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
         <Style x:Key="CommonRowStyle" TargetType="DataGridRow">
-            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="MinHeight" Value="30"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="Black"/>
             <Style.Triggers>
@@ -75,6 +76,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
         <Style x:Key="CommonTextBlockStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Left"/>
         </Style>
@@ -229,232 +231,11 @@
         </Grid>
 
         <!-- ......................................................HẾT VÙNG TRÁI..................................................................... -->
-
-        <!-- Vùng phải: Chia thành 2 groupbox dọc -->
-        <Grid Grid.Column="2" Margin="5">
-            <!-- Quản lý đặt phòng -->
-            <GroupBox Header="Dữ liệu đặt phòng" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="79*"/>
-                        <RowDefinition Height="319*"/>
-                        <RowDefinition Height="149*"/>
-                    </Grid.RowDefinitions>
-                    <!-- Hàng trên: Tìm kiếm + PendingBookingsDataGrid -->
-                    <Grid Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,0,0,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150*"/>
-                                    <ColumnDefinition Width="60*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                            </Grid>
-                            <Grid Grid.Column="0">
-                                <TextBox x:Name="BookingSearchTextBox" Width="150" Height="25" Style="{x:Null}" Margin="0,0,5,0"
-                                    Text="{Binding BookingSearchKeyword, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"/>
-                            </Grid>
-                            <Grid Grid.Column="1">
-                                <Button Content="Tìm" Width="60" Height="25" Margin="0,0,5,0" Style="{StaticResource ButtonBlueSmall}" Grid.Column="1"/>
-                            </Grid>
-                            <Grid Grid.Column="2" HorizontalAlignment="Right">
-                                <Button Content="Sửa đặt phòng" Width="100" Height="25" HorizontalAlignment="Right" Style="{StaticResource ButtonOrangeSmall}" Grid.Column="3"
-                                    IsEnabled="{Binding SelectedPendingBooking, Converter={StaticResource NullToBoolConverter}}"
-                                    Command="{Binding EditPendingBookingCommand}"/>
-                            </Grid>
-                            <Grid Grid.Column="3" HorizontalAlignment="Right">
-                                <Button Content="Xóa đặt phòng" Width="100" Height="25" HorizontalAlignment="Right" Style="{StaticResource ButtonPurpleSmall}" Grid.Column="3"
-                                    IsEnabled="{Binding SelectedPendingBooking, Converter={StaticResource NullToBoolConverter}}"
-                                    Command="{Binding CancelPendingBookingCommand}"/>
-                            </Grid>
-                            <!-- Spacer ở cột 2 -->
-                            
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,20,0,0">
-                            <Button Content="Xác nhận đặt" Width="110" Height="32" Margin="0,0,10,0" Style="{StaticResource ButtonBlueSmall}"/>
-                            <Button Content="Hủy đặt" Width="110" Height="32" Margin="0,0,10,0" Style="{StaticResource ButtonPurpleSmall}"/>
-                            <Button Content="Không đến" Width="110" Height="32" Margin="0,0,10,0" Style="{StaticResource ButtonPurpleSmall}"/>
-                            <Button Content="Nhận phòng" Width="110" Height="32" Margin="0,0,10,0" Style="{StaticResource ButtonBlueSmall}"/>
-                            <Button Content="Trả phòng" Width="110" Height="32" Style="{StaticResource ButtonBlueSmall}"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Border Grid.Row="1" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4" Margin="0,10,0,0" Padding="10">
-                        <DataGrid x:Name="PendingBookingsDataGrid"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
-                                  IsReadOnly="True"
-                                  SelectionMode="Single"
-                                  SelectionUnit="FullRow"
-                                  FontWeight="Normal"
-                                  VerticalContentAlignment="Center"
-                                  ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                                  CellStyle="{StaticResource PendingBookingCellStyle}"
-                                  ItemsSource="{Binding PendingBookings}"
-                                  SelectedItem="{Binding SelectedPendingBooking, Mode=TwoWay}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Ngày đặt" Binding="{Binding BookingDate, StringFormat=dd/MM/yyyy}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Header="Khách hàng" Binding="{Binding GuestName}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Header="SL phòng" Binding="{Binding NumberOfRoom}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Header="Check-In" Binding="{Binding CheckInDate, StringFormat=dd/MM/yyyy}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-
-                                <DataGridTextColumn Header="Check-Out" Binding="{Binding CheckOutDate, StringFormat=dd/MM/yyyy}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-
-                                <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusName}" Width="Auto">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Padding" Value="12,0,12,0"/>
-                                            <Setter Property="TextAlignment" Value="Left"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Background" Value="White"/>
-                                    <Setter Property="MinHeight" Value="36"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đặt">
-                                            <Setter Property="Background" Value="#A5D6A7"/>
-                                            <!-- xanh lá nhạt -->
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã hủy">
-                                            <Setter Property="Background" Value="#BDBDBD"/>
-                                            <!-- xám -->
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đến">
-                                            <Setter Property="Background" Value="#90CAF9"/>
-                                            <!-- xanh da trời nhạt -->
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusName}" Value="Không đến">
-                                            <Setter Property="Background" Value="#CE93D8"/>
-                                            <!-- tím nhạt -->
-                                        </DataTrigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="BorderBrush" Value="#B71C1C"/>
-                                            <Setter Property="BorderThickness" Value="2"/>
-                                            <Setter Property="Background" Value="Transparent"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-                        </DataGrid>
-                    </Border>
-
-                    <!-- Hàng dưới: Thông tin chi tiết -->
-                    <Border Grid.Row="2" Margin="0,10,0,0" Padding="10" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4">
-                        <StackPanel>
-                            <TextBlock Text="Thông tin chi tiết đặt phòng" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="Họ tên: " FontWeight="Medium" Width="Auto"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestName}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
-                                <TextBlock Text="Số CCCD: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestIdCard}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
-                                <TextBlock Text="Địa chỉ: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
-                                <TextBlock Text="{Binding SelectedPendingBooking.GuestAddress}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
-                            </StackPanel>
-                            <DataGrid x:Name="BookingRoomsDataGrid"
-                                      AutoGenerateColumns="False"
-                                      CanUserAddRows="False"
-                                      IsReadOnly="True"
-                                      SelectionMode="Single"
-                                      SelectionUnit="FullRow"
-                                      FontWeight="Normal"
-                                      VerticalContentAlignment="Center"
-                                      ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                                      CellStyle="{StaticResource CommonCellStyle}"
-                                      RowStyle="{StaticResource CommonRowStyle}"
-                                      ItemsSource="{Binding PendingBookingSelectedRooms}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="Auto">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Padding" Value="12,0,12,0"/>
-                                                <Setter Property="TextAlignment" Value="Left"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="Auto">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Padding" Value="12,0,12,0"/>
-                                                <Setter Property="TextAlignment" Value="Left"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Giá" Binding="{Binding Price, Converter={StaticResource VnCurrencyConverter}}" Width="Auto">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Padding" Value="12,0,12,0"/>
-                                                <Setter Property="TextAlignment" Value="Left"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </GroupBox>
-        </Grid>
-
-        <!-- .................................................... HẾT VÙNG PHẢI .................................................................... -->
         <!-- Vùng giữa: Chia thành 2 groupbox dọc -->
         <Grid Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="6*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
             <!-- Nửa trên: GroupBox Tìm kiếm khách hàng -->
             <GroupBox Header="Tìm kiếm khách hàng" Grid.Row="0" Foreground="#FF2C68CC" FontWeight="Medium" Margin="0,0,0,10">
@@ -469,31 +250,31 @@
                     </Grid.ColumnDefinitions>
                     <!-- Nút Thêm khách bên trái -->
                     <Button Content="➕ Thêm" Width="70" Height="30" HorizontalAlignment="Left" Margin="0,0,0,10" Style="{StaticResource ButtonBlueSmall}"
-                            Grid.Row="0" Grid.Column="0" Command="{Binding AddGuestCommand}"/>
+                     Grid.Row="0" Grid.Column="0" Command="{Binding AddGuestCommand}"/>
                     <!-- Thanh tìm kiếm bên phải -->
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
                         <TextBox Width="200" Height="25" Margin="0,0,5,0" VerticalContentAlignment="Center" FontSize="12" Style="{x:Null}"
-                                 Text="{Binding GuestSearchKeyword, UpdateSourceTrigger=PropertyChanged}"/>
+                          Text="{Binding GuestSearchKeyword, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="🔍 Tìm" Width="60" Height="25" Margin="0,0,5,0" Style="{StaticResource ButtonBlueSmall}"
-                                Command="{Binding GuestSearchCommand}"/>
+                         Command="{Binding GuestSearchCommand}"/>
                         <Button Content="❌ Xóa" Width="60" Height="25" Style="{StaticResource ButtonPurpleSmall}"
-                                Command="{Binding GuestClearSearchCommand}"/>
+                         Command="{Binding GuestClearSearchCommand}"/>
                     </StackPanel>
                     <!-- DataGrid danh sách khách -->
                     <DataGrid x:Name="GuestDataGrid"
-                              ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                              CellStyle="{StaticResource CommonCellStyle}"
-                              RowStyle="{StaticResource CommonRowStyle}"
-                              Grid.Row="1" Grid.ColumnSpan="2"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False"
-                              ItemsSource="{Binding Guests}"
-                              SelectionMode="Single"
-                              IsReadOnly="True"
-                              VerticalAlignment="Stretch"
-                              FontWeight="Normal"
-                              VerticalContentAlignment="Center"
-                              SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
+                       ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                       CellStyle="{StaticResource CommonCellStyle}"
+                       RowStyle="{StaticResource CommonRowStyle}"
+                       Grid.Row="1" Grid.ColumnSpan="2"
+                       AutoGenerateColumns="False"
+                       CanUserAddRows="False"
+                       ItemsSource="{Binding Guests}"
+                       SelectionMode="Single"
+                       IsReadOnly="True"
+                       VerticalAlignment="Stretch"
+                       FontWeight="Normal"
+                       VerticalContentAlignment="Center"
+                       SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="Auto">
                                 <DataGridTextColumn.ElementStyle>
@@ -578,19 +359,19 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
                             <DataGrid x:Name="SelectedRoomsDataGrid"
-                                      AutoGenerateColumns="False"
-                                      ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                                      CellStyle="{StaticResource CommonCellStyle}"
-                                      RowStyle="{StaticResource CommonRowStyle}"
-                                      CanUserAddRows="False"
-                                      SelectionMode="Single"
-                                      SelectionUnit="FullRow"
-                                      VerticalAlignment="Stretch"
-                                      FontWeight="Normal"
-                                      VerticalContentAlignment="Center"
-                                      ItemsSource="{Binding SelectedRooms}"
-                                      Grid.Column="0"
-                                      VerticalScrollBarVisibility="Auto">
+                               AutoGenerateColumns="False"
+                               ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                               CellStyle="{StaticResource CommonCellStyle}"
+                               RowStyle="{StaticResource CommonRowStyle}"
+                               CanUserAddRows="False"
+                               SelectionMode="Single"
+                               SelectionUnit="FullRow"
+                               VerticalAlignment="Stretch"
+                               FontWeight="Normal"
+                               VerticalContentAlignment="Center"
+                               ItemsSource="{Binding SelectedRooms}"
+                               Grid.Column="0"
+                               VerticalScrollBarVisibility="Auto">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Phòng" Binding="{Binding RoomNumber}" Width="Auto" IsReadOnly="True">
                                         <DataGridTextColumn.ElementStyle>
@@ -619,12 +400,12 @@
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>
                                                 <xctk:IntegerUpDown Value="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                   FormatString="N0"
-                                                                   Padding="12,0,12,0"
-                                                                   VerticalAlignment="Center"
-                                                                   Minimum="0"
-                                                                   Watermark="0"
-                                                                   Increment="10000"/>
+                                                            FormatString="N0"
+                                                            Padding="12,0,12,0"
+                                                            VerticalAlignment="Center"
+                                                            Minimum="0"
+                                                            Watermark="0"
+                                                            Increment="10000"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                     </DataGridTemplateColumn>
@@ -636,8 +417,8 @@
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,10">
                                     <TextBlock Text="Tiền đặt cọc" FontWeight="Bold" FontSize="14" Margin="0,0,0,4"/>
                                     <TextBox x:Name="DepositTextBox" Width="120" Height="25" Style="{x:Null}"
-                                             Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             HorizontalAlignment="Left"/>
+                                      Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Left"/>
                                 </StackPanel>
                                 <Button Content="Đặt phòng" Width="100" Margin="0,30,0,10" Style="{StaticResource ButtonBlueMedium}" Command="{Binding ConfirmBookingCommand}"/>
                                 <Button Content="Hủy" Width="100" Margin="0,0,0,20" Style="{StaticResource ButtonPurpleMedium}" Command="{Binding CancelBookingCommand}"/>
@@ -647,5 +428,291 @@
                 </Grid>
             </GroupBox>
         </Grid>
+        <!-- .................................................... HẾT VÙNG GIỮA .................................................................... -->
+
+        <!-- Vùng phải: Chia thành 2 groupbox dọc -->
+        <Grid Grid.Column="2" Margin="5">
+            <!-- Quản lý đặt phòng -->
+            <GroupBox Header="Dữ liệu đặt phòng" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50*"/>
+                        <RowDefinition Height="400*"/>
+                        <RowDefinition Height="200*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Hàng trên: Tìm kiếm + PendingBookingsDataGrid -->
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200*"/>
+                                    <ColumnDefinition Width="60*"/>
+
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                            <Grid Grid.Column="0">
+                                <TextBox x:Name="BookingSearchTextBox" Width="200" Height="25" Style="{x:Null}" Margin="0,0,5,0"
+                                    Text="{Binding BookingSearchKeyword, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Button Content="Tìm" Width="60" Height="25" Margin="0,0,5,0" Style="{StaticResource ButtonBlueSmall}" Grid.Column="1"/>
+                            </Grid>
+
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,10,0,0">
+                            <Button Content="Xác nhận đặt" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanConfirmBookingButton}" Command="{Binding ConfirmSelectedBookingCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonBlueSmall}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="Hủy đặt" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanCancelBooking}" Command="{Binding CancelSelectedBookingCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="Không đến" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanNoShowBooking}" Command="{Binding NoShowSelectedBookingCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="Sửa đặt phòng" Width="110" Margin="40,0,10,0" HorizontalAlignment="Right" IsEnabled="{Binding CanEditBooking}" Command="{Binding EditBookingCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonOrangeSmall}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="Xóa đặt phòng" Width="110" Margin="10,0,0,0" HorizontalAlignment="Right" IsEnabled="{Binding CanDeleteBooking}" Command="{Binding DeleteBookingCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Grid.Row="1" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4" Margin="0,5,0,0" Padding="5">
+                        <DataGrid x:Name="BookingsDataGrid"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  FontWeight="Normal"
+                                  VerticalContentAlignment="Center"
+                                  ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                                  CellStyle="{StaticResource PendingBookingCellStyle}"
+                                  ItemsSource="{Binding Bookings}"
+                                  SelectedItem="{Binding SelectedBooking, Mode=TwoWay}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Ngày đặt" Binding="{Binding BookingDate, StringFormat=dd/MM/yyyy}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Khách hàng" Binding="{Binding GuestName}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="SL phòng" Binding="{Binding NumberOfRoom}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Check-In" Binding="{Binding CheckInDate, StringFormat=dd/MM/yyyy}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Check-Out" Binding="{Binding CheckOutDate, StringFormat=dd/MM/yyyy}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusName}" Width="Auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Padding" Value="12,0,12,0"/>
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="MinHeight" Value="36"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đặt">
+                                            <Setter Property="Background" Value="#FFF9C4"/>
+                                            <!-- xanh ngọc pastel -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã hủy">
+                                            <Setter Property="Background" Value="Gray"/>
+                                            <!-- cam nhạt pastel -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Đã đến">
+                                            <Setter Property="Background" Value="#FFE0B2"/>
+                                            <!-- xanh tím nhạt pastel -->
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusName}" Value="Không đến">
+                                            <Setter Property="Background" Value="#C5CAE9"/>
+                                            <!-- vàng nhạt pastel -->
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="BorderBrush" Value="#B71C1C"/>
+                                            <Setter Property="BorderThickness" Value="2"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                        </DataGrid>
+                    </Border>
+
+                    <!-- Hàng dưới: Thông tin chi tiết -->
+                    <Border Grid.Row="2" Margin="0,10,0,0" Padding="10" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4">
+                        <StackPanel>
+                            <TextBlock Text="Thông tin chi tiết đặt phòng" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="Họ tên: " FontWeight="Medium" Width="Auto"/>
+                                <TextBlock Text="{Binding SelectedBooking.GuestName}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
+                                <TextBlock Text="Số CCCD: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
+                                <TextBlock Text="{Binding SelectedBooking.GuestIdCard}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
+                                <TextBlock Text="Địa chỉ: " FontWeight="Medium" Width="Auto" Margin="10,0,0,0"/>
+                                <TextBlock Text="{Binding SelectedBooking.GuestAddress}" Width="Auto" Margin="3,0,0,0" Foreground="Red"/>
+                            </StackPanel>
+                            <!-- Chia 2 cột: trái 60% DataGrid, phải 40% 2 nút -->
+                            <Grid Margin="0,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Cột trái: DataGrid -->
+                                <DataGrid x:Name="BookingRoomsDataGrid"
+                                          Grid.Column="0"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          FontWeight="Normal"
+                                          VerticalContentAlignment="Center"
+                                          ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                                          CellStyle="{StaticResource CommonCellStyle}"
+                                          RowStyle="{StaticResource CommonRowStyle}"
+                                          ItemsSource="{Binding BookingselectedRooms}"
+                                          SelectedItem="{Binding SelectedBookingRoom, Mode=TwoWay}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="Auto">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Padding" Value="12,0,12,0"/>
+                                                    <Setter Property="TextAlignment" Value="Left"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="Auto">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Padding" Value="12,0,12,0"/>
+                                                    <Setter Property="TextAlignment" Value="Left"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Giá" Binding="{Binding Price, Converter={StaticResource VnCurrencyConverter}}" Width="Auto">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Padding" Value="12,0,12,0"/>
+                                                    <Setter Property="TextAlignment" Value="Left"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <!-- Cột phải: 2 nút -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="0,20,0,0">
+                                    <Button Content="Thêm phòng" Width="100" Margin="0,0,0,20" Style="{StaticResource ButtonBlueSmall}" Command="{Binding AddRoomCommand}"/>
+                                    <Button Content="Xóa phòng" Width="100" Style="{StaticResource ButtonPurpleSmall}" Command="{Binding DeleteRoomCommand}" IsEnabled="{Binding CanDeleteBookingRoom}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <!-- .................................................... HẾT VÙNG PHẢI .................................................................... -->
+
     </Grid>
 </UserControl> 

@@ -273,6 +273,19 @@ namespace HotelManagementSystem
                 }
             };
 
+            //Đăng ký event chuyển sang view Nhận phòng (CheckIn)
+            sideBarviewModel.OpenCheckInRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var vm = new CheckInManagementViewModel();
+                    var control = new CheckInManagementUserControl();
+                    control.DataContext = vm;
+                    mainVm.CurrentView = control;
+                    mainVm.CurrentViewTitle = "Nhận phòng";
+                }
+            };
+
 
             // Đăng ký event logout
             sideBarviewModel.LogoutRequested += () =>

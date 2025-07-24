@@ -30,6 +30,8 @@ namespace HotelManagementSystem.ViewModels
         public ICommand ServiceCommand { get; }
         public ICommand RoomCommand { get; }
         public ICommand BookingCommand {get;}
+        public ICommand NavigateCheckInCommand { get; }
+        public event Action? OpenCheckInRequested;
 
         public event Action? HomeRequested;
         public event Action? OpenBookingRequested;
@@ -69,6 +71,7 @@ namespace HotelManagementSystem.ViewModels
             ServiceCommand = new RelayCommand(_ => OpenServices());
             RoomCommand = new RelayCommand(_ => OpenRooms());
             BookingCommand = new RelayCommand(_ => OpenBookings());
+            NavigateCheckInCommand = new RelayCommand(_ => OpenCheckIn());
         }
 
         private void Home()
@@ -143,6 +146,11 @@ namespace HotelManagementSystem.ViewModels
         {
             // This command is not directly mapped to a specific action in the new menu structure
             // It might need to be handled differently if it triggers a navigation
+        }
+
+        private void OpenCheckIn()
+        {
+            OpenCheckInRequested?.Invoke();
         }
 
         private void LogOut()
