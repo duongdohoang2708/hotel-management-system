@@ -31,7 +31,12 @@ namespace HotelManagementSystem.ViewModels
         public ICommand RoomCommand { get; }
         public ICommand BookingCommand {get;}
         public ICommand NavigateCheckInCommand { get; }
+        public ICommand NavigateCheckoutCommand { get; }
+        public ICommand NavigateServiceUsageCommand { get; }
+        public ICommand NavigateReportCommand { get; }
         public event Action? OpenCheckInRequested;
+        public event Action? OpenCheckoutRequested;
+        public event Action? OpenServiceUsageRequested;
 
         public event Action? HomeRequested;
         public event Action? OpenBookingRequested;
@@ -48,6 +53,7 @@ namespace HotelManagementSystem.ViewModels
         public event Action? OpenAccountRequested;
         public event Action? OpenRoomTypeRequested;
         public event Action? OpenBookingStatusRequested;
+        public event Action? OpenReportRequested;
 
         public SidebarViewModel(Account account)
         {
@@ -72,6 +78,9 @@ namespace HotelManagementSystem.ViewModels
             RoomCommand = new RelayCommand(_ => OpenRooms());
             BookingCommand = new RelayCommand(_ => OpenBookings());
             NavigateCheckInCommand = new RelayCommand(_ => OpenCheckIn());
+            NavigateCheckoutCommand = new RelayCommand(_ => OpenCheckout());
+            NavigateServiceUsageCommand = new RelayCommand(_ => OpenServiceUsage());
+            NavigateReportCommand = new RelayCommand(_ => OpenReport());
         }
 
         private void Home()
@@ -151,6 +160,21 @@ namespace HotelManagementSystem.ViewModels
         private void OpenCheckIn()
         {
             OpenCheckInRequested?.Invoke();
+        }
+
+        private void OpenCheckout()
+        {
+            OpenCheckoutRequested?.Invoke();
+        }
+
+        private void OpenServiceUsage()
+        {
+            OpenServiceUsageRequested?.Invoke();
+        }
+
+        private void OpenReport()
+        {
+            OpenReportRequested?.Invoke();
         }
 
         private void LogOut()

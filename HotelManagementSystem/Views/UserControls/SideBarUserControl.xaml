@@ -42,7 +42,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateCheckOutCommand}" Margin="20,5,20,0" Height="40" Background="#FF39562D">
+                <Button Style="{StaticResource SideBarButtonStyle}" Command="{Binding NavigateCheckoutCommand}" Margin="20,5,20,0" Height="40" Background="#FF39562D">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="LocationExit" Width="20" Margin="0,0,8,0" Foreground="White"/>
                         <TextBlock Text="Trả phòng" Foreground="White"/>

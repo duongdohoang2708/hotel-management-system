@@ -286,6 +286,31 @@ namespace HotelManagementSystem
                 }
             };
 
+            //Đăng ký event chuyển sang view Trả phòng (Checkout)
+            sideBarviewModel.OpenCheckoutRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var vm = new CheckoutManagementViewModel();
+                    var control = new CheckoutManagementUserControl();
+                    control.DataContext = vm;
+                    mainVm.CurrentView = control;
+                    mainVm.CurrentViewTitle = "Trả phòng";
+                }
+            };
+
+            //Đăng ký event chuyển sang view Sử dụng dịch vụ
+            sideBarviewModel.OpenServiceUsageRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var vm = new ServiceUsageManagementViewModel();
+                    var control = new ServiceUsageManagementUserControl();
+                    control.DataContext = vm;
+                    mainVm.CurrentView = control;
+                    mainVm.CurrentViewTitle = "Sử dụng dịch vụ";
+                }
+            };
 
             // Đăng ký event logout
             sideBarviewModel.LogoutRequested += () =>
@@ -307,6 +332,19 @@ namespace HotelManagementSystem
                 var result = System.Windows.MessageBox.Show($"Bạn có chắc chắn muốn thoát ứng dụng?", "Xác nhận thoát", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
                 if (result == System.Windows.MessageBoxResult.Yes)
                     this.Close();
+            };
+
+            //Đăng ký event chuyển sang view Báo cáo
+            sideBarviewModel.OpenReportRequested += () =>
+            {
+                if (this.DataContext is MainWindowViewModel mainVm)
+                {
+                    var vm = new ReportDashboardViewModel();
+                    var control = new ReportDashboardUserControl();
+                    control.DataContext = vm;
+                    mainVm.CurrentView = control;
+                    mainVm.CurrentViewTitle = "Báo cáo tổng hợp";
+                }
             };
 
         }

@@ -1,0 +1,59 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.ServiceUsageManagementUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HotelManagementSystem.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+    <UserControl.Resources>
+        <local:VnCurrencyConverter x:Key="VnCurrencyConverter" />
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <!-- Danh sách phòng đang có khách -->
+        <GroupBox Header="Phòng đang có khách" Grid.Column="0" Margin="0,0,10,0">
+            <DataGrid ItemsSource="{Binding OccupiedRooms}"
+                      SelectedItem="{Binding SelectedRoom, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      Margin="0,0,0,10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="*"/>
+                    <DataGridTextColumn Header="Khách hàng" Binding="{Binding GuestName}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <!-- Danh sách dịch vụ đã sử dụng và thêm mới dịch vụ -->
+        <GroupBox Header="Dịch vụ đã sử dụng" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!-- Danh sách dịch vụ đã sử dụng -->
+                <DataGrid ItemsSource="{Binding RoomServiceUsages}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          Margin="0,0,0,10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tên dịch vụ" Binding="{Binding ServiceName}" Width="*"/>
+                        <DataGridTextColumn Header="Đơn giá" Binding="{Binding UnitPrice, Converter={StaticResource VnCurrencyConverter}}" Width="*"/>
+                        <DataGridTextColumn Header="Thời gian sử dụng" Binding="{Binding UsageTime, StringFormat=dd/MM/yyyy HH:mm}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- Thêm mới dịch vụ -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Right">
+                    <ComboBox Width="200" ItemsSource="{Binding AvailableServices}" SelectedItem="{Binding SelectedService, Mode=TwoWay}" DisplayMemberPath="ServiceName" Margin="0,0,10,0"/>
+                    <TextBox Width="60" Text="{Binding ServiceQuantity, Mode=TwoWay}" Margin="0,0,10,0"/>
+                    <Button Content="Thêm dịch vụ" Width="120" Height="32" Command="{Binding AddServiceUsageCommand}"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl> 

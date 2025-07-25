@@ -1,0 +1,140 @@
+<UserControl x:Class="HotelManagementSystem.Views.UserControls.ReportDashboardUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HotelManagementSystem.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
+    <UserControl.Resources>
+        <local:VnCurrencyConverter x:Key="VnCurrencyConverter" />
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="BÁO CÁO TỔNG HỢP KHÁCH SẠN" FontSize="22" FontWeight="Bold" Foreground="#2C68CC" Margin="0,0,0,20"/>
+            <!-- Bộ lọc thời gian -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <DatePicker SelectedDate="{Binding FromDate, Mode=TwoWay}" Margin="0,0,16,0"/>
+                <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <DatePicker SelectedDate="{Binding ToDate, Mode=TwoWay}" Margin="0,0,16,0"/>
+                <Button Content="Lọc" Command="{Binding ApplyFilterCommand}" Width="80" Height="28"/>
+            </StackPanel>
+            <!-- Các chỉ số tổng quan -->
+            <UniformGrid Columns="4" Rows="2" Margin="0,0,0,20">
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Tổng số phòng" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalRooms}" FontSize="20" Foreground="#2C68CC"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Phòng trống" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding AvailableRooms}" FontSize="20" Foreground="#27ae60"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Phòng đang sử dụng" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding OccupiedRooms}" FontSize="20" Foreground="#e67e22"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Phòng cần dọn dẹp" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CleaningRooms}" FontSize="20" Foreground="#e74c3c"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Phòng đã đặt" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding BookedRooms}" FontSize="20" Foreground="#8e44ad"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Tổng khách hàng" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalGuests}" FontSize="20" Foreground="#2C68CC"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Booking hôm nay" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalBookingsToday}" FontSize="20" Foreground="#2C68CC"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2C68CC" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Booking tháng này" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalBookingsThisMonth}" FontSize="20" Foreground="#2C68CC"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+            <!-- Doanh thu -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <Border BorderBrush="#27ae60" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12" Width="250">
+                    <StackPanel>
+                        <TextBlock Text="Doanh thu hôm nay" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalRevenueToday, Converter={StaticResource VnCurrencyConverter}}" FontSize="20" Foreground="#27ae60"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#2980b9" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12" Width="250">
+                    <StackPanel>
+                        <TextBlock Text="Doanh thu tháng này" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalRevenueThisMonth, Converter={StaticResource VnCurrencyConverter}}" FontSize="20" Foreground="#2980b9"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#e67e22" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12" Width="250">
+                    <StackPanel>
+                        <TextBlock Text="Dịch vụ đã sử dụng" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalServiceUsages}" FontSize="20" Foreground="#e67e22"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#8e44ad" BorderThickness="1" CornerRadius="8" Margin="8" Padding="12" Width="250">
+                    <StackPanel>
+                        <TextBlock Text="Khách đang lưu trú" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CurrentStayingGuests}" FontSize="20" Foreground="#8e44ad"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <!-- Biểu đồ doanh thu theo ngày -->
+            <TextBlock Text="Biểu đồ doanh thu theo ngày" FontWeight="Bold" FontSize="16" Margin="0,10,0,5"/>
+            <lvc:CartesianChart Series="{Binding RevenueSeries}" Height="220" Margin="0,0,0,20">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Ngày" Labels="{Binding RevenueLabels}"/>
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Doanh thu"/>
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+            <!-- Biểu đồ trạng thái phòng -->
+            <TextBlock Text="Tỷ lệ trạng thái phòng" FontWeight="Bold" FontSize="16" Margin="0,10,0,5"/>
+            <lvc:PieChart Series="{Binding RoomStatusSeries}" Height="220" Margin="0,0,0,20"/>
+            <!-- Biểu đồ top dịch vụ sử dụng nhiều nhất -->
+            <TextBlock Text="Top 5 dịch vụ sử dụng nhiều nhất (biểu đồ)" FontWeight="Bold" FontSize="16" Margin="0,10,0,5"/>
+            <lvc:CartesianChart Series="{Binding ServiceUsageSeries}" Height="220" Margin="0,0,0,20">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Dịch vụ" Labels="{Binding ServiceUsageLabels}"/>
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Số lần sử dụng"/>
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+            <!-- Top phòng doanh thu cao nhất (bảng) -->
+            <TextBlock Text="Top 5 phòng doanh thu cao nhất" FontWeight="Bold" FontSize="16" Margin="0,10,0,5"/>
+            <DataGrid ItemsSource="{Binding TopRoomsByRevenue}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Margin="0,0,0,20" Height="180">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Phòng" Binding="{Binding RoomNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Doanh thu" Binding="{Binding Revenue, Converter={StaticResource VnCurrencyConverter}}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!-- Top dịch vụ sử dụng nhiều nhất (bảng) -->
+            <TextBlock Text="Top 5 dịch vụ sử dụng nhiều nhất (bảng)" FontWeight="Bold" FontSize="16" Margin="0,10,0,5"/>
+            <DataGrid ItemsSource="{Binding TopServicesByUsage}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Height="180">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Dịch vụ" Binding="{Binding ServiceName}" Width="*"/>
+                    <DataGridTextColumn Header="Số lần sử dụng" Binding="{Binding UsageCount}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl> 
