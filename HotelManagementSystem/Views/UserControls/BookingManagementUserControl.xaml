@@ -170,6 +170,7 @@
                               FontWeight="Normal"
                               VerticalContentAlignment="Center"
                               ItemsSource="{Binding AvailableRooms}"
+                              SelectedItem="{Binding SelectedAvailableRoom, Mode=TwoWay}"
                               Grid.Row="1"
                               VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
