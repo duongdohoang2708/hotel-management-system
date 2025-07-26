@@ -5,6 +5,77 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
     <UserControl.Resources>
         <local:VnCurrencyConverter x:Key="VnCurrencyConverter" />
+        <Style x:Key="CommonHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{x:Null}">
+            <Setter Property="Padding" Value="8,0,8,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontWeight="Medium" Foreground="Black"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CommonCellStyle" TargetType="DataGridCell">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFB0C4DE"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Background" Value="#FFB0C4DE"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CommonRowStyle" TargetType="DataGridRow">
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFB0C4DE"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFFDE9B3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder/>
+                            <TextBlock Foreground="Red" FontSize="12" Text="{Binding [0].ErrorContent}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder/>
+                            <TextBlock Foreground="Red" FontSize="12" Text="{Binding [0].ErrorContent}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -19,7 +90,10 @@
                       CanUserAddRows="False"
                       IsReadOnly="True"
                       SelectionMode="Single"
-                      Margin="0,0,0,10">
+                      Margin="0,0,0,10"
+                      ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                      CellStyle="{StaticResource CommonCellStyle}"
+                      RowStyle="{StaticResource CommonRowStyle}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="*"/>
                     <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="*"/>
@@ -40,17 +114,57 @@
                           CanUserAddRows="False"
                           IsReadOnly="True"
                           SelectionMode="Single"
-                          Margin="0,0,0,10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Tên dịch vụ" Binding="{Binding ServiceName}" Width="*"/>
-                        <DataGridTextColumn Header="Đơn giá" Binding="{Binding UnitPrice, Converter={StaticResource VnCurrencyConverter}}" Width="*"/>
-                        <DataGridTextColumn Header="Thời gian sử dụng" Binding="{Binding UsageTime, StringFormat=dd/MM/yyyy HH:mm}" Width="*"/>
-                    </DataGrid.Columns>
+                          Margin="0,0,0,10"
+                          ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+                          CellStyle="{StaticResource CommonCellStyle}"
+                          RowStyle="{StaticResource CommonRowStyle}">
+                                         <DataGrid.Columns>
+                         <DataGridTextColumn Header="Phòng" Binding="{Binding RoomNumber}" Width="*">
+                             <DataGridTextColumn.ElementStyle>
+                                 <Style TargetType="TextBlock">
+                                     <Setter Property="Padding" Value="12,0,12,0"/>
+                                     <Setter Property="TextAlignment" Value="Center"/>
+                                     <Setter Property="VerticalAlignment" Value="Center"/>
+                                     <Setter Property="FontWeight" Value="Normal"/>
+                                 </Style>
+                             </DataGridTextColumn.ElementStyle>
+                         </DataGridTextColumn>
+                         <DataGridTextColumn Header="Tên dịch vụ" Binding="{Binding ServiceName}" Width="*">
+                             <DataGridTextColumn.ElementStyle>
+                                 <Style TargetType="TextBlock">
+                                     <Setter Property="Padding" Value="12,0,12,0"/>
+                                     <Setter Property="TextAlignment" Value="Left"/>
+                                     <Setter Property="VerticalAlignment" Value="Center"/>
+                                     <Setter Property="FontWeight" Value="Normal"/>
+                                 </Style>
+                             </DataGridTextColumn.ElementStyle>
+                         </DataGridTextColumn>
+                         <DataGridTextColumn Header="Đơn giá" Binding="{Binding UnitPrice, Converter={StaticResource VnCurrencyConverter}}" Width="*">
+                             <DataGridTextColumn.ElementStyle>
+                                 <Style TargetType="TextBlock">
+                                     <Setter Property="Padding" Value="12,0,12,0"/>
+                                     <Setter Property="TextAlignment" Value="Right"/>
+                                     <Setter Property="VerticalAlignment" Value="Center"/>
+                                     <Setter Property="FontWeight" Value="Normal"/>
+                                 </Style>
+                             </DataGridTextColumn.ElementStyle>
+                         </DataGridTextColumn>
+                         <DataGridTextColumn Header="Thời gian sử dụng" Binding="{Binding UsageTime, StringFormat=dd/MM/yyyy HH:mm}" Width="*">
+                             <DataGridTextColumn.ElementStyle>
+                                 <Style TargetType="TextBlock">
+                                     <Setter Property="Padding" Value="12,0,12,0"/>
+                                     <Setter Property="TextAlignment" Value="Left"/>
+                                     <Setter Property="VerticalAlignment" Value="Center"/>
+                                     <Setter Property="FontWeight" Value="Normal"/>
+                                 </Style>
+                             </DataGridTextColumn.ElementStyle>
+                         </DataGridTextColumn>
+                     </DataGrid.Columns>
                 </DataGrid>
                 <!-- Thêm mới dịch vụ -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Right">
-                    <ComboBox Width="200" ItemsSource="{Binding AvailableServices}" SelectedItem="{Binding SelectedService, Mode=TwoWay}" DisplayMemberPath="ServiceName" Margin="0,0,10,0"/>
-                    <TextBox Width="60" Text="{Binding ServiceQuantity, Mode=TwoWay}" Margin="0,0,10,0"/>
+                    <ComboBox Width="200" Height="25" ItemsSource="{Binding AvailableServices}" SelectedItem="{Binding SelectedService, Mode=TwoWay}" DisplayMemberPath="ServiceName" Margin="0,0,10,0"/>
+                    <TextBox Width="60" Height="25" Text="{Binding ServiceQuantity, Mode=TwoWay}" Margin="0,0,10,0"/>
                     <Button Content="Thêm dịch vụ" Width="120" Height="32" Command="{Binding AddServiceUsageCommand}"/>
                 </StackPanel>
             </Grid>

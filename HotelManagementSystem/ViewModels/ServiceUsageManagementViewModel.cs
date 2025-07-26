@@ -62,6 +62,7 @@ namespace HotelManagementSystem.ViewModels
         public class ServiceUsageDisplay
         {
             public int UsageId { get; set; }
+            public string RoomNumber { get; set; }
             public string ServiceName { get; set; }
             public decimal UnitPrice { get; set; }
             public DateTime UsageTime { get; set; }
@@ -92,6 +93,7 @@ namespace HotelManagementSystem.ViewModels
                 .Select(u => new ServiceUsageDisplay
                 {
                     UsageId = u.UsageId,
+                    RoomNumber = u.BookedRoom.Room.RoomNumber,
                     ServiceName = u.Service.ServiceName,
                     UnitPrice = u.UnitPrice ?? 0,
                     UsageTime = u.UsageTime ?? DateTime.MinValue

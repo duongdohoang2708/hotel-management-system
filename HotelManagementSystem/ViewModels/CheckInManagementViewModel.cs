@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using HotelManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -96,7 +97,12 @@ namespace HotelManagementSystem.ViewModels
         {
             PendingBookings.Clear();
             var bookings = _dbContext.Bookings
-                .Where(b => b.StatusId == 1)
+                .Include(b => b.Guest)
+                .Include(b => b.Status)
+                .Include(b => b.BookedRooms)
+                    .ThenInclude(br => br.Room)
+                        .ThenInclude(r => r.RoomType)
+                .Where(b => b.StatusId == 1) // StatusId = 1 is "Đã đặt" (Booked)
                 .Select(b => new
                 {
                     b.BookingId,
@@ -138,7 +144,12 @@ namespace HotelManagementSystem.ViewModels
         {
             CheckedInBookings.Clear();
             var bookings = _dbContext.Bookings
-                .Where(b => b.StatusId == 2 && (b.Status.StatusName == "Đã nhận phòng" || b.Status.StatusName == "Checked In"))
+                .Include(b => b.Guest)
+                .Include(b => b.Status)
+                .Include(b => b.BookedRooms)
+                    .ThenInclude(br => br.Room)
+                        .ThenInclude(r => r.RoomType)
+                .Where(b => b.StatusId == 2) // StatusId = 2 is "Đã nhận phòng" (Checked In)
                 .Select(b => new
                 {
                     b.BookingId,

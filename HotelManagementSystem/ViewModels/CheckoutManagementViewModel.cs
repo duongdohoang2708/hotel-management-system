@@ -261,7 +261,9 @@ namespace HotelManagementSystem.ViewModels
                             })
                         )
                     }).ToList()
-                }).ToList();
+                })
+                .OrderByDescending(b => b.CheckOut) // Sắp xếp theo ngày checkout giảm dần
+                .ToList();
                 
             foreach (var b in bookings)
             {
