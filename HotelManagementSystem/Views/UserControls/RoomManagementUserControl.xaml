@@ -111,7 +111,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="SL phòng" Binding="{Binding RoomNumber}" Width="150">
+                        <DataGridTextColumn Header="Số hiệu phòng" Binding="{Binding RoomNumber}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="TextAlignment" Value="Center"/>
@@ -119,7 +119,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="150">
+                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="TextWrapping" Value="Wrap"/>
@@ -127,7 +127,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="150">
+                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="TextWrapping" Value="Wrap"/>
@@ -135,7 +135,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Tình trạng dọn dẹp" Binding="{Binding CleanStatus}" Width="150">
+                        <DataGridTextColumn Header="Dọn phòng" Binding="{Binding CleanStatus}" Width="150">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="TextWrapping" Value="Wrap"/>

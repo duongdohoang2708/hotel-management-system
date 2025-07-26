@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using HotelManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -80,6 +81,7 @@ namespace HotelManagementSystem.ViewModels
         
         public ICommand ConfirmCheckoutCommand { get; }
         public ICommand GenerateInvoiceCommand { get; }
+        public ICommand DebugCommand { get; }
 
         public CheckoutManagementViewModel()
         {
@@ -88,6 +90,31 @@ namespace HotelManagementSystem.ViewModels
             LoadCheckedOutBookings();
             ConfirmCheckoutCommand = new RelayCommand(_ => ConfirmCheckout(), _ => CanCheckout);
             GenerateInvoiceCommand = new RelayCommand(_ => GenerateInvoice(), _ => CanCheckout);
+            DebugCommand = new RelayCommand(_ => DebugBookingStatuses());
+        }
+
+        public void RefreshData()
+        {
+            LoadCheckedInBookings();
+            LoadCheckedOutBookings();
+        }
+
+        private void DebugBookingStatuses()
+        {
+            var allBookings = _dbContext.Bookings
+                .Include(b => b.Status)
+                .Select(b => new { b.BookingId, b.StatusId, StatusName = b.Status.StatusName })
+                .ToList();
+            
+            var statusCounts = allBookings.GroupBy(b => new { b.StatusId, b.StatusName })
+                .Select(g => new { g.Key.StatusId, g.Key.StatusName, Count = g.Count() })
+                .OrderBy(x => x.StatusId)
+                .ToList();
+            
+            var message = "Booking Status Counts:\n" + 
+                         string.Join("\n", statusCounts.Select(s => $"StatusId: {s.StatusId}, Name: {s.StatusName}, Count: {s.Count}"));
+            
+            MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public class BookingDisplay
@@ -124,9 +151,20 @@ namespace HotelManagementSystem.ViewModels
         private void LoadCheckedInBookings()
         {
             CheckedInBookings.Clear();
-            var bookings = _dbContext.Bookings
-                .Where(b => b.StatusId == 2 && (b.Status.StatusName == "Đã nhận phòng" || b.Status.StatusName == "Checked In"))
-                .Select(b => new
+            
+            try
+            {
+                var bookings = _dbContext.Bookings
+                    .Where(b => b.StatusId == 2)
+                    .Include(b => b.Guest)
+                    .Include(b => b.Status)
+                    .Include(b => b.BookedRooms)
+                        .ThenInclude(br => br.Room)
+                            .ThenInclude(r => r.RoomType)
+                    .Include(b => b.BookedRooms)
+                        .ThenInclude(br => br.RoomServiceUsages)
+                            .ThenInclude(rsu => rsu.Service)
+                    .Select(b => new
                 {
                     b.BookingId,
                     b.BookingDate,
@@ -174,13 +212,29 @@ namespace HotelManagementSystem.ViewModels
                 };
                 CheckedInBookings.Add(bookingDisplay);
             }
+            
+            // Debug: Show count of loaded bookings
+            // MessageBox.Show($"Loaded {CheckedInBookings.Count} checked-in bookings", "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading checked-in bookings: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LoadCheckedOutBookings()
         {
             CheckedOutBookings.Clear();
             var bookings = _dbContext.Bookings
-                .Where(b => b.StatusId == 3 && (b.Status.StatusName == "Đã trả phòng" || b.Status.StatusName == "Checked Out"))
+                .Where(b => b.StatusId == 3)
+                .Include(b => b.Guest)
+                .Include(b => b.Status)
+                .Include(b => b.BookedRooms)
+                    .ThenInclude(br => br.Room)
+                        .ThenInclude(r => r.RoomType)
+                .Include(b => b.BookedRooms)
+                    .ThenInclude(br => br.RoomServiceUsages)
+                        .ThenInclude(rsu => rsu.Service)
                 .Select(b => new
                 {
                     b.BookingId,
@@ -264,8 +318,7 @@ namespace HotelManagementSystem.ViewModels
                     var room = _dbContext.Rooms.FirstOrDefault(r => r.RoomId == bookedRoom.RoomId);
                     if (room != null)
                     {
-                        room.Status = "Trống";
-                        room.CleanStatus = "Cần dọn dẹp";
+                        room.CleanStatus = "Chưa dọn";
                     }
                 }
                 

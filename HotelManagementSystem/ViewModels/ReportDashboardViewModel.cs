@@ -75,10 +75,10 @@ namespace HotelManagementSystem.ViewModels
         {
             // Tổng số phòng
             TotalRooms = _dbContext.Rooms.Count();
-            AvailableRooms = _dbContext.Rooms.Count(r => r.Status == "Trống");
-            OccupiedRooms = _dbContext.Rooms.Count(r => r.Status == "Đang sử dụng");
-            CleaningRooms = _dbContext.Rooms.Count(r => r.CleanStatus == "Cần dọn dẹp");
-            BookedRooms = _dbContext.Rooms.Count(r => r.Status == "Đã đặt");
+            AvailableRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Trống");
+            OccupiedRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Có khách");
+            CleaningRooms = _dbContext.Rooms.Count(r => r.CleanStatus == "Chờ dọn");
+            BookedRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Đã đặt");
 
             // Tổng số khách hàng
             TotalGuests = _dbContext.Guests.Count();

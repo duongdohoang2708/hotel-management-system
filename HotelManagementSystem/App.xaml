@@ -7,7 +7,7 @@
         
         <ResourceDictionary>
             <!-- Converter phải nằm trong ResourceDictionary -->
-            <!--<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" /> -->
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
             <!-- Style textbox vừa -->
             <Style x:Key="TextboxStyle" TargetType="TextBox">

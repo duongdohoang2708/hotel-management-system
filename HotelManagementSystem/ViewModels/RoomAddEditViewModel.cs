@@ -32,18 +32,7 @@ namespace HotelManagementSystem.ViewModels
             }
         }
 
-        private string _status;
-        public string Status
-        {
-            get => _status;
-            set
-            {
-                if (SetProperty(ref _status, value))
-                {
-                    ValidateStatus();
-                }
-            }
-        }
+       
 
         private string _cleanStatus;
         public string CleanStatus
@@ -96,12 +85,7 @@ namespace HotelManagementSystem.ViewModels
         }
 
         private ObservableCollection<string> _statusOptions;
-        public ObservableCollection<string> StatusOptions
-        {
-            get => _statusOptions;
-            set => SetProperty(ref _statusOptions, value);
-        }
-
+       
         private ObservableCollection<string> _cleanStatusOptions;
         public ObservableCollection<string> CleanStatusOptions
         {
@@ -150,7 +134,6 @@ namespace HotelManagementSystem.ViewModels
             get
             {
                 return !string.IsNullOrWhiteSpace(RoomNumber)
-                    && !string.IsNullOrWhiteSpace(Status)
                     && !string.IsNullOrWhiteSpace(CleanStatus)
                     && RoomTypeId > 0;
             }
@@ -166,7 +149,6 @@ namespace HotelManagementSystem.ViewModels
             {
                 RoomId = room.RoomId;
                 RoomNumber = room.RoomNumber ?? "";
-                Status = room.Status ?? "";
                 CleanStatus = room.CleanStatus ?? "";
                 RoomTypeId = room.RoomTypeId;
                 SelectedRoomType = RoomTypes.FirstOrDefault(rt => rt.RoomTypeId == room.RoomTypeId);
@@ -187,14 +169,7 @@ namespace HotelManagementSystem.ViewModels
 
         private void LoadStatusOptions()
         {
-            StatusOptions = new ObservableCollection<string>
-            {
-                "Trống",
-                "Đã đặt",
-                "Bảo trì",
-                "Đang sử dụng"
-            };
-
+           
             CleanStatusOptions = new ObservableCollection<string>
             {
                 "Đã dọn",
@@ -211,14 +186,7 @@ namespace HotelManagementSystem.ViewModels
                 AddError(nameof(RoomNumber), "Số phòng không được để trống!");
             }
         }
-        public void ValidateStatus()
-        {
-            ClearErrors(nameof(Status));
-            if (string.IsNullOrWhiteSpace(Status))
-            {
-                AddError(nameof(Status), "Trạng thái không được để trống!");
-            }
-        }
+       
         public void ValidateCleanStatus()
         {
             ClearErrors(nameof(CleanStatus));
@@ -239,7 +207,6 @@ namespace HotelManagementSystem.ViewModels
         private void Save()
         {
             ValidateRoomNumber();
-            ValidateStatus();
             ValidateCleanStatus();
             ValidateRoomTypeId();
             if (HasErrors)
@@ -254,7 +221,6 @@ namespace HotelManagementSystem.ViewModels
                     if (r != null)
                     {
                         r.RoomNumber = RoomNumber;
-                        r.Status = Status;
                         r.CleanStatus = CleanStatus;
                         r.RoomTypeId = RoomTypeId;
                         db.SaveChanges();
@@ -273,7 +239,6 @@ namespace HotelManagementSystem.ViewModels
                     var r = new Room
                     {
                         RoomNumber = RoomNumber,
-                        Status = Status,
                         CleanStatus = CleanStatus,
                         RoomTypeId = RoomTypeId
                     };

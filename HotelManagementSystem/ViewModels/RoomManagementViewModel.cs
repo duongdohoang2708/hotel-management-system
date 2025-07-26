@@ -183,7 +183,6 @@ namespace HotelManagementSystem.ViewModels
                     query = query.Where(r => 
                         (r.RoomNumber != null && r.RoomNumber.ToLower().Contains(keyword)) ||
                         (r.RoomType != null && r.RoomType.TypeName != null && r.RoomType.TypeName.ToLower().Contains(keyword)) ||
-                        (r.Status != null && r.Status.ToLower().Contains(keyword)) ||
                         (r.CleanStatus != null && r.CleanStatus.ToLower().Contains(keyword))
                     );
                 }
@@ -195,7 +194,7 @@ namespace HotelManagementSystem.ViewModels
                         RoomId = r.RoomId,
                         RoomNumber = r.RoomNumber ?? "",
                         RoomTypeName = r.RoomType.TypeName ?? "",
-                        Status = r.Status ?? "",
+                        Status = r.GetStatusByNow(db.Bookings.ToList()),
                         CleanStatus = r.CleanStatus ?? "",
                         Price = r.RoomType.BasePrice ?? 0
                     })

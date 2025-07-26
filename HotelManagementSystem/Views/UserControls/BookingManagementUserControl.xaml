@@ -115,7 +115,8 @@
                         <!-- Ngày nhận -->
                         <StackPanel Orientation="Vertical" Margin="0,5,0,0">
                             <TextBlock Text="Ngày nhận:" Width="90" HorizontalAlignment="Left" Margin="10,0,0,5"/>
-                            <DatePicker x:Name="CheckInDatePicker" Width="150" Height="32" SelectedDate="{Binding CheckInDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{x:Null}" Margin="10,0,0,0"/>
+                            <DatePicker x:Name="CheckInDatePicker" Width="150" Height="32" SelectedDate="{Binding CheckInDate, 
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{x:Null}" Margin="10,0,0,0" />
                             <TextBlock Text="{Binding CheckInDateError}" Foreground="Red" FontSize="12" Margin="10,0,0,0" Visibility="{Binding CheckInDateError, Converter={StaticResource StringNotNullOrWhiteSpaceToVisibilityConverter}}"/>
                         </StackPanel>
                         <!-- Ngày trả -->
@@ -130,8 +131,13 @@
             </GroupBox>
             <!-- Dòng trên: Danh sách phòng trống -->
             <GroupBox Header="Danh sách phòng trống" Grid.Row="1" Foreground="#FF2C68CC" FontWeight="Medium" Margin="0,10,0,0">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" Grid.Row="0">
                         <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                             <TextBlock Text="Chọn loại phòng:" Width="150" HorizontalAlignment="Left" Margin="10,0,0,5"/>
                             <ComboBox x:Name="FilterRoomTypeComboBox"
@@ -163,7 +169,9 @@
                               VerticalAlignment="Stretch"
                               FontWeight="Normal"
                               VerticalContentAlignment="Center"
-                              ItemsSource="{Binding AvailableRooms}">
+                              ItemsSource="{Binding AvailableRooms}"
+                              Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="SL phòng" Binding="{Binding RoomNumber}" Width="Auto">
                                 <DataGridTextColumn.ElementStyle>
@@ -197,7 +205,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button ToolTip="Chọn phòng này"
-                                            Command="{Binding DataContext.AddRoomCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            Command="{Binding DataContext.AddRoomToNewBookingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Width="32" Height="32">
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -225,8 +233,8 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock x:Name="NoRoomText" Text="Không còn phòng phù hợp" Visibility="Collapsed" Foreground="Red" Margin="0,10,0,0"/>
-                </StackPanel>
+                    <TextBlock x:Name="NoRoomText" Text="Không còn phòng phù hợp" Visibility="Collapsed" Foreground="Red" Margin="0,10,0,0" Grid.Row="2"/>
+                </Grid>
             </GroupBox>
         </Grid>
 
@@ -369,7 +377,7 @@
                                VerticalAlignment="Stretch"
                                FontWeight="Normal"
                                VerticalContentAlignment="Center"
-                               ItemsSource="{Binding SelectedRooms}"
+                               ItemsSource="{Binding SelectedRoomsForNewBooking}"
                                Grid.Column="0"
                                VerticalScrollBarVisibility="Auto">
                                 <DataGrid.Columns>
@@ -412,7 +420,7 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                             <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Top">
-                                <TextBlock Text="{Binding SelectedRooms.Count, StringFormat='Tổng số phòng: {0}'}" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding SelectedRoomsForNewBooking.Count, StringFormat='Tổng số phòng: {0}'}" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
                                 <TextBlock Text="{Binding TotalRoomPricePerDay, StringFormat='Tổng tiền/ngày: {0:N0} đ'}" FontWeight="Bold" FontSize="14"/>
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,10">
                                     <TextBlock Text="Tiền đặt cọc" FontWeight="Bold" FontSize="14" Margin="0,0,0,4"/>
@@ -420,8 +428,32 @@
                                       Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Left"/>
                                 </StackPanel>
-                                <Button Content="Đặt phòng" Width="100" Margin="0,30,0,10" Style="{StaticResource ButtonBlueMedium}" Command="{Binding ConfirmBookingCommand}"/>
-                                <Button Content="Hủy" Width="100" Margin="0,0,0,20" Style="{StaticResource ButtonPurpleMedium}" Command="{Binding CancelBookingCommand}"/>
+                                <Button Content="Đặt phòng" Width="100" Margin="0,30,0,10" IsEnabled="{Binding CanConfirmBookingProperty}" Command="{Binding ConfirmBookingCommand}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource ButtonBlueMedium}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Background" Value="Gray"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Cursor" Value="Arrow"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button Content="Hủy" Width="100" Margin="0,0,0,20" IsEnabled="{Binding CanCancelBookingProperty}" Command="{Binding CancelBookingCommand}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleMedium}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Background" Value="Gray"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Cursor" Value="Arrow"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -465,21 +497,8 @@
 
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,10,0,0">
-                            <Button Content="Xác nhận đặt" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanConfirmBookingButton}" Command="{Binding ConfirmSelectedBookingCommand}">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonBlueSmall}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsEnabled" Value="False">
-                                                <Setter Property="Background" Value="Gray"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                                <Setter Property="Cursor" Value="Arrow"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <Button Content="Hủy đặt" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanCancelBooking}" Command="{Binding CancelSelectedBookingCommand}">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Content="Hủy đặt" Width="110" Margin="0,0,20,0" IsEnabled="{Binding CanCancelBooking}" Command="{Binding CancelSelectedBookingCommand}">
                                 <Button.Style>
                                     <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
                                         <Style.Triggers>
@@ -492,20 +511,8 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            <Button Content="Không đến" Width="110" Margin="0,0,10,0" IsEnabled="{Binding CanNoShowBooking}" Command="{Binding NoShowSelectedBookingCommand}">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsEnabled" Value="False">
-                                                <Setter Property="Background" Value="Gray"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                                <Setter Property="Cursor" Value="Arrow"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <Button Content="Sửa đặt phòng" Width="110" Margin="40,0,10,0" HorizontalAlignment="Right" IsEnabled="{Binding CanEditBooking}" Command="{Binding EditBookingCommand}">
+
+                            <Button Content="Sửa đặt phòng" Width="110" Margin="0,0,20,0" IsEnabled="{Binding CanEditBooking}" Command="{Binding EditBookingCommand}">
                                 <Button.Style>
                                     <Style TargetType="Button" BasedOn="{StaticResource ButtonOrangeSmall}">
                                         <Style.Triggers>
@@ -518,7 +525,8 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            <Button Content="Xóa đặt phòng" Width="110" Margin="10,0,0,0" HorizontalAlignment="Right" IsEnabled="{Binding CanDeleteBooking}" Command="{Binding DeleteBookingCommand}">
+                            
+                            <Button Content="Xóa đặt phòng" Width="110" Margin="0,0,20,0" IsEnabled="{Binding CanDeleteBooking}" Command="{Binding DeleteBookingCommand}">
                                 <Button.Style>
                                     <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
                                         <Style.Triggers>
@@ -531,10 +539,11 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
+
                         </StackPanel>
                     </Grid>
 
-                    <Border Grid.Row="1" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4" Margin="0,5,0,0" Padding="5">
+                    <Border Grid.Row="1" BorderBrush="#FF2C68CC" BorderThickness="1" CornerRadius="4" Margin="0,10,0,0" Padding="5">
                         <DataGrid x:Name="BookingsDataGrid"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
@@ -656,22 +665,22 @@
                                     <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
                                 <!-- Cột trái: DataGrid -->
-                                <DataGrid x:Name="BookingRoomsDataGrid"
-                                          Grid.Column="0"
-                                          AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          IsReadOnly="True"
-                                          SelectionMode="Single"
-                                          SelectionUnit="FullRow"
-                                          FontWeight="Normal"
-                                          VerticalContentAlignment="Center"
-                                          ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
-                                          CellStyle="{StaticResource CommonCellStyle}"
-                                          RowStyle="{StaticResource CommonRowStyle}"
-                                          ItemsSource="{Binding BookingselectedRooms}"
-                                          SelectedItem="{Binding SelectedBookingRoom, Mode=TwoWay}">
+                                        <DataGrid x:Name="BookingRoomsDataGrid"
+          Grid.Column="0"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          IsReadOnly="True"
+          SelectionMode="Single"
+          SelectionUnit="FullRow"
+          FontWeight="Normal"
+          VerticalContentAlignment="Center"
+          ColumnHeaderStyle="{StaticResource CommonHeaderStyle}"
+          CellStyle="{StaticResource CommonCellStyle}"
+          RowStyle="{StaticResource CommonRowStyle}"
+          ItemsSource="{Binding BookedRooms}"
+          SelectedItem="{Binding SelectedBookedRoom, Mode=TwoWay}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="SL phòng" Binding="{Binding RoomNumber}" Width="Auto">
+                                        <DataGridTextColumn Header="SL phòng" Binding="{Binding Room.RoomNumber}" Width="Auto">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Padding" Value="12,0,12,0"/>
@@ -680,7 +689,7 @@
                                                 </Style>
                                             </DataGridTextColumn.ElementStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding RoomTypeName}" Width="Auto">
+                                        <DataGridTextColumn Header="Loại phòng" Binding="{Binding Room.RoomType.TypeName}" Width="Auto">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Padding" Value="12,0,12,0"/>
@@ -689,7 +698,7 @@
                                                 </Style>
                                             </DataGridTextColumn.ElementStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn Header="Giá" Binding="{Binding Price, Converter={StaticResource VnCurrencyConverter}}" Width="Auto">
+                                        <DataGridTextColumn Header="Giá" Binding="{Binding RoomPrice, Converter={StaticResource VnCurrencyConverter}}" Width="Auto">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Padding" Value="12,0,12,0"/>
@@ -702,8 +711,32 @@
                                 </DataGrid>
                                 <!-- Cột phải: 2 nút -->
                                 <StackPanel Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="0,20,0,0">
-                                    <Button Content="Thêm phòng" Width="100" Margin="0,0,0,20" Style="{StaticResource ButtonBlueSmall}" Command="{Binding AddRoomCommand}"/>
-                                    <Button Content="Xóa phòng" Width="100" Style="{StaticResource ButtonPurpleSmall}" Command="{Binding DeleteRoomCommand}" IsEnabled="{Binding CanDeleteBookingRoom}"/>
+                                    <Button Content="Thêm phòng" Width="100" Margin="0,0,0,20" IsEnabled="{Binding CanAddBookingRoom}" Command="{Binding AddRoomCommand}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource ButtonBlueSmall}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="Gray"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="Cursor" Value="Arrow"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Content="Xóa phòng" Width="100" IsEnabled="{Binding CanDeleteBookingRoom}" Command="{Binding DeleteRoomCommand}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource ButtonPurpleSmall}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="Gray"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="Cursor" Value="Arrow"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>

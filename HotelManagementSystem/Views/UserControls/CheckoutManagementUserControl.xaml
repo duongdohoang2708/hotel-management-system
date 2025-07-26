@@ -248,12 +248,13 @@
                     </StackPanel>
                     <Grid Margin="0,0,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="62*"/>
+                            <ColumnDefinition Width="59*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Cột trái: DataGrid danh sách phòng đã đặt -->
                         <DataGrid x:Name="BookingRoomsDataGrid"
                                   Grid.Column="0"
+                                  Margin="0,0,100,0"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
                                   IsReadOnly="True"
@@ -267,7 +268,7 @@
                                   CellStyle="{StaticResource CommonCellStyle}"
                                   RowStyle="{StaticResource CommonRowStyle}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="Auto">
+                                <DataGridTextColumn Header="Số phòng" Binding="{Binding RoomNumber}" Width="Auto" >
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Padding" Value="12,0,12,0"/>
@@ -302,6 +303,7 @@
                         <!-- Cột phải: DataGrid dịch vụ đã sử dụng của phòng -->
                         <DataGrid x:Name="RoomServiceUsageDataGrid"
                                   Grid.Column="1"
+                                  Margin="0,0,0,0"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
                                   IsReadOnly="True"
@@ -322,15 +324,15 @@
                     </Grid>
                 </StackPanel>
                 <!-- Các nút chức năng -->
-                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0">
+                    <Button Content="Xác nhận trả phòng"
+                            Height="40" Width="159" Margin="0,0,20,0"
+                            Command="{Binding ConfirmCheckoutCommand}" 
+                            IsEnabled="{Binding SelectedCheckedInBooking, Converter={StaticResource NullToBoolConverter}}" />
                     <Button Content="Tạo hóa đơn"
                             Height="40" Width="150"
                             Margin="0,0,10,0"
                             Command="{Binding GenerateInvoiceCommand}"
-                            IsEnabled="{Binding SelectedCheckedInBooking, Converter={StaticResource NullToBoolConverter}}" />
-                    <Button Content="Xác nhận trả phòng"
-                            Height="40" Width="180"
-                            Command="{Binding ConfirmCheckoutCommand}"
                             IsEnabled="{Binding SelectedCheckedInBooking, Converter={StaticResource NullToBoolConverter}}" />
                 </StackPanel>
             </Grid>

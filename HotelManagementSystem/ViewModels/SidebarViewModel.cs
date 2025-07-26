@@ -55,6 +55,22 @@ namespace HotelManagementSystem.ViewModels
         public event Action? OpenBookingStatusRequested;
         public event Action? OpenReportRequested;
 
+        // Role-based visibility properties
+        public bool CanAccessBooking => Role == "Manager" || Role == "Receptionist";
+        public bool CanAccessCheckIn => Role == "Manager" || Role == "Receptionist";
+        public bool CanAccessCheckout => Role == "Manager" || Role == "Receptionist";
+        public bool CanAccessServiceUsage => Role == "Manager" || Role == "Receptionist";
+        public bool CanAccessReport => Role == "Manager";
+        public bool CanAccessGuest => Role == "Manager";
+        public bool CanAccessFacility => Role == "Manager";
+        public bool CanAccessRoomType => Role == "Manager";
+        public bool CanAccessBookingStatus => Role == "Manager";
+        public bool CanAccessRoom => Role == "Manager";
+        public bool CanAccessServiceCategory => Role == "Manager";
+        public bool CanAccessService => Role == "Manager";
+        public bool CanAccessStaff => Role == "Manager";
+        public bool CanAccessAccount => Role == "Admin";
+
         public SidebarViewModel(Account account)
         {
             Role = account.Role;

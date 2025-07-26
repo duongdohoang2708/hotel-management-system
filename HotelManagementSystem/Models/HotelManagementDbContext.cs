@@ -59,7 +59,7 @@ public partial class HotelManagementDbContext : DbContext
                 .Build();
 
             // Lấy chuỗi kết nối
-            var connectionString = config.GetConnectionString("AruzeDBContext");
+            var connectionString = config.GetConnectionString("DBContext");
 
             // Cấu hình DbContext
             optionsBuilder.UseSqlServer(connectionString);
@@ -216,7 +216,7 @@ public partial class HotelManagementDbContext : DbContext
             entity.Property(e => e.CleanStatus).HasMaxLength(50);
             entity.Property(e => e.RoomNumber).HasMaxLength(10);
             entity.Property(e => e.RoomTypeId).HasColumnName("RoomTypeID");
-            entity.Property(e => e.Status).HasMaxLength(50);
+           
 
             entity.HasOne(d => d.RoomType).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.RoomTypeId)

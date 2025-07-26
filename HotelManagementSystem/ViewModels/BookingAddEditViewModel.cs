@@ -73,7 +73,7 @@ namespace HotelManagementSystem.ViewModels
             ValidateCheckIn();
             ValidateCheckOut();
             ValidateDeposit();
-            ValidateStatus();
+            
         }
         private void ValidateGuest()
         {
@@ -105,12 +105,7 @@ namespace HotelManagementSystem.ViewModels
             else if (Booking.Deposit < 0)
                 AddError(nameof(Booking.Deposit), "Tiền cọc không được âm.");
         }
-        private void ValidateStatus()
-        {
-            ClearErrors(nameof(Booking.Status));
-            if (Booking.Status == null)
-                AddError(nameof(Booking.Status), "Vui lòng chọn trạng thái.");
-        }
+        
         private void Save()
         {
             ValidateAll();
