@@ -734,10 +734,7 @@ namespace HotelManagementSystem.ViewModels
                 // Sau khi thêm xong, cập nhật lại danh sách Bookings
                 _isUpdatingFromLoadBookings = true;
                 LoadBookings();
-                // Lọc theo tên khách vừa đặt
-                BookingSearchKeyword = SelectedGuest.FullName;
-                LoadBookings();
-                // Chọn dòng vừa thêm
+                // Chọn dòng vừa thêm (không cần lọc theo tên khách)
                 Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     SelectedBooking = Bookings.FirstOrDefault(b => b.GuestId == SelectedGuest.GuestId && b.CheckInDate == CheckInDate && b.CheckOutDate == CheckOutDate);
@@ -791,7 +788,7 @@ namespace HotelManagementSystem.ViewModels
                 bookingQuery = bookingQuery.Where(b => b.Guest.FullName.ToLower().Contains(keyword));
             }
             var booking = bookingQuery
-                .OrderBy(b => b.CheckIn)
+                .OrderByDescending(b => b.BookingDate)
                 .ToList();
             foreach (var b in booking)
             {

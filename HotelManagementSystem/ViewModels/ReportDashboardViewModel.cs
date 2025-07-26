@@ -5,6 +5,7 @@ using System.Windows.Input;
 using HotelManagementSystem.Models;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.ViewModels
 {
@@ -75,10 +76,16 @@ namespace HotelManagementSystem.ViewModels
         {
             // Tổng số phòng
             TotalRooms = _dbContext.Rooms.Count();
-            AvailableRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Trống");
-            OccupiedRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Có khách");
+            
+            // Lấy tất cả bookings để tính toán trạng thái phòng
+            var allBookings = _dbContext.Bookings.ToList();
+            var allRooms = _dbContext.Rooms.ToList();
+            
+            // Tính toán trạng thái phòng bằng client-side evaluation
+            AvailableRooms = allRooms.Count(r => r.GetStatusByNow(allBookings) == "Trống");
+            OccupiedRooms = allRooms.Count(r => r.GetStatusByNow(allBookings) == "Có khách");
             CleaningRooms = _dbContext.Rooms.Count(r => r.CleanStatus == "Chờ dọn");
-            BookedRooms = _dbContext.Rooms.Count(r => r.GetStatusByNow(_dbContext.Bookings) == "Đã đặt");
+            BookedRooms = allRooms.Count(r => r.GetStatusByNow(allBookings) == "Đã đặt");
 
             // Tổng số khách hàng
             TotalGuests = _dbContext.Guests.Count();
@@ -114,6 +121,7 @@ namespace HotelManagementSystem.ViewModels
             // Top 5 dịch vụ sử dụng nhiều nhất
             TopServicesByUsage.Clear();
             var topServices = _dbContext.RoomServiceUsages
+                .Include(su => su.Service)
                 .GroupBy(su => su.Service.ServiceName)
                 .Select(g => new { ServiceName = g.Key, UsageCount = g.Count() })
                 .OrderByDescending(x => x.UsageCount)
